@@ -1,0 +1,17 @@
+<sample>
+    <chartest desc="Test for CHARs">Character data here!</chartest>    
+    <cdatatest desc="Test for CDATA" misc="true"><![CDATA[CDATA here!]]></cdatatest>
+    <nochartest desc="No data" misc="false" />
+    <listtest>
+        <item>
+            This <subitem>Foo(1)</subitem> is
+            <subitem>Foo(2)</subitem>
+            character
+            <subitem>Foo(3)</subitem>
+            data!
+            <subitem>Foo(4)</subitem>
+        </item>
+        <item>Qux.</item>
+        <item>Quux.</item>
+    </listtest>
+</sample>
