@@ -1,8 +1,9 @@
 {
   "name": "xml2js",
   "description": "Simple XML to JavaScript object converter.",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "author": "maqr <maqr.lollerskates@gmail.com>",
   "keywords": ["xml", "json"],
-  "directories": { "lib": "./lib" }
+  "directories": { "lib": "./lib" },
+  "dependencies" : { "sax" : ">=0.1.1" }
 }
