@@ -6,5 +6,9 @@
   "keywords": ["xml", "json"],
   "directories": { "lib": "./lib" },
   "main": "./lib/index",
-  "dependencies" : { "sax" : ">=0.1.1" }
+  "dependencies" : { "sax" : ">=0.1.1" },
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/Leonidas-from-XIV/node-xml2js.git"
+  }
 }
