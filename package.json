@@ -11,7 +11,7 @@
     "Jae Kwon (https://github.com/jaekwon)",
     "Jim Robert"
   ],
-  "main" : "./lib/index",
+  "main" : "./lib/xml2js",
   "directories" : {
     "lib": "./lib"
   },
