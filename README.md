@@ -3,9 +3,19 @@ node-xml2js
 
 Description
 -----------
-Simple XML to JavaScript object converter.  Uses [sax-js](http://github.com/isaacs/sax-js/).  Install with [npm](http://github.com/isaacs/npm) :)
+
+Simple XML to JavaScript object converter. Uses [sax-js](http://github.com/isaacs/sax-js/).
+
 See the tests for examples until docs are written.
-Note:  If you're looking for a full DOM parser, you probably want [JSDom](http://github.com/tmpvar/jsdom).
+
+Note: If you're looking for a full DOM parser, you probably want
+[JSDom](http://github.com/tmpvar/jsdom).
+
+Installation
+------------
+
+Simplest way to install `xml2js` is to use [npm](http://npmjs.org), just `npm
+install xml2js` which will download xml2js and all dependencies.
 
 Simple usage
 -----------
