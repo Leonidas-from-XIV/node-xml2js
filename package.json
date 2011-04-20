@@ -1,14 +1,28 @@
 {
-  "name": "xml2js",
-  "description": "Simple XML to JavaScript object converter.",
-  "version": "0.1.6",
-  "author": "maqr <maqr.lollerskates@gmail.com>",
-  "keywords": ["xml", "json"],
-  "directories": { "lib": "./lib" },
-  "main": "./lib/index",
-  "dependencies" : { "sax" : ">=0.1.1" },
+  "name" : "xml2js",
+  "description" : "Simple XML to JavaScript object converter.",
+  "keywords" : ["xml", "json"],
+  "homepage" : "https://github.com/Leonidas-from-XIV/node-xml2js",
+  "version" : "0.1.7",
+  "author" : "Marek Kubica <marek@xivilization.net> (http://xivilization.net)",
+  "contributors" : [
+    "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
+    "Ben Weaver (http://benweaver.com/)",
+    "Jae Kwon (https://github.com/jaekwon)",
+    "Jim Robert"
+  ],
+  "main" : "./lib/index",
+  "directories" : {
+    "lib": "./lib"
+  },
   "repository" : {
-    "type": "git",
-    "url": "https://github.com/Leonidas-from-XIV/node-xml2js.git"
+    "type" : "git",
+    "url" : "https://github.com/Leonidas-from-XIV/node-xml2js.git"
+  },
+  "dependencies" : {
+    "sax" : ">=0.1.1"
+  },
+  "devDependencies" : {
+    "zap" : ">=0.2.0"
   }
 }
