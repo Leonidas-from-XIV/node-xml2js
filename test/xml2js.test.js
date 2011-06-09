@@ -1,5 +1,5 @@
 // use zap to run the tests
-var xml2js = require('xml2js'),
+var xml2js = require('../lib/xml2js'),
     fs = require('fs'),
     sys = require('sys'),
     assert = require('assert');
@@ -17,7 +17,8 @@ module.exports = {
             assert.equal(r['cdatatest']['#'], "CDATA here!");
             assert.equal(r['nochartest']['@']['desc'], "No data");
             assert.equal(r['nochartest']['@']['misc'], "false");
-            assert.equal(r['listtest']['item'][0]['#'], "This is character data!");
+            assert.equal(r['whitespacetest']['#'], "Line One\n      Line Two");
+            assert.equal(r['listtest']['item'][0]['#'], "This  is\n            \n            character\n            \n            data!");
             assert.equal(r['listtest']['item'][0]['subitem'][0], "Foo(1)");
             assert.equal(r['listtest']['item'][0]['subitem'][1], "Foo(2)");
             assert.equal(r['listtest']['item'][0]['subitem'][2], "Foo(3)");
@@ -43,7 +44,7 @@ module.exports = {
             assert.equal(r['cdatatest']['#'], "CDATA here!");
             assert.equal(r['nochartest']['@']['desc'], "No data");
             assert.equal(r['nochartest']['@']['misc'], "false");
-            assert.equal(r['listtest']['item'][0]['#'], "This is character data!");
+            assert.equal(r['listtest']['item'][0]['#'], "This  is\n            \n            character\n            \n            data!");
             assert.equal(r['listtest']['item'][0]['subitem'][0]['#'], "Foo(1)");
             assert.equal(r['listtest']['item'][0]['subitem'][1]['#'], "Foo(2)");
             assert.equal(r['listtest']['item'][0]['subitem'][2]['#'], "Foo(3)");

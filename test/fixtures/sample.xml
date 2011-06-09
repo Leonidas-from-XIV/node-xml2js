@@ -2,6 +2,10 @@
     <chartest desc="Test for CHARs">Character data here!</chartest>    
     <cdatatest desc="Test for CDATA" misc="true"><![CDATA[CDATA here!]]></cdatatest>
     <nochartest desc="No data" misc="false" />
+    <whitespacetest desc="White space test">
+      Line One
+      Line Two
+    </whitespacetest>
     <listtest>
         <item>
             This <subitem>Foo(1)</subitem> is
