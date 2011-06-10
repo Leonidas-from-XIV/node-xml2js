@@ -12,9 +12,10 @@ Parser = ->
     obj = {}
     obj["#"] = ""
     for own key of node.attributes
-      if typeof obj["@"] == "undefined"
+      if not ("@" of obj)
         obj["@"] = {}
       obj["@"][key] = node.attributes[key]
+
     obj["#name"] = node.name
     stack.push obj
   
