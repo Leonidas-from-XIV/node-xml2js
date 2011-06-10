@@ -1,6 +1,7 @@
 sax = require("sax")
 sys = require("sys")
 events = require("events")
+
 Parser = ->
   that = this
   @saxParser = sax.parser(true)
@@ -10,11 +11,10 @@ Parser = ->
   @saxParser.onopentag = (node) ->
     obj = {}
     obj["#"] = ""
-    for key of node.attributes
-      if node.attributes.hasOwnProperty(key)
-        if typeof obj["@"] == "undefined"
-          obj["@"] = {}
-        obj["@"][key] = node.attributes[key]
+    for own key of node.attributes
+      if typeof obj["@"] == "undefined"
+        obj["@"] = {}
+      obj["@"][key] = node.attributes[key]
     obj["#name"] = node.name
     stack.push obj
   
@@ -47,6 +47,8 @@ Parser = ->
     s = stack[stack.length - 1]
     if s
       s["#"] += t
+
+  undefined
 
 sys.inherits Parser, events.EventEmitter
 Parser::parseString = (str) ->
