@@ -14,7 +14,7 @@ class exports.Parser extends events.EventEmitter
       obj = {}
       obj["#"] = ""
       for own key of node.attributes
-        if not ("@" of obj)
+        if "@" not of obj
           obj["@"] = {}
         obj["@"][key] = node.attributes[key]
 
@@ -40,22 +40,22 @@ class exports.Parser extends events.EventEmitter
           obj = obj["#"]
 
       if stack.length > 0
-        if typeof s[nodeName] == "undefined"
+        if nodeName not of s
           s[nodeName] = obj
         else if s[nodeName] instanceof Array
           s[nodeName].push obj
         else
           old = s[nodeName]
-          s[nodeName] = [ old ]
+          s[nodeName] = [old]
           s[nodeName].push obj
       else
         @resultObject = obj
         @emit "end", @resultObject
 
-    @saxParser.ontext = @saxParser.oncdata = (t) ->
+    @saxParser.ontext = @saxParser.oncdata = (text) =>
       s = stack[stack.length - 1]
       if s
-        s["#"] += t
+        s["#"] += text
 
   parseString: (str) =>
     @saxParser.write str.toString()
