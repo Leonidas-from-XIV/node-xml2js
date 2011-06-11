@@ -1,12 +1,22 @@
 sax = require("sax")
 events = require("events")
 
+
 class exports.Parser extends events.EventEmitter
-  constructor: ->
+  constructor: (opts) ->
+
+    # default options
+    options =
+      explicitCharkey: false
+      trim: false
+      normalize: false
+    # overwrite them with the specified options, if any
+    options[key] = value for own key, value of opts
+
     # make the sax parser
-    @saxParser = sax.parser(true)
+    @saxParser = sax.parser true
     # always use the '#' key, even if there are no subkeys
-    @EXPLICIT_CHARKEY = false
+    @EXPLICIT_CHARKEY = options.explicitCharkey
     @resultObject = null
     stack = []
 
