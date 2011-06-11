@@ -33,3 +33,9 @@ Simple usage
         parser.parseString(data);
     });
 
+Running tests, development
+--------------------------
+
+The development requirements are handled by npm, you just need to install
+them. We also have a number of unittests, they can be run using `zap`
+directly from the project root.
