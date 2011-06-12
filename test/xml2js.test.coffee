@@ -4,6 +4,15 @@ fs = require('fs')
 sys = require('sys')
 assert = require('assert')
 
+skeleton = (options, checks) ->
+  (test) ->
+    x2js = new xml2js.Parser(options)
+    x2js.addListener 'end', (r) ->
+      checks(r)
+      test.finish()
+    fs.readFile __dirname + '/fixtures/sample.xml', (err, data) ->
+      x2js.parseString data
+
 module.exports =
   'test default parse': (test) ->
     x2js = new xml2js.Parser()
@@ -50,3 +59,15 @@ module.exports =
     
     fs.readFile __dirname + '/fixtures/sample.xml', (err, data) ->
       x2js.parseString data
+
+  'test default text handling': skeleton(undefined, (r) ->
+      assert.equal r['whitespacetest']['#'], 'Line One Line Two')
+
+  'test disable trimming': skeleton({trim: false}, (r) ->
+      assert.equal r['whitespacetest']['#'], '\n        Line One Line Two\n    ')
+
+  'test disable normalize': skeleton({normalize: false}, (r) ->
+      assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
+
+  'test disable normalize and trim': skeleton({normalize: false, trim: false}, (r) ->
+      assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')

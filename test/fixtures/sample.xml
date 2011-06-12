@@ -4,7 +4,7 @@
     <nochartest desc="No data" misc="false" />
     <whitespacetest desc="Test for normalizing and trimming">
         Line One
-	Line Two
+        Line Two
     </whitespacetest>
     <listtest>
         <item>
