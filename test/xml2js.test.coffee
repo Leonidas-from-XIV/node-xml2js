@@ -1,8 +1,8 @@
 # use zap to run tests, it also detects CoffeeScript files
-xml2js = require('../lib/xml2js')
-fs = require('fs')
-sys = require('sys')
-assert = require('assert')
+xml2js = require '../lib/xml2js'
+fs = require 'fs'
+sys = require 'sys'
+assert = require 'assert'
 
 skeleton = (options, checks) ->
   (test) ->

@@ -1,6 +1,5 @@
-sax = require("sax")
-events = require("events")
-
+sax = require 'sax'
+events = require 'events'
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
