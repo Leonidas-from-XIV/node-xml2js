@@ -5,16 +5,22 @@ events = require("events")
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
 
-    # default options
+    # default options. for compatibility's sake set to some
+    # sub-optimal settings. might change in the future.
     options =
       explicitCharkey: false
-      trim: false
-      normalize: false
+      trim: true
+      # normalize implicates trimming, just so you know
+      normalize: true
     # overwrite them with the specified options, if any
     options[key] = value for own key, value of opts
 
-    # make the sax parser
-    @saxParser = sax.parser true
+    # make the SAX parser. tried trim and normalize, but they are not
+    # very helpful
+    @saxParser = sax.parser true, {
+      trim: false,
+      normalize: false
+    }
     # always use the '#' key, even if there are no subkeys
     @EXPLICIT_CHARKEY = options.explicitCharkey
     @resultObject = null
@@ -42,8 +48,8 @@ class exports.Parser extends events.EventEmitter
       if obj["#"].match(/^\s*$/)
         delete obj["#"]
       else
-        # turn 2 or more spaces into one space
-        obj["#"] = obj["#"].replace(/\s{2,}/g, " ").trim()
+        obj["#"] = obj["#"].trim() if options.trim
+        obj["#"] = obj["#"].replace(/\s{2,}/g, " ").trim() if options.normalize
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
         if Object.keys(obj).length == 1 and "#" of obj and not @EXPLICIT_CHARKEY

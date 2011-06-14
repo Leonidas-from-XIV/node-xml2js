@@ -58,7 +58,7 @@ module.exports =
       assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
   'test disable trimming': skeleton({trim: false}, (r) ->
-      assert.equal r['whitespacetest']['#'], '\n        Line One Line Two\n    ')
+      assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
   'test disable normalize': skeleton({normalize: false}, (r) ->
       assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
