@@ -22,6 +22,8 @@ class exports.Parser extends events.EventEmitter
       normalize: false
     }
     # always use the '#' key, even if there are no subkeys
+    # setting this property by and is deprecated, yet still supported.
+    # better pass it as explicitCharkey option to the constructor
     @EXPLICIT_CHARKEY = options.explicitCharkey
     @resultObject = null
     stack = []
