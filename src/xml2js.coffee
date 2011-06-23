@@ -20,6 +20,15 @@ class exports.Parser extends events.EventEmitter
       trim: false,
       normalize: false
     }
+    
+    # emit one error event if the sax parser fails. this is mostly a hack, but
+    # the sax parser isn't state of the art either.
+    err = false
+    @saxParser.onerror = (error) =>
+      if ! err
+        err = true
+        @emit "error", error
+    
     # always use the '#' key, even if there are no subkeys
     # setting this property by and is deprecated, yet still supported.
     # better pass it as explicitCharkey option to the constructor
