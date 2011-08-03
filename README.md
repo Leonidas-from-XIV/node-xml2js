@@ -20,13 +20,12 @@ install xml2js` which will download xml2js and all dependencies.
 Simple usage
 -----------
 
-    var sys = require('sys'),
-        fs = require('fs'),
+    var fs = require('fs'),
         xml2js = require('xml2js');
 
     var parser = new xml2js.Parser();
     parser.addListener('end', function(result) {
-        console.log(sys.inspect(result));
+        console.dir(result);
         console.log('Done.');
     });
     fs.readFile(__dirname + '/foo.xml', function(err, data) {
