@@ -66,5 +66,8 @@ module.exports =
   'test disable normalize and trim': skeleton({normalize: false, trim: false}, (r) ->
     assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
 
-  'test root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
+  'test default root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
     assert.deepEqual r, {})
+
+  'test default empty tag result': skeleton(undefined, (r) ->
+    assert.deepEqual r['emptytest'], {})
