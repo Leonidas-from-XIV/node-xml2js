@@ -69,6 +69,9 @@ module.exports =
   'test default root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
     assert.deepEqual r, {})
 
+  'test disabled root node elimination': skeleton({__xmlString: '<root></root>', explicitRoot: true}, (r) ->
+    assert.deepEqual r, {root: {}})
+
   'test default empty tag result': skeleton(undefined, (r) ->
     assert.deepEqual r['emptytest'], {})
 

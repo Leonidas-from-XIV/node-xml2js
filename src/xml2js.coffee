@@ -83,6 +83,13 @@ class exports.Parser extends events.EventEmitter
           s[nodeName] = [old]
           s[nodeName].push obj
       else
+        # if explicitRoot was specified, wrap stuff in the root tag name
+        if options.explicitRoot
+          # avoid circular references
+          old = obj
+          obj = {}
+          obj[nodeName] = old
+
         @resultObject = obj
         @emit "end", @resultObject
 
