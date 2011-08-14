@@ -32,6 +32,26 @@ Simple usage
         parser.parseString(data);
     });
 
+Options
+-------
+
+Apart from the default settings, there is a number of options that can be
+specified for the parser. Options are specified by ``new Parser({optionName:
+value})``. Possible options are:
+
+  * `explicitCharkey` (default: `false`)
+  * `trim` (default: `true`): Trim the whitespace at the beginning and end of
+    text nodes.
+  * `normalize` (default: `true`): Trim whitespaces inside text nodes.
+  * `explicitRoot` (default: `false`): Set this if you want to get the root
+    node in the resulting object.
+  * `emptyTag` (default: `undefined`): what will the value of empty nodes be.
+    Default is `{}`.
+
+These default settings are for backward-compatibility (and might change in the
+future). For the most 'clean' parsing, you should disable `normalize` and
+`trimming` and enable `explicitRoot`.
+
 Running tests, development
 --------------------------
 
