@@ -3,15 +3,22 @@ xml2js = require '../lib/xml2js'
 fs = require 'fs'
 sys = require 'sys'
 assert = require 'assert'
+path = require 'path'
 
 skeleton = (options, checks) ->
   (test) ->
+    xmlString = options?.__xmlString
+    delete options?.__xmlString
     x2js = new xml2js.Parser(options)
     x2js.addListener 'end', (r) ->
       checks(r)
       test.finish()
-    fs.readFile __dirname + '/fixtures/sample.xml', (err, data) ->
-      x2js.parseString data
+    fileName = path.join(__dirname, '/fixtures/sample.xml')
+    if not xmlString
+      fs.readFile fileName, (err, data) ->
+        x2js.parseString data
+    else
+      x2js.parseString xmlString
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
@@ -58,3 +65,6 @@ module.exports =
 
   'test disable normalize and trim': skeleton({normalize: false, trim: false}, (r) ->
       assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
+
+  'test root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
+    assert.deepEqual r, {})
