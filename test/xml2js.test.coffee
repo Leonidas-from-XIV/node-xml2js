@@ -71,3 +71,6 @@ module.exports =
 
   'test default empty tag result': skeleton(undefined, (r) ->
     assert.deepEqual r['emptytest'], {})
+
+  'test empty tag result specified null': skeleton({emptyTag: null}, (r) ->
+    assert.equal r['emptytest'], null)

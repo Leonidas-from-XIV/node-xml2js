@@ -1,6 +1,10 @@
 sax = require 'sax'
 events = require 'events'
 
+# Underscore has a nice function for this, but we try to go without dependencies
+isEmpty = (thing) ->
+  return typeof thing == 'object' && thing? && Object.keys(thing).length == 0
+
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
 
@@ -65,6 +69,10 @@ class exports.Parser extends events.EventEmitter
         if Object.keys(obj).length == 1 and "#" of obj and not @EXPLICIT_CHARKEY
           obj = obj["#"]
 
+      if options.emptyTag != undefined && isEmpty obj
+        obj = options.emptyTag
+
+      # check whether we closed all the open tags
       if stack.length > 0
         if nodeName not of s
           s[nodeName] = obj
