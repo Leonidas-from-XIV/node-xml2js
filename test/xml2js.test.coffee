@@ -55,16 +55,16 @@ module.exports =
     assert.equal r['listtest']['item'][2]['#'], 'Quux.')
     
   'test default text handling': skeleton(undefined, (r) ->
-      assert.equal r['whitespacetest']['#'], 'Line One Line Two')
+    assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
   'test disable trimming': skeleton({trim: false}, (r) ->
-      assert.equal r['whitespacetest']['#'], 'Line One Line Two')
+    assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
   'test disable normalize': skeleton({normalize: false}, (r) ->
-      assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
+    assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
 
   'test disable normalize and trim': skeleton({normalize: false, trim: false}, (r) ->
-      assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
+    assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
 
   'test root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
     assert.deepEqual r, {})
