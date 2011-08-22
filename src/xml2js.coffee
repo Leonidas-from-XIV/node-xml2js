@@ -13,7 +13,9 @@ class exports.Parser extends events.EventEmitter
     options =
       explicitCharkey: false
       trim: true
-      # normalize implicates trimming, just so you know
+      # attribute object key, so you can choose whatever you want
+      attrkey: "@"
+     # normalize implicates trimming, just so you know
       normalize: true
     # overwrite them with the specified options, if any
     options[key] = value for own key, value of opts
@@ -44,9 +46,9 @@ class exports.Parser extends events.EventEmitter
       obj = {}
       obj["#"] = ""
       for own key of node.attributes
-        if "@" not of obj
-          obj["@"] = {}
-        obj["@"][key] = node.attributes[key]
+        if options.attrkey not of obj
+          obj[options.attrkey] = {}
+        obj[options.attrkey][key] = node.attributes[key]
 
       # need a place to store the node name
       obj["#name"] = node.name
