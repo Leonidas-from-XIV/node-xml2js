@@ -15,6 +15,10 @@ class exports.Parser extends events.EventEmitter
       trim: true
       # normalize implicates trimming, just so you know
       normalize: true
+      # set default attribute object key
+      attrkey: "@"
+      # set default char object key
+      charkey: "#"
     # overwrite them with the specified options, if any
     options[key] = value for own key, value of opts
 
@@ -37,16 +41,18 @@ class exports.Parser extends events.EventEmitter
     # setting this property by and is deprecated, yet still supported.
     # better pass it as explicitCharkey option to the constructor
     @EXPLICIT_CHARKEY = options.explicitCharkey
+    @ATTRKEY = options.attrkey
+    @CHARKEY = options.charkey
     @resultObject = null
     stack = []
 
     @saxParser.onopentag = (node) =>
       obj = {}
-      obj["#"] = ""
+      obj[@CHARKEY] = ""
       for own key of node.attributes
-        if "@" not of obj
-          obj["@"] = {}
-        obj["@"][key] = node.attributes[key]
+        if @ATTRKEY not of obj
+          obj[@ATTRKEY] = {}
+        obj[@ATTRKEY][key] = node.attributes[key]
 
       # need a place to store the node name
       obj["#name"] = node.name
@@ -59,15 +65,15 @@ class exports.Parser extends events.EventEmitter
 
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
-      if obj["#"].match(/^\s*$/)
-        delete obj["#"]
+      if obj[@CHARKEY].match(/^\s*$/)
+        delete obj[@CHARKEY]
       else
-        obj["#"] = obj["#"].trim() if options.trim
-        obj["#"] = obj["#"].replace(/\s{2,}/g, " ").trim() if options.normalize
+        obj[@CHARKEY] = obj[@CHARKEY].trim() if options.trim
+        obj[@CHARKEY] = obj[@CHARKEY].replace(/\s{2,}/g, " ").trim() if options.normalize
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
-        if Object.keys(obj).length == 1 and "#" of obj and not @EXPLICIT_CHARKEY
-          obj = obj["#"]
+        if Object.keys(obj).length == 1 and @CHARKEY of obj and not @EXPLICIT_CHARKEY
+          obj = obj[@CHARKEY]
 
       if options.emptyTag != undefined && isEmpty obj
         obj = options.emptyTag
@@ -96,7 +102,7 @@ class exports.Parser extends events.EventEmitter
     @saxParser.ontext = @saxParser.oncdata = (text) =>
       s = stack[stack.length - 1]
       if s
-        s["#"] += text
+        s[@CHARKEY] += text
 
   parseString: (str) =>
     @saxParser.write str.toString()

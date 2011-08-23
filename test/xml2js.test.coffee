@@ -77,3 +77,12 @@ module.exports =
 
   'test empty tag result specified null': skeleton({emptyTag: null}, (r) ->
     assert.equal r['emptytest'], null)
+
+  'test parse with custom char and attribute object keys': skeleton({attrkey: 'attrobj', charkey: 'charobj'}, (r) ->
+    assert.equal r['chartest']['attrobj']['desc'], 'Test for CHARs'
+    assert.equal r['chartest']['charobj'], 'Character data here!'
+    assert.equal r['cdatatest']['attrobj']['desc'], 'Test for CDATA'
+    assert.equal r['cdatatest']['attrobj']['misc'], 'true'
+    assert.equal r['cdatatest']['charobj'], 'CDATA here!'
+    assert.equal r['nochartest']['attrobj']['desc'], 'No data'
+    assert.equal r['nochartest']['attrobj']['misc'], 'false'
