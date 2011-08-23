@@ -85,4 +85,4 @@ module.exports =
     assert.equal r['cdatatest']['attrobj']['misc'], 'true'
     assert.equal r['cdatatest']['charobj'], 'CDATA here!'
     assert.equal r['nochartest']['attrobj']['desc'], 'No data'
-    assert.equal r['nochartest']['attrobj']['misc'], 'false'
+    assert.equal r['nochartest']['attrobj']['misc'], 'false')
