@@ -19,6 +19,8 @@ class exports.Parser extends events.EventEmitter
       attrkey: "@"
       # set default char object key
       charkey: "#"
+      # always put child nodes in an array
+      explicitArray: false
     # overwrite them with the specified options, if any
     options[key] = value for own key, value of opts
 
@@ -81,13 +83,18 @@ class exports.Parser extends events.EventEmitter
 
       # check whether we closed all the open tags
       if stack.length > 0
-        if nodeName not of s
-          s[nodeName] = obj
-        else if s[nodeName] instanceof Array
-          s[nodeName].push obj
+        if not options.explicitArray
+          if nodeName not of s
+            s[nodeName] = obj
+          else if s[nodeName] instanceof Array
+            s[nodeName].push obj
+          else
+            old = s[nodeName]
+            s[nodeName] = [old]
+            s[nodeName].push obj
         else
-          old = s[nodeName]
-          s[nodeName] = [old]
+          if not (s[nodeName] instanceof Array)
+            s[nodeName] = []
           s[nodeName].push obj
       else
         # if explicitRoot was specified, wrap stuff in the root tag name
