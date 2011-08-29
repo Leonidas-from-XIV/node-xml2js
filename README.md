@@ -47,6 +47,8 @@ value})``. Possible options are:
     node in the resulting object.
   * `emptyTag` (default: `undefined`): what will the value of empty nodes be.
     Default is `{}`.
+  * `explicitArray` (default: `false`): Always put child nodes in an array if true;
+    otherwise an array is created only if there is more than one.
 
 These default settings are for backward-compatibility (and might change in the
 future). For the most 'clean' parsing, you should disable `normalize` and
