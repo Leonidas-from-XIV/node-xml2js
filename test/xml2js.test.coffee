@@ -86,3 +86,13 @@ module.exports =
     assert.equal r['cdatatest']['charobj'], 'CDATA here!'
     assert.equal r['nochartest']['attrobj']['desc'], 'No data'
     assert.equal r['nochartest']['attrobj']['misc'], 'false')
+
+  'test child node with explicitArray false': skeleton({explicitArray: false}, (r) ->
+    assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
+    assert.equal r['arraytest']['item'][1]['subitem'][0], 'Foo.'
+    assert.equal r['arraytest']['item'][1]['subitem'][1], 'Bar.')
+
+  'test child node with explicitArray true': skeleton({explicitArray: true}, (r) ->
+    assert.equal r['arraytest'][0]['item'][0]['subitem'][0], 'Baz.'
+    assert.equal r['arraytest'][0]['item'][1]['subitem'][0], 'Foo.'
+    assert.equal r['arraytest'][0]['item'][1]['subitem'][1], 'Bar.')
