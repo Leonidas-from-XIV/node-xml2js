@@ -3,7 +3,7 @@ events = require 'events'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
-  return typeof thing == 'object' && thing? && Object.keys(thing).length == 0
+  return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
@@ -113,10 +113,10 @@ class exports.Parser extends events.EventEmitter
         s[charkey] += text
 
   parseString: (str, cb) =>
-    if cb? and typeof cb is 'function'
-      @on 'end', (result) ->
+    if cb? and typeof cb is "function"
+      @on "end", (result) ->
         cb null, result
-      @on 'error', (err) ->
+      @on "error", (err) ->
         cb err
         
     @saxParser.write str.toString()
