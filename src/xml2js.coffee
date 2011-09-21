@@ -112,5 +112,12 @@ class exports.Parser extends events.EventEmitter
       if s
         s[charkey] += text
 
-  parseString: (str) =>
+  parseString: (str, cb) =>
+    if cb? and typeof cb is 'function'
+      @on 'end', (result) ->
+        cb null, result
+      @on 'error', (err) ->
+        cb err
+        
     @saxParser.write str.toString()
+      
