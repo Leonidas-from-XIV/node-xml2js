@@ -1,5 +1,5 @@
 <sample>
-    <chartest desc="Test for CHARs">Character data here!</chartest>    
+    <chartest desc="Test for CHARs">Character data here!</chartest>
     <cdatatest desc="Test for CDATA" misc="true"><![CDATA[CDATA here!]]></cdatatest>
     <nochartest desc="No data" misc="false" />
     <whitespacetest desc="Test for normalizing and trimming">
@@ -23,4 +23,12 @@
         <item><subitem>Foo.</subitem><subitem>Bar.</subitem></item>
     </arraytest>
     <emptytest/>
+    <ordertest>
+	<one>1</one>
+	<two>2</two>
+	<three>3</three>
+	<one>4</one>
+	<two>5</two>
+	<three>6</three>
+    </ordertest>
 </sample>
