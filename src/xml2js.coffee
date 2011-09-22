@@ -120,4 +120,3 @@ class exports.Parser extends events.EventEmitter
         cb err
         
     @saxParser.write str.toString()
-      
