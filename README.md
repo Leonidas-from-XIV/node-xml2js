@@ -1,14 +1,18 @@
 node-xml2js
 ===========
 
+Ever had the urge to parse XML? And wanted to access the data in some sane,
+easy way? Don't want to compile a C parser, for whatever reason? Then xml2js is
+what you're looking for!
+
 Description
 ===========
 
 Simple XML to JavaScript object converter. Uses
-[sax-js](http://github.com/isaacs/sax-js/).
+[sax-js](https://github.com/isaacs/sax-js/).
 
 Note: If you're looking for a full DOM parser, you probably want
-[JSDom](http://github.com/tmpvar/jsdom).
+[JSDom](https://github.com/tmpvar/jsdom).
 
 Installation
 ============
@@ -38,7 +42,7 @@ var parser = new xml2js.Parser();
 fs.readFile(__dirname + '/foo.xml', function(err, data) {
     parser.parseString(data, function (err, result) {
         console.dir(result);
-	console.log('Done');
+        console.log('Done');
     });
 });
 ```
