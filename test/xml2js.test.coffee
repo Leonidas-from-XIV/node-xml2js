@@ -39,7 +39,7 @@ module.exports =
     assert.equal r['listtest']['item'][1], 'Qux.'
     assert.equal r['listtest']['item'][2], 'Quux.')
 
-  'test parse with explicitCharkey': skeleton({explicitCharkey: true}, (r) ->
+  'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
     assert.equal r['chartest']['@']['desc'], 'Test for CHARs'
     assert.equal r['chartest']['#'], 'Character data here!'
     assert.equal r['cdatatest']['@']['desc'], 'Test for CDATA'
@@ -58,28 +58,28 @@ module.exports =
   'test default text handling': skeleton(undefined, (r) ->
     assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
-  'test disable trimming': skeleton({trim: false}, (r) ->
+  'test disable trimming': skeleton(trim: false, (r) ->
     assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
-  'test disable normalize': skeleton({normalize: false}, (r) ->
+  'test disable normalize': skeleton(normalize: false, (r) ->
     assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
 
-  'test disable normalize and trim': skeleton({normalize: false, trim: false}, (r) ->
+  'test disable normalize and trim': skeleton(normalize: false, trim: false, (r) ->
     assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
 
-  'test default root node eliminiation': skeleton({__xmlString: '<root></root>'}, (r) ->
+  'test default root node eliminiation': skeleton(__xmlString: '<root></root>', (r) ->
     assert.deepEqual r, {})
 
-  'test disabled root node elimination': skeleton({__xmlString: '<root></root>', explicitRoot: true}, (r) ->
+  'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
     assert.deepEqual r, {root: {}})
 
   'test default empty tag result': skeleton(undefined, (r) ->
     assert.deepEqual r['emptytest'], {})
 
-  'test empty tag result specified null': skeleton({emptyTag: null}, (r) ->
+  'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     assert.equal r['emptytest'], null)
 
-  'test parse with custom char and attribute object keys': skeleton({attrkey: 'attrobj', charkey: 'charobj'}, (r) ->
+  'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     assert.equal r['chartest']['attrobj']['desc'], 'Test for CHARs'
     assert.equal r['chartest']['charobj'], 'Character data here!'
     assert.equal r['cdatatest']['attrobj']['desc'], 'Test for CDATA'
@@ -88,12 +88,12 @@ module.exports =
     assert.equal r['nochartest']['attrobj']['desc'], 'No data'
     assert.equal r['nochartest']['attrobj']['misc'], 'false')
 
-  'test child node with explicitArray false': skeleton({explicitArray: false}, (r) ->
+  'test child node without explicitArray': skeleton(explicitArray: false, (r) ->
     assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
     assert.equal r['arraytest']['item'][1]['subitem'][0], 'Foo.'
     assert.equal r['arraytest']['item'][1]['subitem'][1], 'Bar.')
 
-  'test child node with explicitArray true': skeleton({explicitArray: true}, (r) ->
+  'test child node with explicitArray': skeleton(explicitArray: true, (r) ->
     assert.equal r['arraytest'][0]['item'][0]['subitem'][0], 'Baz.'
     assert.equal r['arraytest'][0]['item'][1]['subitem'][0], 'Foo.'
     assert.equal r['arraytest'][0]['item'][1]['subitem'][1], 'Bar.')
