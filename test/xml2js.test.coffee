@@ -5,15 +5,16 @@ sys = require 'sys'
 assert = require 'assert'
 path = require 'path'
 
+fileName = path.join __dirname, '/fixtures/sample.xml'
+
 skeleton = (options, checks) ->
   (test) ->
     xmlString = options?.__xmlString
     delete options?.__xmlString
-    x2js = new xml2js.Parser(options)
+    x2js = new xml2js.Parser options
     x2js.addListener 'end', (r) ->
-      checks(r)
+      checks r
       test.finish()
-    fileName = path.join(__dirname, '/fixtures/sample.xml')
     if not xmlString
       fs.readFile fileName, (err, data) ->
         x2js.parseString data
@@ -37,7 +38,7 @@ module.exports =
     assert.equal r['listtest']['item'][0]['subitem'][3], 'Foo(4)'
     assert.equal r['listtest']['item'][1], 'Qux.'
     assert.equal r['listtest']['item'][2], 'Quux.')
-    
+
   'test parse with explicitCharkey': skeleton({explicitCharkey: true}, (r) ->
     assert.equal r['chartest']['@']['desc'], 'Test for CHARs'
     assert.equal r['chartest']['#'], 'Character data here!'
@@ -53,7 +54,7 @@ module.exports =
     assert.equal r['listtest']['item'][0]['subitem'][3]['#'], 'Foo(4)'
     assert.equal r['listtest']['item'][1]['#'], 'Qux.'
     assert.equal r['listtest']['item'][2]['#'], 'Quux.')
-    
+
   'test default text handling': skeleton(undefined, (r) ->
     assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
@@ -96,3 +97,13 @@ module.exports =
     assert.equal r['arraytest'][0]['item'][0]['subitem'][0], 'Baz.'
     assert.equal r['arraytest'][0]['item'][1]['subitem'][0], 'Foo.'
     assert.equal r['arraytest'][0]['item'][1]['subitem'][1], 'Bar.')
+
+  'test simple callback mode': (test) ->
+    x2js = new xml2js.Parser()
+    fs.readFile fileName, (err, data) ->
+      assert.equal err, null
+      x2js.parseString data, (err, r) ->
+        assert.equal err, null
+        # just a single test to check whether we parsed anything
+        assert.equal r['chartest']['#'], 'Character data here!'
+        test.finish()
