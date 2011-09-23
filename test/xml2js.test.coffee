@@ -67,7 +67,7 @@ module.exports =
   'test disable normalize and trim': skeleton(normalize: false, trim: false, (r) ->
     assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
 
-  'test default root node eliminiation': skeleton(__xmlString: '<root></root>', (r) ->
+  'test default root node elimination': skeleton(__xmlString: '<root></root>', (r) ->
     assert.deepEqual r, {})
 
   'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
@@ -78,6 +78,9 @@ module.exports =
 
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     assert.equal r['emptytest'], null)
+
+  'test empty string result specified null': skeleton(__xmlString: ' ', (r) ->
+    assert.equal r, null)
 
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     assert.equal r['chartest']['attrobj']['desc'], 'Test for CHARs'

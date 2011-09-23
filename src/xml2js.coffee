@@ -119,4 +119,8 @@ class exports.Parser extends events.EventEmitter
       @on "error", (err) ->
         cb err
         
+    if str.toString().trim() is ''
+      @emit "end", null
+      return true
+      
     @saxParser.write str.toString()
