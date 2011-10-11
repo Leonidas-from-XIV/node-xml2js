@@ -121,6 +121,8 @@ value})``. Possible options are:
     Default is `{}`.
   * `explicitArray` (default: `false`): Always put child nodes in an array if
     true; otherwise an array is created only if there is more than one.
+  * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
+    text nodes.
 
 These default settings are for backward-compatibility (and might change in the
 future). For the most 'clean' parsing, you should disable `normalize` and
