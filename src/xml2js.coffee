@@ -21,6 +21,8 @@ class exports.Parser extends events.EventEmitter
       charkey: "#"
       # always put child nodes in an array
       explicitArray: false
+      # ignore all attributes regardless
+      ignoreAttrs: false
     # overwrite them with the specified options, if any
     options[key] = value for own key, value of opts
 
@@ -52,10 +54,11 @@ class exports.Parser extends events.EventEmitter
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
-      for own key of node.attributes
-        if attrkey not of obj
-          obj[attrkey] = {}
-        obj[attrkey][key] = node.attributes[key]
+      unless options.ignoreAttrs
+        for own key of node.attributes
+          if attrkey not of obj
+            obj[attrkey] = {}
+          obj[attrkey][key] = node.attributes[key]
 
       # need a place to store the node name
       obj["#name"] = node.name

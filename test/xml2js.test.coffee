@@ -101,6 +101,18 @@ module.exports =
     assert.equal r['arraytest'][0]['item'][1]['subitem'][0], 'Foo.'
     assert.equal r['arraytest'][0]['item'][1]['subitem'][1], 'Bar.')
 
+  'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
+    assert.equal r['chartest'], 'Character data here!'
+    assert.equal r['cdatatest'], 'CDATA here!'
+    assert.deepEqual r['nochartest'], {}
+    assert.equal r['listtest']['item'][0]['#'], 'This is character data!'
+    assert.equal r['listtest']['item'][0]['subitem'][0], 'Foo(1)'
+    assert.equal r['listtest']['item'][0]['subitem'][1], 'Foo(2)'
+    assert.equal r['listtest']['item'][0]['subitem'][2], 'Foo(3)'
+    assert.equal r['listtest']['item'][0]['subitem'][3], 'Foo(4)'
+    assert.equal r['listtest']['item'][1], 'Qux.'
+    assert.equal r['listtest']['item'][2], 'Quux.')
+
   'test simple callback mode': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
