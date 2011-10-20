@@ -14,7 +14,8 @@
     "Carter Cole <carter.cole@cartercole.com> (http://cartercole.com/)",
     "Kurt Raschke <kurt@kurtraschke.com> (http://www.kurtraschke.com/)",
     "Contra <contra@australia.edu> (https://github.com/Contra)",
-    "Marcelo Diniz <marudiniz@gmail.com> (https://github.com/mdiniz)"
+    "Marcelo Diniz <marudiniz@gmail.com> (https://github.com/mdiniz)",
+    "Michael Hart (https://github.com/mhart)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
