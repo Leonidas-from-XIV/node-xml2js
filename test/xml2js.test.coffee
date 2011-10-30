@@ -1,7 +1,7 @@
 # use zap to run tests, it also detects CoffeeScript files
 xml2js = require '../lib/xml2js'
 fs = require 'fs'
-sys = require 'sys'
+util = require 'util'
 assert = require 'assert'
 path = require 'path'
 
@@ -23,7 +23,7 @@ skeleton = (options, checks) ->
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
-    console.log 'Result object: ' + sys.inspect(r, false, 10)
+    console.log 'Result object: ' + util.inspect(r, false, 10)
     assert.equal r['chartest']['@']['desc'], 'Test for CHARs'
     assert.equal r['chartest']['#'], 'Character data here!'
     assert.equal r['cdatatest']['@']['desc'], 'Test for CDATA'
