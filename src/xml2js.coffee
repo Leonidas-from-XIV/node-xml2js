@@ -28,6 +28,9 @@ class exports.Parser extends events.EventEmitter
     @reset()
 
   reset: =>
+    # remove all previous listeners for events, to prevent event listener
+    # accumulation
+    @removeAllListeners()
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
     @saxParser = sax.parser true, {
