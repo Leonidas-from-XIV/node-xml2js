@@ -122,3 +122,16 @@ module.exports =
         # just a single test to check whether we parsed anything
         assert.equal r['chartest']['#'], 'Character data here!'
         test.finish()
+
+  'test double parse': (test) ->
+    x2js = new xml2js.Parser()
+    fs.readFile fileName, (err, data) ->
+      assert.equal err, null
+      x2js.parseString data, (err, r) ->
+        assert.equal err, null
+        # make sure we parsed anything
+        assert.equal r['chartest']['#'], 'Character data here!'
+        x2js.parseString data, (err, r) ->
+          assert.equal err, null
+          assert.equal r['chartest']['#'], 'Character data here!'
+          test.finish()
