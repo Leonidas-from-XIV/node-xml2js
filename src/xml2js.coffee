@@ -7,10 +7,9 @@ isEmpty = (thing) ->
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
-
     # default options. for compatibility's sake set to some
     # sub-optimal settings. might change in the future.
-    options =
+    @options =
       explicitCharkey: false
       trim: true
       # normalize implicates trimming, just so you know
@@ -24,8 +23,11 @@ class exports.Parser extends events.EventEmitter
       # ignore all attributes regardless
       ignoreAttrs: false
     # overwrite them with the specified options, if any
-    options[key] = value for own key, value of opts
+    @options[key] = value for own key, value of opts
 
+    @reset()
+
+  reset: =>
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
     @saxParser = sax.parser true, {
@@ -44,17 +46,17 @@ class exports.Parser extends events.EventEmitter
     # always use the '#' key, even if there are no subkeys
     # setting this property by and is deprecated, yet still supported.
     # better pass it as explicitCharkey option to the constructor
-    @EXPLICIT_CHARKEY = options.explicitCharkey
+    @EXPLICIT_CHARKEY = @options.explicitCharkey
     @resultObject = null
     stack = []
     # aliases, so we don't have to type so much
-    attrkey = options.attrkey
-    charkey = options.charkey
+    attrkey = @options.attrkey
+    charkey = @options.charkey
 
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
-      unless options.ignoreAttrs
+      unless @options.ignoreAttrs
         for own key of node.attributes
           if attrkey not of obj
             obj[attrkey] = {}
@@ -74,19 +76,19 @@ class exports.Parser extends events.EventEmitter
       if obj[charkey].match(/^\s*$/)
         delete obj[charkey]
       else
-        obj[charkey] = obj[charkey].trim() if options.trim
-        obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if options.normalize
+        obj[charkey] = obj[charkey].trim() if @options.trim
+        obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
           obj = obj[charkey]
 
-      if options.emptyTag != undefined && isEmpty obj
-        obj = options.emptyTag
+      if @options.emptyTag != undefined && isEmpty obj
+        obj = @options.emptyTag
 
       # check whether we closed all the open tags
       if stack.length > 0
-        if not options.explicitArray
+        if not @options.explicitArray
           if nodeName not of s
             s[nodeName] = obj
           else if s[nodeName] instanceof Array
@@ -101,7 +103,7 @@ class exports.Parser extends events.EventEmitter
           s[nodeName].push obj
       else
         # if explicitRoot was specified, wrap stuff in the root tag name
-        if options.explicitRoot
+        if @options.explicitRoot
           # avoid circular references
           old = obj
           obj = {}
@@ -118,8 +120,10 @@ class exports.Parser extends events.EventEmitter
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"
       @on "end", (result) ->
+        @reset()
         cb null, result
       @on "error", (err) ->
+        @reset()
         cb err
 
     if str.toString().trim() is ''
