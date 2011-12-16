@@ -125,7 +125,7 @@ value})``. Possible options are:
     text nodes.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child
-    attribute object.
+    attribute object. This option is ignored if `ignoreAttrs` is `false`.
 
 These default settings are for backward-compatibility (and might change in the
 future). For the most 'clean' parsing, you should disable `normalize` and
