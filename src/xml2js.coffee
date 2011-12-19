@@ -22,6 +22,9 @@ class exports.Parser extends events.EventEmitter
       explicitArray: false
       # ignore all attributes regardless
       ignoreAttrs: false
+      # merge attributes and child elements onto parent object.  this may
+      # cause collisions.
+      mergeAttrs: false
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
@@ -61,9 +64,12 @@ class exports.Parser extends events.EventEmitter
       obj[charkey] = ""
       unless @options.ignoreAttrs
         for own key of node.attributes
-          if attrkey not of obj
+          if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
-          obj[attrkey][key] = node.attributes[key]
+          if @options.mergeAttrs
+            obj[key] = node.attributes[key]
+          else
+            obj[attrkey][key] = node.attributes[key]
 
       # need a place to store the node name
       obj["#name"] = node.name
