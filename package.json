@@ -15,7 +15,9 @@
     "Kurt Raschke <kurt@kurtraschke.com> (http://www.kurtraschke.com/)",
     "Contra <contra@australia.edu> (https://github.com/Contra)",
     "Marcelo Diniz <marudiniz@gmail.com> (https://github.com/mdiniz)",
-    "Michael Hart (https://github.com/mhart)"
+    "Michael Hart (https://github.com/mhart)",
+    "Zachary Scott <zachary@zacharyscott.net> (http://zacharyscott.net/)",
+    "Raoul Millais (https://github.com/raoulmillais)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {

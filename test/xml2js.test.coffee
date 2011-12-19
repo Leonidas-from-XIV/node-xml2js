@@ -71,6 +71,7 @@ module.exports =
     assert.equal r['listtest']['item'][0]['subitem'][3], 'Foo(4)'
     assert.equal r['listtest']['item'][1], 'Qux.'
     assert.equal r['listtest']['item'][2], 'Quux.')
+
   'test default text handling': skeleton(undefined, (r) ->
     assert.equal r['whitespacetest']['#'], 'Line One Line Two')
 
