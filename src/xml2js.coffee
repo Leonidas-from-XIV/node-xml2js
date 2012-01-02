@@ -18,6 +18,8 @@ class exports.Parser extends events.EventEmitter
       attrkey: "@"
       # set default char object key
       charkey: "#"
+      # set default comment object key
+      commentkey: "$"
       # always put child nodes in an array
       explicitArray: false
       # ignore all attributes regardless
@@ -40,7 +42,7 @@ class exports.Parser extends events.EventEmitter
       trim: false,
       normalize: false
     }
-    
+
     # emit one error event if the sax parser fails. this is mostly a hack, but
     # the sax parser isn't state of the art either.
     err = false
@@ -48,7 +50,7 @@ class exports.Parser extends events.EventEmitter
       if ! err
         err = true
         @emit "error", error
-    
+
     # always use the '#' key, even if there are no subkeys
     # setting this property by and is deprecated, yet still supported.
     # better pass it as explicitCharkey option to the constructor
@@ -58,6 +60,7 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentkey = @options.commentkey
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -74,7 +77,7 @@ class exports.Parser extends events.EventEmitter
       # need a place to store the node name
       obj["#name"] = node.name
       stack.push obj
-    
+
     @saxParser.onclosetag = =>
       obj = stack.pop()
       nodeName = obj["#name"]
@@ -120,6 +123,11 @@ class exports.Parser extends events.EventEmitter
 
         @resultObject = obj
         @emit "end", @resultObject
+
+    @saxParser.oncomment = (text) =>
+      s = stack[stack.length -1]
+      if s
+        s[commentkey] = text
 
     @saxParser.ontext = @saxParser.oncdata = (text) =>
       s = stack[stack.length - 1]

@@ -2,11 +2,13 @@
     <chartest desc="Test for CHARs">Character data here!</chartest>
     <cdatatest desc="Test for CDATA" misc="true"><![CDATA[CDATA here!]]></cdatatest>
     <nochartest desc="No data" misc="false" />
+    <!-- This is a sample Comment! -->
     <whitespacetest desc="Test for normalizing and trimming">
         Line One
         Line Two
     </whitespacetest>
     <listtest>
+      <!-- listtest comment text right before "item" -->
         <item>
             This <subitem>Foo(1)</subitem> is
             <subitem>Foo(2)</subitem>
@@ -24,11 +26,11 @@
     </arraytest>
     <emptytest/>
     <ordertest>
-	<one>1</one>
-	<two>2</two>
-	<three>3</three>
-	<one>4</one>
-	<two>5</two>
-	<three>6</three>
+  <one>1</one>
+  <two>2</two>
+  <three>3</three>
+  <one>4</one>
+  <two>5</two>
+  <three>6</three>
     </ordertest>
 </sample>
