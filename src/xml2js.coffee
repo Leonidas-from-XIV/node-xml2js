@@ -27,6 +27,8 @@ class exports.Parser extends events.EventEmitter
       # merge attributes and child elements onto parent object.  this may
       # cause collisions.
       mergeAttrs: false
+      # toggle for parsing comments
+      parseComments: false
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
@@ -61,6 +63,7 @@ class exports.Parser extends events.EventEmitter
     attrkey = @options.attrkey
     charkey = @options.charkey
     commentkey = @options.commentkey
+    parseComments = @options.parseComments
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -124,10 +127,11 @@ class exports.Parser extends events.EventEmitter
         @resultObject = obj
         @emit "end", @resultObject
 
-    @saxParser.oncomment = (text) =>
-      s = stack[stack.length -1]
-      if s
-        s[commentkey] = text
+    if parseComments
+      @saxParser.oncomment = (text) =>
+        s = stack[stack.length -1]
+        if s
+          s[commentkey] = text
 
     @saxParser.ontext = @saxParser.oncdata = (text) =>
       s = stack[stack.length - 1]
