@@ -129,7 +129,7 @@ class exports.Parser extends events.EventEmitter
 
     if parseComments
       @saxParser.oncomment = (text) =>
-        s = stack[stack.length -1]
+        s = stack[stack.length - 1]
         if s
           s[commentkey] = text
 
