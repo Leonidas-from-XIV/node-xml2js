@@ -25,6 +25,9 @@ class exports.Parser extends events.EventEmitter
       # merge attributes and child elements onto parent object.  this may
       # cause collisions.
       mergeAttrs: false
+      # using strict mode can cause sax to break on non-standard XML
+      # entities (such as HTML entities). use false if you want to let these pass
+      strict: true
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
@@ -36,7 +39,7 @@ class exports.Parser extends events.EventEmitter
     @removeAllListeners()
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
-    @saxParser = sax.parser true, {
+    @saxParser = sax.parser @options.strict, {
       trim: false,
       normalize: false
     }
