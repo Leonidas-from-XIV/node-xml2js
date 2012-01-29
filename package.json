@@ -32,6 +32,7 @@
   },
   "devDependencies" : {
     "coffee-script" : ">=1.0.1",
-    "zap" : ">=0.2.3"
+    "zap" : ">=0.2.3",
+    "docco" : ">=0.3.0"
   }
 }
