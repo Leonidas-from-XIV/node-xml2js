@@ -25,6 +25,8 @@ class exports.Parser extends events.EventEmitter
       # merge attributes and child elements onto parent object.  this may
       # cause collisions.
       mergeAttrs: false
+      # optional validator for schema-driven generawtion
+      validator: null
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
@@ -95,6 +97,9 @@ class exports.Parser extends events.EventEmitter
       if @options.emptyTag != undefined && isEmpty obj
         obj = @options.emptyTag
 
+      if @options.validator?
+        obj = @options.validator.validate(obj, stack, nodeName)
+
       # check whether we closed all the open tags
       if stack.length > 0
         if not @options.explicitArray
@@ -139,4 +144,9 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write str.toString()
+    try
+      @saxParser.write str.toString()
+    catch ex
+      @emit("error", ex.message)
+      return @saxParser
+
