@@ -5,6 +5,10 @@ events = require 'events'
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
+class exports.ValidationError extends Error
+  constructor: (message) ->
+    @message = message
+
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
     # default options. for compatibility's sake set to some
@@ -98,7 +102,7 @@ class exports.Parser extends events.EventEmitter
         obj = @options.emptyTag
 
       if @options.validator?
-        obj = @options.validator.validate(obj, stack, nodeName)
+        obj = @options.validator(obj, stack, nodeName)
 
       # check whether we closed all the open tags
       if stack.length > 0
@@ -147,6 +151,8 @@ class exports.Parser extends events.EventEmitter
     try
       @saxParser.write str.toString()
     catch ex
-      @emit("error", ex.message)
-      return @saxParser
+      if ex instanceof exports.ValidationError
+        @emit("error", ex.message)
+      else
+        throw ex
 

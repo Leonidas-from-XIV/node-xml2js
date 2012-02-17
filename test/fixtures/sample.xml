@@ -31,4 +31,9 @@
 	<two>5</two>
 	<three>6</three>
     </ordertest>
+    <validatortest>
+ 	<oneitemarray/>
+	<numbertest>42</numbertest>
+        <stringtest>42</stringtest>
+    </validatortest>
 </sample>

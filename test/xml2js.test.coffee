@@ -21,6 +21,15 @@ skeleton = (options, checks) ->
     else
       x2js.parseString xmlString
 
+validator = (obj, stack, nodeName) ->
+  if nodeName == "numbertest"
+    return Number(obj)
+  else if nodeName == "oneitemarray"
+    stack[stack.length-1][nodeName] = []
+  else if nodeName == "validationerror"
+    throw new xml2js.ValidationError("Validation error!") 
+  return obj
+
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
     console.log 'Result object: ' + util.inspect(r, false, 10)
@@ -152,3 +161,15 @@ module.exports =
           assert.equal err, null
           assert.equal r['chartest']['#'], 'Character data here!'
           test.finish()
+
+  'test validator': skeleton(validator: validator, (r) ->
+    assert.equal typeof r['validatortest']['stringtest'], 'string'
+    assert.equal typeof r['validatortest']['numbertest'], 'number'
+    assert.ok r['validatortest']['oneitemarray'] instanceof Array)
+
+  'test validation error': (test) ->
+    x2js = new xml2js.Parser({validator: validator})
+    x2js.parseString '<validationerror/>', (err, r) ->
+      assert.equal err, 'Validation error!' 
+      test.finish()
+  
