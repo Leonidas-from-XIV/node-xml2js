@@ -102,7 +102,8 @@ class exports.Parser extends events.EventEmitter
         obj = @options.emptyTag
 
       if @options.validator?
-        obj = @options.validator(obj, stack, nodeName)
+        xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
+        obj = @options.validator(xpath, s and s[nodeName], obj)
 
       # check whether we closed all the open tags
       if stack.length > 0

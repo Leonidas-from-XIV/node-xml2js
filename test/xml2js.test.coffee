@@ -20,15 +20,25 @@ skeleton = (options, checks) ->
         x2js.parseString data
     else
       x2js.parseString xmlString
-
-validator = (obj, stack, nodeName) ->
-  if nodeName == "numbertest"
-    return Number(obj)
-  else if nodeName == "oneitemarray"
-    stack[stack.length-1][nodeName] = []
-  else if nodeName == "validationerror"
+###
+The `validator` function validates the value at the XPath. It also transforms the value
+if necessary to conform to the schema or other validation information being used. If there
+is an existing value at this path it is supplied in `currentValue` (e.g. this is the second or
+later item in an array).
+If the validation fails it should throw a `ValidationError`.
+###
+validator = (xpath, currentValue, newValue) ->
+  if xpath == '/sample/validatortest/numbertest'
+    return Number(newValue)
+  else if xpath in ['/sample/arraytest', '/sample/validatortest/emptyarray', '/sample/validatortest/oneitemarray']
+    if not ('item' of newValue)
+      return {'item': []}
+  else if xpath in ['/sample/arraytest/item', '/sample/validatortest/emptyarray/item', '/sample/validatortest/oneitemarray/item']
+    if not currentValue
+      return [newValue]
+  else if xpath == '/validationerror'
     throw new xml2js.ValidationError("Validation error!") 
-  return obj
+  return newValue
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
@@ -165,11 +175,19 @@ module.exports =
   'test validator': skeleton(validator: validator, (r) ->
     assert.equal typeof r['validatortest']['stringtest'], 'string'
     assert.equal typeof r['validatortest']['numbertest'], 'number'
-    assert.ok r['validatortest']['oneitemarray'] instanceof Array)
+    assert.ok r['validatortest']['emptyarray']['item'] instanceof Array
+    assert.equal r['validatortest']['emptyarray']['item'].length, 0
+    assert.ok r['validatortest']['oneitemarray']['item'] instanceof Array
+    assert.equal r['validatortest']['oneitemarray']['item'].length, 1
+    assert.equal r['validatortest']['oneitemarray']['item'], 'Bar.'
+    assert.ok r['arraytest']['item'] instanceof Array
+    assert.equal r['arraytest']['item'].length, 2
+    assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
+    assert.equal r['arraytest']['item'][1]['subitem'][0], 'Foo.'
+    assert.equal r['arraytest']['item'][1]['subitem'][1], 'Bar.')
 
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
       assert.equal err, 'Validation error!' 
       test.finish()
-  

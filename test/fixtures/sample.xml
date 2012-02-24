@@ -24,16 +24,19 @@
     </arraytest>
     <emptytest/>
     <ordertest>
-	<one>1</one>
-	<two>2</two>
-	<three>3</three>
-	<one>4</one>
-	<two>5</two>
-	<three>6</three>
+        <one>1</one>
+        <two>2</two>
+        <three>3</three>
+        <one>4</one>
+        <two>5</two>
+        <three>6</three>
     </ordertest>
     <validatortest>
- 	<oneitemarray/>
-	<numbertest>42</numbertest>
-        <stringtest>42</stringtest>
+        <emptyarray/>
+        <oneitemarray>
+            <item>Bar.</item>
+        </oneitemarray>
+        <numbertest>42</numbertest>
+        <stringtest>43</stringtest>
     </validatortest>
 </sample>
