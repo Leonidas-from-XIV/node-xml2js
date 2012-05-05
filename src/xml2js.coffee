@@ -22,6 +22,7 @@ exports.defaults =
     # merge attributes and child elements onto parent object.  this may
     # cause collisions.
     mergeAttrs: false
+    explicitRoot: false
     validator: null
   "0.2":
     explicitCharkey: false
@@ -33,6 +34,7 @@ exports.defaults =
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
+    explicitRoot: true
     validator: null
 
 class exports.ValidationError extends Error
