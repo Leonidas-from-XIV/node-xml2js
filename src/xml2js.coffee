@@ -22,6 +22,7 @@ exports.defaults =
     # merge attributes and child elements onto parent object.  this may
     # cause collisions.
     mergeAttrs: false
+    validator: null
   "0.2":
     explicitCharkey: false
     trim: false
@@ -32,6 +33,11 @@ exports.defaults =
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
+    validator: null
+
+class exports.ValidationError extends Error
+  constructor: (message) ->
+    @message = message
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
@@ -107,6 +113,10 @@ class exports.Parser extends events.EventEmitter
       if @options.emptyTag != undefined && isEmpty obj
         obj = @options.emptyTag
 
+      if @options.validator?
+        xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
+        obj = @options.validator(xpath, s and s[nodeName], obj)
+
       # check whether we closed all the open tags
       if stack.length > 0
         if not @options.explicitArray
@@ -151,4 +161,11 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write str.toString()
+    try
+      @saxParser.write str.toString()
+    catch ex
+      if ex instanceof exports.ValidationError
+        @emit("error", ex.message)
+      else
+        throw ex
+
