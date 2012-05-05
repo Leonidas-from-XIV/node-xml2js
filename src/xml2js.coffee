@@ -29,8 +29,7 @@ exports.defaults =
     trim: false
     normalize: false
     attrkey: "$"
-    # not sure if # is the best idea, will investigate
-    charkey: "#"
+    charkey: "_"
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
