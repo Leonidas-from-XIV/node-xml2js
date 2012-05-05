@@ -5,26 +5,38 @@ events = require 'events'
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
+exports.defaults =
+  "0.1":
+    explicitCharkey: false
+    trim: true
+    # normalize implicates trimming, just so you know
+    normalize: true
+    # set default attribute object key
+    attrkey: "@"
+    # set default char object key
+    charkey: "#"
+    # always put child nodes in an array
+    explicitArray: false
+    # ignore all attributes regardless
+    ignoreAttrs: false
+    # merge attributes and child elements onto parent object.  this may
+    # cause collisions.
+    mergeAttrs: false
+  "0.2":
+    explicitCharkey: false
+    trim: false
+    normalize: false
+    attrkey: "$"
+    # not sure if # is the best idea, will investigate
+    charkey: "#"
+    explicitArray: true
+    ignoreAttrs: false
+    mergeAttrs: false
+
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
-    # default options. for compatibility's sake set to some
-    # sub-optimal settings. might change in the future.
-    @options =
-      explicitCharkey: false
-      trim: true
-      # normalize implicates trimming, just so you know
-      normalize: true
-      # set default attribute object key
-      attrkey: "@"
-      # set default char object key
-      charkey: "#"
-      # always put child nodes in an array
-      explicitArray: false
-      # ignore all attributes regardless
-      ignoreAttrs: false
-      # merge attributes and child elements onto parent object.  this may
-      # cause collisions.
-      mergeAttrs: false
+    # copy this versions default options
+    @options = value for own key, value of exports.defaults["0.1"]
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
