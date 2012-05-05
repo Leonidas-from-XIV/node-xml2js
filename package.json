@@ -17,7 +17,8 @@
     "Marcelo Diniz <marudiniz@gmail.com> (https://github.com/mdiniz)",
     "Michael Hart (https://github.com/mhart)",
     "Zachary Scott <zachary@zacharyscott.net> (http://zacharyscott.net/)",
-    "Raoul Millais (https://github.com/raoulmillais)"
+    "Raoul Millais (https://github.com/raoulmillais)",
+    "Salsita Software (http://www.salsitasoft.com/)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
