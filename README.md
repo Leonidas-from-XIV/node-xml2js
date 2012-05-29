@@ -130,9 +130,25 @@ value})``. Possible options are:
     the resulting structure somehow, however you want. See unit tests
     for an example.
 
-These default settings are for backward-compatibility (and might change in the
-future). For the most 'clean' parsing, you should disable `normalize` and
-`trimming` and enable `explicitRoot`.
+These default settings are for backward-compatibility. These are scheduled to
+change to a more 'clean' way of parsing in version 0.2.
+
+Updating to new version
+=======================
+
+As version 0.2 will change the default parsing settings version 0.1.14
+introduced the default settings for version 0.2.
+
+```javascript
+var xml2js = require('xml2js');
+var parser = new xml2js.Parser(xml2js.defaults["0.2"]);
+```
+
+To get the 0.1 defaults in version 0.2 you can just use
+`xml2js.defaults["0.1"]` in the same place. This provides you with enough time
+to migrate to the saner way of parsing in xml2js 0.2. We try to make the
+migration as simple and gentle as possible, but some breakage cannot be
+avoided.
 
 Running tests, development
 ==========================
