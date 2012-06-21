@@ -35,7 +35,7 @@ validator = (xpath, currentValue, newValue) ->
       return {'item': []}
   else if xpath in ['/sample/arraytest/item', '/sample/validatortest/emptyarray/item', '/sample/validatortest/oneitemarray/item']
     if not currentValue
-      return [newValue]
+      return newValue
   else if xpath == '/validationerror'
     throw new xml2js.ValidationError("Validation error!") 
   return newValue
