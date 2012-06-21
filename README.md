@@ -112,14 +112,14 @@ specified for the parser. Options are specified by ``new Parser({optionName:
 value})``. Possible options are:
 
   * `explicitCharkey` (default: `false`)
-  * `trim` (default: `true`): Trim the whitespace at the beginning and end of
+  * `trim` (default: `false`): Trim the whitespace at the beginning and end of
     text nodes.
-  * `normalize` (default: `true`): Trim whitespaces inside text nodes.
-  * `explicitRoot` (default: `false`): Set this if you want to get the root
+  * `normalize` (default: `false`): Trim whitespaces inside text nodes.
+  * `explicitRoot` (default: `true`): Set this if you want to get the root
     node in the resulting object.
   * `emptyTag` (default: `undefined`): what will the value of empty nodes be.
     Default is `{}`.
-  * `explicitArray` (default: `false`): Always put child nodes in an array if
+  * `explicitArray` (default: `true`): Always put child nodes in an array if
     true; otherwise an array is created only if there is more than one.
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
     text nodes.
@@ -149,6 +149,18 @@ To get the 0.1 defaults in version 0.2 you can just use
 to migrate to the saner way of parsing in xml2js 0.2. We try to make the
 migration as simple and gentle as possible, but some breakage cannot be
 avoided.
+
+So, what exactly did change and why? In 0.2 we changed some defaults to parse
+the XML in a more universal and sane way. So we disabled `normalize` and `trim`
+so xml2js does not cut out any text content. You can reenable this at will of
+course. A more important change is that we return the root tag in the resulting
+JavaScript structure via the `explicitRoot` setting, so you need to access the
+first element. This is useful for anybody who wants to know what the root node
+is and preserves more information. The last major change was to enable
+`explicitArray`, so everytime it is possible that one might embed more than one
+sub-tag into a tag, xml2js >= 0.2 returns an array even if the array just
+includes one element. This is useful when dealing with APIs that return
+variable amounts of subtags.
 
 Running tests, development
 ==========================
