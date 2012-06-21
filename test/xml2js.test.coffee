@@ -106,7 +106,8 @@ module.exports =
   'test text no trimming, no normalize': skeleton(trim: false, normalize: false, (r) ->
     equ r.sample.whitespacetest[0]._, '\n        Line One\n        Line Two\n    ')
 
-  'test default root node elimination': skeleton(__xmlString: '<root></root>', (r) ->
+  'test enabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
     assert.deepEqual r, {})
 
   'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
