@@ -123,13 +123,14 @@ module.exports =
     equ r, null)
 
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
-    assert.equal r['chartest']['attrobj']['desc'], 'Test for CHARs'
-    assert.equal r['chartest']['charobj'], 'Character data here!'
-    assert.equal r['cdatatest']['attrobj']['desc'], 'Test for CDATA'
-    assert.equal r['cdatatest']['attrobj']['misc'], 'true'
-    assert.equal r['cdatatest']['charobj'], 'CDATA here!'
-    assert.equal r['nochartest']['attrobj']['desc'], 'No data'
-    assert.equal r['nochartest']['attrobj']['misc'], 'false')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest[0].attrobj.desc, 'Test for CHARs'
+    equ r.sample.chartest[0].charobj, 'Character data here!'
+    equ r.sample.cdatatest[0].attrobj.desc, 'Test for CDATA'
+    equ r.sample.cdatatest[0].attrobj.misc, 'true'
+    equ r.sample.cdatatest[0].charobj, 'CDATA here!'
+    equ r.sample.nochartest[0].attrobj.desc, 'No data'
+    equ r.sample.nochartest[0].attrobj.misc, 'false')
 
   'test child node without explicitArray': skeleton(explicitArray: false, (r) ->
     assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
