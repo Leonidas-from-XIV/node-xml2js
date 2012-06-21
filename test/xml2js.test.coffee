@@ -94,17 +94,17 @@ module.exports =
     equ r.sample.listtest[0].item[1], 'Qux.'
     equ r.sample.listtest[0].item[2], 'Quux.')
 
-  'test default text handling': skeleton(undefined, (r) ->
-    assert.equal r['whitespacetest']['#'], 'Line One Line Two')
+  'test text trimming, normalize': skeleton(trim: true, normalize: true, (r) ->
+    equ r.sample.whitespacetest[0]._, 'Line One Line Two')
 
-  'test disable trimming': skeleton(trim: false, (r) ->
-    assert.equal r['whitespacetest']['#'], 'Line One Line Two')
+  'test text trimming, no normalizing': skeleton(trim: true, normalize: false, (r) ->
+    equ r.sample.whitespacetest[0]._, 'Line One\n        Line Two')
 
-  'test disable normalize': skeleton(normalize: false, (r) ->
-    assert.equal r['whitespacetest']['#'], 'Line One\n        Line Two')
+  'test text no trimming, normalize': skeleton(trim: false, normalize: true, (r) ->
+    equ r.sample.whitespacetest[0]._, 'Line One Line Two')
 
-  'test disable normalize and trim': skeleton(normalize: false, trim: false, (r) ->
-    assert.equal r['whitespacetest']['#'], '\n        Line One\n        Line Two\n    ')
+  'test text no trimming, no normalize': skeleton(trim: false, normalize: false, (r) ->
+    equ r.sample.whitespacetest[0]._, '\n        Line One\n        Line Two\n    ')
 
   'test default root node elimination': skeleton(__xmlString: '<root></root>', (r) ->
     assert.deepEqual r, {})
