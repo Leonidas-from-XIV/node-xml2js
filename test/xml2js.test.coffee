@@ -45,7 +45,7 @@ equ = assert.equal
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
-    console.log 'Result object: ' + util.inspect(r, false, 10)
+    console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].$.desc, 'Test for CHARs'
     equ r.sample.chartest[0]._, 'Character data here!'
     equ r.sample.cdatatest[0].$.desc, 'Test for CDATA'
@@ -62,20 +62,21 @@ module.exports =
     equ r.sample.listtest[0].item[2], 'Quux.')
 
   'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
-    assert.equal r['chartest']['@']['desc'], 'Test for CHARs'
-    assert.equal r['chartest']['#'], 'Character data here!'
-    assert.equal r['cdatatest']['@']['desc'], 'Test for CDATA'
-    assert.equal r['cdatatest']['@']['misc'], 'true'
-    assert.equal r['cdatatest']['#'], 'CDATA here!'
-    assert.equal r['nochartest']['@']['desc'], 'No data'
-    assert.equal r['nochartest']['@']['misc'], 'false'
-    assert.equal r['listtest']['item'][0]['#'], 'This is character data!'
-    assert.equal r['listtest']['item'][0]['subitem'][0]['#'], 'Foo(1)'
-    assert.equal r['listtest']['item'][0]['subitem'][1]['#'], 'Foo(2)'
-    assert.equal r['listtest']['item'][0]['subitem'][2]['#'], 'Foo(3)'
-    assert.equal r['listtest']['item'][0]['subitem'][3]['#'], 'Foo(4)'
-    assert.equal r['listtest']['item'][1]['#'], 'Qux.'
-    assert.equal r['listtest']['item'][2]['#'], 'Quux.')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest[0].$.desc, 'Test for CHARs'
+    equ r.sample.chartest[0]._, 'Character data here!'
+    equ r.sample.cdatatest[0].$.desc, 'Test for CDATA'
+    equ r.sample.cdatatest[0].$.misc, 'true'
+    equ r.sample.cdatatest[0]._, 'CDATA here!'
+    equ r.sample.nochartest[0].$.desc, 'No data'
+    equ r.sample.nochartest[0].$.misc, 'false'
+    equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
+    equ r.sample.listtest[0].item[0].subitem[0]._, 'Foo(1)'
+    equ r.sample.listtest[0].item[0].subitem[1]._, 'Foo(2)'
+    equ r.sample.listtest[0].item[0].subitem[2]._, 'Foo(3)'
+    equ r.sample.listtest[0].item[0].subitem[3]._, 'Foo(4)'
+    equ r.sample.listtest[0].item[1]._, 'Qux.'
+    equ r.sample.listtest[0].item[2]._, 'Quux.')
 
   'test parse with mergeAttrs': skeleton(mergeAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect(r, false, 10)
