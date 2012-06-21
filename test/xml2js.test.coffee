@@ -114,13 +114,13 @@ module.exports =
     assert.deepEqual r, {root: {}})
 
   'test default empty tag result': skeleton(undefined, (r) ->
-    assert.deepEqual r['emptytest'], {})
+    assert.deepEqual r.sample.emptytest, [{}])
 
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
-    assert.equal r['emptytest'], null)
+    equ r.sample.emptytest[0], null)
 
-  'test empty string result specified null': skeleton(__xmlString: ' ', (r) ->
-    assert.equal r, null)
+  'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
+    equ r, null)
 
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     assert.equal r['chartest']['attrobj']['desc'], 'Test for CHARs'
