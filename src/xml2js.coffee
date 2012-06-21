@@ -44,7 +44,7 @@ class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
     # copy this versions default options
     @options = {}
-    @options[key] = value for own key, value of exports.defaults["0.1"]
+    @options[key] = value for own key, value of exports.defaults["0.2"]
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
