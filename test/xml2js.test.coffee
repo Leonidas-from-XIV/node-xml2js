@@ -133,14 +133,16 @@ module.exports =
     equ r.sample.nochartest[0].attrobj.misc, 'false')
 
   'test child node without explicitArray': skeleton(explicitArray: false, (r) ->
-    assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
-    assert.equal r['arraytest']['item'][1]['subitem'][0], 'Foo.'
-    assert.equal r['arraytest']['item'][1]['subitem'][1], 'Bar.')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.arraytest.item[0].subitem, 'Baz.'
+    equ r.sample.arraytest.item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest.item[1].subitem[1], 'Bar.')
 
   'test child node with explicitArray': skeleton(explicitArray: true, (r) ->
-    assert.equal r['arraytest'][0]['item'][0]['subitem'][0], 'Baz.'
-    assert.equal r['arraytest'][0]['item'][1]['subitem'][0], 'Foo.'
-    assert.equal r['arraytest'][0]['item'][1]['subitem'][1], 'Bar.')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
+    equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     assert.equal r['chartest'], 'Character data here!'
