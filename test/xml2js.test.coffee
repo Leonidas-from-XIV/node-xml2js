@@ -145,16 +145,17 @@ module.exports =
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
-    assert.equal r['chartest'], 'Character data here!'
-    assert.equal r['cdatatest'], 'CDATA here!'
-    assert.deepEqual r['nochartest'], {}
-    assert.equal r['listtest']['item'][0]['#'], 'This is character data!'
-    assert.equal r['listtest']['item'][0]['subitem'][0], 'Foo(1)'
-    assert.equal r['listtest']['item'][0]['subitem'][1], 'Foo(2)'
-    assert.equal r['listtest']['item'][0]['subitem'][2], 'Foo(3)'
-    assert.equal r['listtest']['item'][0]['subitem'][3], 'Foo(4)'
-    assert.equal r['listtest']['item'][1], 'Qux.'
-    assert.equal r['listtest']['item'][2], 'Quux.')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest, 'Character data here!'
+    equ r.sample.cdatatest, 'CDATA here!'
+    assert.deepEqual r.sample.nochartest[0], {}
+    equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
+    equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+    equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
+    equ r.sample.listtest[0].item[0].subitem[2], 'Foo(3)'
+    equ r.sample.listtest[0].item[0].subitem[3], 'Foo(4)'
+    equ r.sample.listtest[0].item[1], 'Qux.'
+    equ r.sample.listtest[0].item[2], 'Quux.')
 
   'test simple callback mode': (test) ->
     x2js = new xml2js.Parser()
@@ -163,7 +164,7 @@ module.exports =
       x2js.parseString data, (err, r) ->
         assert.equal err, null
         # just a single test to check whether we parsed anything
-        assert.equal r['chartest']['#'], 'Character data here!'
+        assert.equal r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
   'test double parse': (test) ->
@@ -173,25 +174,26 @@ module.exports =
       x2js.parseString data, (err, r) ->
         assert.equal err, null
         # make sure we parsed anything
-        assert.equal r['chartest']['#'], 'Character data here!'
+        assert.equal r.sample.chartest[0]._, 'Character data here!'
         x2js.parseString data, (err, r) ->
           assert.equal err, null
-          assert.equal r['chartest']['#'], 'Character data here!'
+          assert.equal r.sample.chartest[0]._, 'Character data here!'
           test.finish()
 
   'test validator': skeleton(validator: validator, (r) ->
-    assert.equal typeof r['validatortest']['stringtest'], 'string'
-    assert.equal typeof r['validatortest']['numbertest'], 'number'
-    assert.ok r['validatortest']['emptyarray']['item'] instanceof Array
-    assert.equal r['validatortest']['emptyarray']['item'].length, 0
-    assert.ok r['validatortest']['oneitemarray']['item'] instanceof Array
-    assert.equal r['validatortest']['oneitemarray']['item'].length, 1
-    assert.equal r['validatortest']['oneitemarray']['item'], 'Bar.'
-    assert.ok r['arraytest']['item'] instanceof Array
-    assert.equal r['arraytest']['item'].length, 2
-    assert.equal r['arraytest']['item'][0]['subitem'], 'Baz.'
-    assert.equal r['arraytest']['item'][1]['subitem'][0], 'Foo.'
-    assert.equal r['arraytest']['item'][1]['subitem'][1], 'Bar.')
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ typeof r.sample.validatortest[0].stringtest[0], 'string'
+    equ typeof r.sample.validatortest[0].numbertest[0], 'number'
+    assert.ok r.sample.validatortest[0].emptyarray[0].item instanceof Array
+    equ r.sample.validatortest[0].emptyarray[0].item.length, 0
+    assert.ok r.sample.validatortest[0].oneitemarray[0].item instanceof Array
+    equ r.sample.validatortest[0].oneitemarray[0].item.length, 1
+    equ r.sample.validatortest[0].oneitemarray[0].item[0], 'Bar.'
+    assert.ok r.sample.arraytest[0].item instanceof Array
+    equ r.sample.arraytest[0].item.length, 2
+    equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
+    equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
