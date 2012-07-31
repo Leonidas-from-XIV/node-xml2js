@@ -129,6 +129,10 @@ value})``. Possible options are:
   * `validator` (default `null`): You can specify a callable that validates
     the resulting structure somehow, however you want. See unit tests
     for an example.
+  * `xmlns` (default `false`): Give each element a field usually called '$ns' 
+    (the first character is the same as attrkey) that contains its local name 
+    and namespace uri.
+
 
 These default settings are for backward-compatibility. These are scheduled to
 change to a more 'clean' way of parsing in version 0.2.
