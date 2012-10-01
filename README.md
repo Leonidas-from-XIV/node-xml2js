@@ -111,6 +111,10 @@ Apart from the default settings, there is a number of options that can be
 specified for the parser. Options are specified by ``new Parser({optionName:
 value})``. Possible options are:
 
+  * `attrkey` (default: `$`): Prefix that is used to access the attributes.
+    Version 0.1 default was `@`.
+  * `charkey` (default: `\_`): Prefix that is used to access the character
+    content. Version 0.1 default was `#`.
   * `explicitCharkey` (default: `false`)
   * `trim` (default: `false`): Trim the whitespace at the beginning and end of
     text nodes.
