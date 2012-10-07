@@ -30,6 +30,7 @@ exports.defaults =
     explicitCharkey: false
     trim: false
     normalize: false
+    normalizeTags: false
     attrkey: "$"
     charkey: "_"
     explicitArray: true
@@ -94,7 +95,7 @@ class exports.Parser extends events.EventEmitter
             obj[attrkey][key] = node.attributes[key]
 
       # need a place to store the node name
-      obj["#name"] = node.name
+      obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
       stack.push obj
 
     @saxParser.onclosetag = =>
@@ -102,9 +103,6 @@ class exports.Parser extends events.EventEmitter
       nodeName = obj["#name"]
       delete obj["#name"]
       
-      if @options.normalizeTags
-       nodeName = nodeName.toLowerCase()
-
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
       if obj[charkey].match(/^\s*$/)

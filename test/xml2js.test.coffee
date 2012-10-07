@@ -59,7 +59,8 @@ module.exports =
     equ r.sample.listtest[0].item[0].subitem[2], 'Foo(3)'
     equ r.sample.listtest[0].item[0].subitem[3], 'Foo(4)'
     equ r.sample.listtest[0].item[1], 'Qux.'
-    equ r.sample.listtest[0].item[2], 'Quux.')
+    equ r.sample.listtest[0].item[2], 'Quux.'
+    equ r.sample.tagcasetest.length, 3)
 
   'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -121,6 +122,10 @@ module.exports =
 
   'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
     equ r, null)
+
+  'test enabled normalizeTags': skeleton(normalizeTags: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.tagcasetest.length, 1)
 
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10

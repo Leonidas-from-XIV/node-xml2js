@@ -118,6 +118,7 @@ value})``. Possible options are:
   * `explicitCharkey` (default: `false`)
   * `trim` (default: `false`): Trim the whitespace at the beginning and end of
     text nodes.
+  * `normalizeTags` (default: `false`): Normalize all tag names to lowercase.
   * `normalize` (default: `false`): Trim whitespaces inside text nodes.
   * `explicitRoot` (default: `true`): Set this if you want to get the root
     node in the resulting object.

@@ -23,6 +23,11 @@
         <item><subitem>Foo.</subitem><subitem>Bar.</subitem></item>
     </arraytest>
     <emptytest/>
+    <tagcasetest>
+        <tAg>something</tAg>
+        <TAG>something else</TAG>
+        <tag>something third</tag>
+    </tagcasetest>
     <ordertest>
         <one>1</one>
         <two>2</two>
