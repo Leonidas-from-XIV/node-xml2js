@@ -11,6 +11,8 @@ exports.defaults =
     trim: true
     # normalize implicates trimming, just so you know
     normalize: true
+    # normalize tag names to lower case
+    normalizeTags: false
     # set default attribute object key
     attrkey: "@"
     # set default char object key
@@ -78,7 +80,7 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
-
+ 
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
@@ -99,6 +101,9 @@ class exports.Parser extends events.EventEmitter
       obj = stack.pop()
       nodeName = obj["#name"]
       delete obj["#name"]
+      
+      if @options.normalizeTags
+       nodeName = nodeName.toLowerCase()
 
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
