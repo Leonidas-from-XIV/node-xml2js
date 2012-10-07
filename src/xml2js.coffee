@@ -11,6 +11,8 @@ exports.defaults =
     trim: true
     # normalize implicates trimming, just so you know
     normalize: true
+    # normalize tag names to lower case
+    normalizeTags: false
     # set default attribute object key
     attrkey: "@"
     # set default char object key
@@ -28,6 +30,7 @@ exports.defaults =
     explicitCharkey: false
     trim: false
     normalize: false
+    normalizeTags: false
     attrkey: "$"
     charkey: "_"
     explicitArray: true
@@ -78,7 +81,7 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
-
+ 
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
@@ -92,14 +95,14 @@ class exports.Parser extends events.EventEmitter
             obj[attrkey][key] = node.attributes[key]
 
       # need a place to store the node name
-      obj["#name"] = node.name
+      obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
       stack.push obj
 
     @saxParser.onclosetag = =>
       obj = stack.pop()
       nodeName = obj["#name"]
       delete obj["#name"]
-
+      
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
       if obj[charkey].match(/^\s*$/)
