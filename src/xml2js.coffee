@@ -23,7 +23,8 @@ exports.defaults =
     # cause collisions.
     mergeAttrs: false
     explicitRoot: false
-    validator: null
+    validator: null,
+    xmlns: false
   "0.2":
     explicitCharkey: false
     trim: false
@@ -34,7 +35,8 @@ exports.defaults =
     ignoreAttrs: false
     mergeAttrs: false
     explicitRoot: true
-    validator: null
+    validator: null,
+    xmlns: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -47,7 +49,9 @@ class exports.Parser extends events.EventEmitter
     @options[key] = value for own key, value of exports.defaults["0.2"]
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
-
+    # define the key used for namespaces
+    if @options.xmlns
+      @options.xmlnskey = @options.attrkey + "ns"
     @reset()
 
   reset: =>
@@ -58,7 +62,8 @@ class exports.Parser extends events.EventEmitter
     # very helpful
     @saxParser = sax.parser true, {
       trim: false,
-      normalize: false
+      normalize: false,
+      xmlns: @options.xmlns
     }
 
     # emit one error event if the sax parser fails. this is mostly a hack, but
@@ -93,6 +98,8 @@ class exports.Parser extends events.EventEmitter
 
       # need a place to store the node name
       obj["#name"] = node.name
+      if (@options.xmlns)
+        obj[@options.xmlnskey] = {uri: node.uri, local : node.local}
       stack.push obj
 
     @saxParser.onclosetag = =>
