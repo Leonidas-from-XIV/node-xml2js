@@ -55,7 +55,7 @@ class exports.Parser extends events.EventEmitter
     # define the key used for namespaces
     if @options.xmlns
       @options.xmlnskey = @options.attrkey + "ns"
-    
+
     @reset()
 
   reset: =>
@@ -87,7 +87,7 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
- 
+
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
@@ -103,7 +103,7 @@ class exports.Parser extends events.EventEmitter
       # need a place to store the node name
       obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
       if (@options.xmlns)
-        obj[@options.xmlnskey] = {uri: node.uri, local : node.local}
+        obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
 
     @saxParser.onclosetag = =>
