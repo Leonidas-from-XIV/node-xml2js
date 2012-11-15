@@ -18,7 +18,8 @@
     "Michael Hart (https://github.com/mhart)",
     "Zachary Scott <zachary@zacharyscott.net> (http://zacharyscott.net/)",
     "Raoul Millais (https://github.com/raoulmillais)",
-    "Salsita Software (http://www.salsitasoft.com/)"
+    "Salsita Software (http://www.salsitasoft.com/)",
+    "Mike Schilling <mike@emotive.com> (http://www.emotive.com/)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
