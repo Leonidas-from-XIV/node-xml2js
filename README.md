@@ -138,14 +138,12 @@ value})``. Possible options are:
     (the first character is the same as attrkey) that contains its local name
     and namespace URI.
 
-These default settings are for backward-compatibility. These are scheduled to
-change to a more 'clean' way of parsing in version 0.2.
-
 Updating to new version
 =======================
 
-As version 0.2 will change the default parsing settings version 0.1.14
-introduced the default settings for version 0.2.
+Version 0.2 changed the default parsing settings, but version 0.1.14 introduced
+the default settings for version 0.2, so these settings can be tried before the
+migration.
 
 ```javascript
 var xml2js = require('xml2js');
