@@ -37,7 +37,7 @@ validator = (xpath, currentValue, newValue) ->
     if not currentValue
       return newValue
   else if xpath == '/validationerror'
-    throw new xml2js.ValidationError("Validation error!") 
+    throw new xml2js.ValidationError("Validation error!")
   return newValue
 
 # shortcut, because it is quite verbose
@@ -204,5 +204,5 @@ module.exports =
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
-      assert.equal err, 'Validation error!' 
+      assert.equal err, 'Validation error!'
       test.finish()
