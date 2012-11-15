@@ -206,3 +206,13 @@ module.exports =
     x2js.parseString '<validationerror/>', (err, r) ->
       assert.equal err, 'Validation error!'
       test.finish()
+
+  'test xmlns': skeleton(xmlns: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample["pfx:top"][0].$ns.local, 'top'
+    equ r.sample["pfx:top"][0].$ns.uri, 'http://foo.com'
+    equ r.sample["pfx:top"][0].$["pfx:attr"].value, 'baz'
+    equ r.sample["pfx:top"][0].$["pfx:attr"].local, 'attr'
+    equ r.sample["pfx:top"][0].$["pfx:attr"].uri, 'http://foo.com'
+    equ r.sample["pfx:top"][0].middle[0].$ns.local, 'middle'
+    equ r.sample["pfx:top"][0].middle[0].$ns.uri, 'http://bar.com')

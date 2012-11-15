@@ -44,4 +44,7 @@
         <numbertest>42</numbertest>
         <stringtest>43</stringtest>
     </validatortest>
+    <pfx:top xmlns:pfx="http://foo.com" pfx:attr="baz">
+        <middle xmlns="http://bar.com"/>
+    </pfx:top>
 </sample>
