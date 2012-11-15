@@ -60,7 +60,8 @@ module.exports =
     equ r.sample.listtest[0].item[0].subitem[3], 'Foo(4)'
     equ r.sample.listtest[0].item[1], 'Qux.'
     equ r.sample.listtest[0].item[2], 'Quux.'
-    equ r.sample.tagcasetest.length, 3)
+    # determine number of items in object
+    equ Object.keys(r.sample.tagcasetest[0]).length, 3)
 
   'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -125,7 +126,7 @@ module.exports =
 
   'test enabled normalizeTags': skeleton(normalizeTags: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.tagcasetest.length, 1)
+    equ Object.keys(r.sample.tagcasetest).length, 1)
 
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
