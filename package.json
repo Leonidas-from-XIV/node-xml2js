@@ -26,7 +26,7 @@
     "lib": "./lib"
   },
   "scripts" : {
-    "test": "cake test"
+    "test": "zap"
   },
   "repository" : {
     "type" : "git",
@@ -37,7 +37,7 @@
   },
   "devDependencies" : {
     "coffee-script" : ">=1.0.1",
-    "zap" : ">=0.2.4-3",
+    "zap" : ">=0.2.5",
     "docco" : ">=0.3.0"
   }
 }
