@@ -25,6 +25,9 @@
   "directories" : {
     "lib": "./lib"
   },
+  "scripts" : {
+    "test": "cake test"
+  },
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/Leonidas-from-XIV/node-xml2js.git"
