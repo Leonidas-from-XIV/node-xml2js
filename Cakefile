@@ -7,8 +7,8 @@ task 'build', 'continually build the JavaScript code', ->
 task 'test', 'run the test suite', ->
   # wrapper around zap to return nonzero if tests failed
   exec 'zap', (err, stdout, stderr) ->
+    console.log stdout.trim()
     if stdout.indexOf("\u001b[1;31mfailed\u001b[0m") != -1
-      console.log stdout.trim()
       process.exit 1
 
 task 'doc', 'rebuild the Docco documentation', ->
