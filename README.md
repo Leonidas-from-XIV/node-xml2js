@@ -8,8 +8,9 @@ what you're looking for!
 Description
 ===========
 
-Simple XML to JavaScript object converter. Uses
-[sax-js](https://github.com/isaacs/sax-js/).
+Simple XML to JavaScript object converter. It supports bi-directional conversion.
+Uses [sax-js](https://github.com/isaacs/sax-js/) and 
+[xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js/).
 
 Note: If you're looking for a full DOM parser, you probably want
 [JSDom](https://github.com/tmpvar/jsdom).
@@ -79,6 +80,22 @@ fs.readFile __dirname + '/foo.xml', (err, data) ->
     console.log 'Done.'
 ```
 
+Objects can be also be used to rebuild the XML:
+
+```javascript
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+var obj = { name: "Super", Surname: "Man", age: 23};
+
+var builder = new xml2js.Builder();
+var xml = builder.buildObject(obj);
+```
+
+At the moment, a one to one bi-directional conversion is guaranteed only for
+default configuration, except for `attrkey`, `charkey` and `explicitArray` options
+you can redefine to your taste. 
+
 So you wanna some JSON?
 -----------------------
 
@@ -137,6 +154,11 @@ value})``. Possible options are:
   * `xmlns` (default `false`): Give each element a field usually called '$ns'
     (the first character is the same as attrkey) that contains its local name
     and namespace URI.
+  * `rootName` (default `root`): root element name to be used in case
+     `explicitiRoot` is `false` or to override the root element name. This
+     setting is only used for `Builder` class (js to xml conversion).
+  * `pretty` (default `true`): prettify generated xml. This setting is 
+     only used for `Builder` class (js to xml conversion).   
 
 Updating to new version
 =======================
