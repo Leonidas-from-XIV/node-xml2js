@@ -9,8 +9,7 @@ Description
 ===========
 
 Simple XML to JavaScript object converter. It supports bi-directional conversion.
-Uses
-[sax-js](https://github.com/isaacs/sax-js/)
+Uses [sax-js](https://github.com/isaacs/sax-js/) and 
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js/).
 
 Note: If you're looking for a full DOM parser, you probably want
@@ -90,7 +89,7 @@ var fs = require('fs'),
 var obj = { name: "Super", Surname: "Man", age: 23};
 
 var builder = new xml2js.Builder();
-var xml = builder.buildObject(obj, 'root');
+var xml = builder.buildObject(obj);
 ```
 
 At the moment, a one to one bi-directional conversion is guaranteed only for
