@@ -33,7 +33,8 @@
     "url" : "https://github.com/Leonidas-from-XIV/node-xml2js.git"
   },
   "dependencies" : {
-    "sax" : ">=0.4.2"
+    "sax" : ">=0.4.2",
+    "xmlbuilder" : ">=0.4.2"
   },
   "devDependencies" : {
     "coffee-script" : ">=1.0.1",
