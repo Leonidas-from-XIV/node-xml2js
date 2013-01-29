@@ -186,6 +186,21 @@ module.exports =
           assert.equal r.sample.chartest[0]._, 'Character data here!'
           test.finish()
 
+  'test simple function without options': (test) ->
+    fs.readFile fileName, (err, data) ->
+      xml2js.parseString data, (err, r) ->
+        equ err, null
+        equ r.sample.chartest[0]._, 'Character data here'
+        test.finish()
+
+  'test simple function with options': (test) ->
+    fs.readFile fileName, (err, data) ->
+      # well, {} still counts as option, right?
+      xml2js.parseString data, {}, (err, r) ->
+        equ err, null
+        equ r.sample.chartest[0]._, 'Character data here'
+        test.finish()
+
   'test validator': skeleton(validator: validator, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ typeof r.sample.validatortest[0].stringtest[0], 'string'
