@@ -182,3 +182,20 @@ class exports.Parser extends events.EventEmitter
       else
         throw ex
 
+exports.parseString = (str, a, b) ->
+  # let's determine what we got as arguments
+  if b?
+    if typeof b == 'function'
+      cb = b
+    if typeof a == 'object'
+      options = a
+  else
+    # well, b is not set, so a has to be a callback
+    if typeof a == 'function'
+      cb = a
+    # and options should be empty - default
+    options = {}
+
+  # the rest is super-easy
+  parser = new exports.Parser options
+  parser.parseString str, cb
