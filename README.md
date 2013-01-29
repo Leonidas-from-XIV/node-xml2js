@@ -44,7 +44,7 @@ Can't get easier than this, right? This works starting with `xml2js` 0.2.3.
 With CoffeeScript it looks like this:
 
 ```coffeescript
-parseString = require('xml2js').parseString;
+parseString = require('xml2js').parseString
 xml = "<root>Hello xml2js!</root>"
 parseString xml, (err, result) ->
     console.dir result
