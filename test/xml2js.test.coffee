@@ -190,7 +190,7 @@ module.exports =
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, (err, r) ->
         equ err, null
-        equ r.sample.chartest[0]._, 'Character data here'
+        equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
   'test simple function with options': (test) ->
@@ -198,7 +198,7 @@ module.exports =
       # well, {} still counts as option, right?
       xml2js.parseString data, {}, (err, r) ->
         equ err, null
-        equ r.sample.chartest[0]._, 'Character data here'
+        equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
   'test validator': skeleton(validator: validator, (r) ->
