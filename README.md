@@ -23,16 +23,46 @@ install xml2js` which will download xml2js and all dependencies.
 Usage
 =====
 
-This will have to do, unless you're looking for some fancy extensive
-documentation. If you're looking for every single option and usage, see the
-unit tests.
+No extensive tutorials required because you are a smart developer! The task of
+parsing XML should be an easy one, so let's make it so! Here's some examples.
+
+Shoot-and-forget usage
+----------------------
+
+You want to parse XML as simple and easy as possible? It's dangerous to go
+alone, take this:
+
+```javascript
+var parseString = require('xml2js').parseString;
+var xml = "<root>Hello xml2js!</root>"
+parseString(xml, function (err, result) {
+    console.dir(result);
+});
+```
+
+Can't get easier than this, right? This works starting with `xml2js` 0.2.3.
+With CoffeeScript it looks like this:
+
+```coffeescript
+parseString = require('xml2js').parseString;
+xml = "<root>Hello xml2js!</root>"
+parseString xml, (err, result) ->
+    console.dir result
+```
+
+If you need some special options, fear not, `xml2js` supports a number of
+options (see below), you can specify these as second argument:
+
+```javascript
+parseString(xml, {trim: true}, function (err, result) {
+});
+```
 
 Simple as pie usage
 -------------------
 
-The simplest way to use it, is to use the optional callback interface added in
-0.1.11. That's right, if you have been using xml-simple or a home-grown
-wrapper, this is for you:
+That's right, if you have been using xml-simple or a home-grown
+wrapper, this is was added in 0.1.11 just for you:
 
 ```javascript
 var fs = require('fs'),
@@ -47,8 +77,28 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 });
 ```
 
-Look ma, no event listeners! Alternatively you can still use the traditional
-`addListener` variant:
+Look ma, no event listeners!
+
+You can also use `xml2js` from
+[CoffeeScript](http://jashkenas.github.com/coffee-script/), further reducing
+the clutter:
+
+```coffeescript
+fs = require 'fs',
+xml2js = require 'xml2js'
+
+parser = new xml2js.Parser()
+fs.readFile __dirname + '/foo.xml', (err, data) ->
+  parser.parseString data, (err, result) ->
+    console.dir result
+    console.log 'Done.'
+```
+
+"Traditional" usage
+-------------------
+
+Alternatively you can still use the traditional `addListener` variant that was
+supported since forever:
 
 ```javascript
 var fs = require('fs'),
@@ -62,21 +112,6 @@ parser.addListener('end', function(result) {
 fs.readFile(__dirname + '/foo.xml', function(err, data) {
     parser.parseString(data);
 });
-```
-
-You can also use xml2js from
-[CoffeeScript](http://jashkenas.github.com/coffee-script/), further reducing
-the clutter:
-
-```coffeescript
-fs = require 'fs',
-xml2js = require 'xml2js'
-
-parser = new xml2js.Parser()
-fs.readFile __dirname + '/foo.xml', (err, data) ->
-  parser.parseString data, (err, result) ->
-    console.dir result
-    console.log 'Done.'
 ```
 
 If you want to parse multiple files, you have multiple possibilites:
