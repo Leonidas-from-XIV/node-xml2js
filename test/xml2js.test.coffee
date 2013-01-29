@@ -166,24 +166,24 @@ module.exports =
   'test simple callback mode': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
-      assert.equal err, null
+      equ err, null
       x2js.parseString data, (err, r) ->
-        assert.equal err, null
+        equ err, null
         # just a single test to check whether we parsed anything
-        assert.equal r.sample.chartest[0]._, 'Character data here!'
+        equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
   'test double parse': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
-      assert.equal err, null
+      equ err, null
       x2js.parseString data, (err, r) ->
-        assert.equal err, null
+        equ err, null
         # make sure we parsed anything
-        assert.equal r.sample.chartest[0]._, 'Character data here!'
+        equ r.sample.chartest[0]._, 'Character data here!'
         x2js.parseString data, (err, r) ->
-          assert.equal err, null
-          assert.equal r.sample.chartest[0]._, 'Character data here!'
+          equ err, null
+          equ r.sample.chartest[0]._, 'Character data here!'
           test.finish()
 
   'test simple function without options': (test) ->
@@ -219,7 +219,7 @@ module.exports =
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
-      assert.equal err, 'Validation error!'
+      equ err, 'Validation error!'
       test.finish()
 
   'test xmlns': skeleton(xmlns: true, (r) ->
