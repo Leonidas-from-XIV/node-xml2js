@@ -177,10 +177,7 @@ class exports.Parser extends events.EventEmitter
     try
       @saxParser.write str.toString()
     catch ex
-      if ex instanceof exports.ValidationError
-        @emit("error", ex.message)
-      else
-        throw ex
+      @emit("error", ex.message)
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
