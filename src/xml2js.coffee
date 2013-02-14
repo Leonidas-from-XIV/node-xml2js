@@ -177,6 +177,7 @@ class exports.Parser extends events.EventEmitter
     try
       @saxParser.write str.toString()
     catch ex
+      cb(ex)
       @emit("error", ex.message)
 
 exports.parseString = (str, a, b) ->
