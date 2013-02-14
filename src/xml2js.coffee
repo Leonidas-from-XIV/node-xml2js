@@ -177,8 +177,11 @@ class exports.Parser extends events.EventEmitter
     try
       @saxParser.write str.toString()
     catch ex
-      cb(ex)
-      @emit("error", ex.message)
+      # determine if we use old or new style error callbacks
+      if cb? and typeof cb is "function"
+        cb ex.message
+      else
+        @emit "error", ex.message
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments

@@ -222,6 +222,21 @@ module.exports =
       equ err, 'Validation error!'
       test.finish()
 
+  'test error throwing': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>test>'
+    # build a short custom exception
+    CustomException = (message) ->
+      @message = message
+
+    try
+      xml2js.parseString xml, (err, parsed) ->
+        # throw something custom
+        throw new CustomException 'Custom error message'
+    catch e
+      if e instanceof CustomException
+        # we caught the proper exception, we're done!
+        test.finish()
+
   'test xmlns': skeleton(xmlns: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample["pfx:top"][0].$ns.local, 'top'
