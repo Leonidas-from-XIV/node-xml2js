@@ -110,7 +110,7 @@ class exports.Parser extends events.EventEmitter
       obj = stack.pop()
       nodeName = obj["#name"]
       delete obj["#name"]
-      
+
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
       if obj[charkey].match(/^\s*$/)
@@ -128,7 +128,10 @@ class exports.Parser extends events.EventEmitter
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
-        obj = @options.validator(xpath, s and s[nodeName], obj)
+        try
+          obj = @options.validator(xpath, s and s[nodeName], obj)
+        catch err
+          @emit "error", err
 
       # check whether we closed all the open tags
       if stack.length > 0
@@ -165,23 +168,18 @@ class exports.Parser extends events.EventEmitter
     if cb? and typeof cb is "function"
       @on "end", (result) ->
         @reset()
-        cb null, result
+        process.nextTick () ->
+          cb null, result
       @on "error", (err) ->
         @reset()
-        cb err
+        process.nextTick () ->
+          cb err
 
     if str.toString().trim() is ''
       @emit "end", null
       return true
 
-    try
-      @saxParser.write str.toString()
-    catch ex
-      # determine if we use old or new style error callbacks
-      if cb? and typeof cb is "function"
-        cb ex.message
-      else
-        @emit "error", ex.message
+    @saxParser.write str.toString()
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments

@@ -219,7 +219,7 @@ module.exports =
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
-      equ err, 'Validation error!'
+      equ err.message, 'Validation error!'
       test.finish()
 
   'test error throwing': (test) ->
