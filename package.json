@@ -19,7 +19,8 @@
     "Zachary Scott <zachary@zacharyscott.net> (http://zacharyscott.net/)",
     "Raoul Millais (https://github.com/raoulmillais)",
     "Salsita Software (http://www.salsitasoft.com/)",
-    "Mike Schilling <mike@emotive.com> (http://www.emotive.com/)"
+    "Mike Schilling <mike@emotive.com> (http://www.emotive.com/)",
+    "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {

@@ -168,11 +168,11 @@ class exports.Parser extends events.EventEmitter
     if cb? and typeof cb is "function"
       @on "end", (result) ->
         @reset()
-        process.nextTick () ->
+        process.nextTick ->
           cb null, result
       @on "error", (err) ->
         @reset()
-        process.nextTick () ->
+        process.nextTick ->
           cb err
 
     if str.toString().trim() is ''

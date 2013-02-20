@@ -226,13 +226,11 @@ module.exports =
     xml = '<?xml version="1.0" encoding="utf-8"?><test>content is ok<test>'
     try
       xml2js.parseString xml, (err, parsed) ->
-        # throw something custom exception
         throw new Error 'error throwing in callback'
       throw new Error 'error throwing outside'
     catch e
-      # don't catch the exception that threw by callback
+      # don't catch the exception that was thrown by callback
       equ e.message, 'error throwing outside'
-      # 0.2.4 equ e.message, 'Uncaught, unspecified 'error' event.'
       test.finish()
 
   'test xmlns': skeleton(xmlns: true, (r) ->
