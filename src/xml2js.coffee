@@ -6,48 +6,48 @@ isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
 exports.defaults =
-"0.1":
-  explicitCharkey: false
-  trim: true
-  # normalize implicates trimming, just so you know
-  normalize: true
-  # normalize tag names to lower case
-  normalizeTags: false
-  # set default attribute object key
-  attrkey: "@"
-  # set default char object key
-  charkey: "#"
-  # always put child nodes in an array
-  explicitArray: false
-  # ignore all attributes regardless
-  ignoreAttrs: false
-  # merge attributes and child elements onto parent object.  this may
-  # cause collisions.
-  mergeAttrs: false
-  explicitRoot: false
-  validator: null
-  xmlns : false
-  # fold children elements into dedicated property (works only in 0.2)
-  explicitChildren: false
-  childkey: '@@'
-  charsAsChildren: false
+  "0.1":
+    explicitCharkey: false
+    trim: true
+    # normalize implicates trimming, just so you know
+    normalize: true
+    # normalize tag names to lower case
+    normalizeTags: false
+    # set default attribute object key
+    attrkey: "@"
+    # set default char object key
+    charkey: "#"
+    # always put child nodes in an array
+    explicitArray: false
+    # ignore all attributes regardless
+    ignoreAttrs: false
+    # merge attributes and child elements onto parent object.  this may
+    # cause collisions.
+    mergeAttrs: false
+    explicitRoot: false
+    validator: null
+    xmlns : false
+    # fold children elements into dedicated property (works only in 0.2)
+    explicitChildren: false
+    childkey: '@@'
+    charsAsChildren: false
 
-"0.2":
-  explicitCharkey: false
-  trim: false
-  normalize: false
-  normalizeTags: false
-  attrkey: "$"
-  charkey: "_"
-  explicitArray: true
-  ignoreAttrs: false
-  mergeAttrs: false
-  explicitRoot: true
-  validator: null
-  xmlns : false
-  explicitChildren: false
-  childkey: '$$'
-  charsAsChildren: false
+  "0.2":
+    explicitCharkey: false
+    trim: false
+    normalize: false
+    normalizeTags: false
+    attrkey: "$"
+    charkey: "_"
+    explicitArray: true
+    ignoreAttrs: false
+    mergeAttrs: false
+    explicitRoot: true
+    validator: null
+    xmlns : false
+    explicitChildren: false
+    childkey: '$$'
+    charsAsChildren: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
