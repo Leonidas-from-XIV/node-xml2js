@@ -2,6 +2,7 @@
     <chartest desc="Test for CHARs">Character data here!</chartest>
     <cdatatest desc="Test for CDATA" misc="true"><![CDATA[CDATA here!]]></cdatatest>
     <nochartest desc="No data" misc="false" />
+    <nochildrentest desc="No data" misc="false" />
     <whitespacetest desc="Test for normalizing and trimming">
         Line One
         Line Two

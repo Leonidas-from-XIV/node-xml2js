@@ -112,25 +112,19 @@ module.exports =
     equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[3], 'Foo(4)'
     equ r.sample.$$.listtest[0].$$.item[1], 'Qux.'
     equ r.sample.$$.listtest[0].$$.item[2], 'Quux.'
+    equ r.sample.$$.nochildrentest[0].$$, undefined
     # determine number of items in object
     equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
 
+  'test element without children': skeleton(explicitChildren: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$.nochildrentest[0].$$, undefined)
+
   'test parse with explicitChildren and charsAsChildren': skeleton(explicitChildren: true, charsAsChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.$$.chartest[0].$.desc, 'Test for CHARs'
     equ r.sample.$$.chartest[0].$$._, 'Character data here!'
-    equ r.sample.$$.cdatatest[0].$.desc, 'Test for CDATA'
-    equ r.sample.$$.cdatatest[0].$.misc, 'true'
     equ r.sample.$$.cdatatest[0].$$._, 'CDATA here!'
-    equ r.sample.$$.nochartest[0].$.desc, 'No data'
-    equ r.sample.$$.nochartest[0].$.misc, 'false'
     equ r.sample.$$.listtest[0].$$.item[0].$$._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
-    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[0], 'Foo(1)'
-    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[1], 'Foo(2)'
-    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[2], 'Foo(3)'
-    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[3], 'Foo(4)'
-    equ r.sample.$$.listtest[0].$$.item[1], 'Qux.'
-    equ r.sample.$$.listtest[0].$$.item[2], 'Quux.'
     # determine number of items in object
     equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
 
