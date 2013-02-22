@@ -153,7 +153,9 @@ class exports.Parser extends events.EventEmitter
           node[@options.charkey] = obj[@options.charkey]
           delete obj[@options.charkey]
 
-        node[@options.childkey] = obj
+        if Object.getOwnPropertyNames(obj).length > 0
+          node[@options.childkey] = obj
+
         obj = node
 
       # check whether we closed all the open tags

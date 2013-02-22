@@ -181,8 +181,8 @@ value})``. Possible options are:
     (the first character is the same as attrkey) that contains its local name
     and namespace URI.
   * `explicitChildren` (default `false`): Put child elements to separate
-    property. Doesn't work with `mergeAttrs = true`. Meaningless for version
-    0.1.
+    property. Doesn't work with `mergeAttrs = true`. If element has no children
+    then "children" won't be created. Meaningless for version 0.1.
   * `childkey` (default `$$`): Prefix that is used to access child elements if
     `explicitChildren` is set to `true`. Meaningless for version 0.1.
   * `charsAsChildren` (default `false`): Determines whether chars should be
