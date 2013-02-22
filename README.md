@@ -180,6 +180,14 @@ value})``. Possible options are:
   * `xmlns` (default `false`): Give each element a field usually called '$ns'
     (the first character is the same as attrkey) that contains its local name
     and namespace URI.
+  * `explicitChildren` (default `false`): Put child elements to separate
+    property. Doesn't work with `mergeAttrs = true`. Meaningless for version
+    0.1.
+  * `childkey` (default `$$`): Prefix that is used to access child elements if
+    `explicitChildren` is set to `true`. Meaningless for version 0.1.
+  * `charsAsChildren` (default `false`): Determines whether chars should be
+    considered as a children if `explicitChildren` is on. Meaningless for
+    version 0.1.
 
 Updating to new version
 =======================

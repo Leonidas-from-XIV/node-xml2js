@@ -3,7 +3,7 @@
   "description" : "Simple XML to JavaScript object converter.",
   "keywords" : ["xml", "json"],
   "homepage" : "https://github.com/Leonidas-from-XIV/node-xml2js",
-  "version" : "0.2.4",
+  "version" : "0.2.5",
   "author" : "Marek Kubica <marek@xivilization.net> (http://xivilization.net)",
   "contributors" : [
     "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
@@ -20,7 +20,8 @@
     "Raoul Millais (https://github.com/raoulmillais)",
     "Salsita Software (http://www.salsitasoft.com/)",
     "Mike Schilling <mike@emotive.com> (http://www.emotive.com/)",
-    "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)"
+    "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)",
+    "Mikhail Zyatin <mikhail.zyatin@gmail.com> (https://github.com/Sitin)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
