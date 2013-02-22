@@ -20,7 +20,8 @@
     "Raoul Millais (https://github.com/raoulmillais)",
     "Salsita Software (http://www.salsitasoft.com/)",
     "Mike Schilling <mike@emotive.com> (http://www.emotive.com/)",
-    "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)"
+    "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)",
+    "Mikhail Zyatin <mikhail.zyatin@gmail.com> (https://github.com/Sitin)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
