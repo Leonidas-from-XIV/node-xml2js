@@ -182,12 +182,11 @@ value})``. Possible options are:
     and namespace URI.
   * `explicitChildren` (default `false`): Put child elements to separate
     property. Doesn't work with `mergeAttrs = true`. If element has no children
-    then "children" won't be created. Meaningless for version 0.1.
+    then "children" won't be created. Added in 0.2.5.
   * `childkey` (default `$$`): Prefix that is used to access child elements if
-    `explicitChildren` is set to `true`. Meaningless for version 0.1.
+    `explicitChildren` is set to `true`. Added in 0.2.5.
   * `charsAsChildren` (default `false`): Determines whether chars should be
-    considered as a children if `explicitChildren` is on. Meaningless for
-    version 0.1.
+    considered children if `explicitChildren` is on. Added in 0.2.5.
 
 Updating to new version
 =======================
