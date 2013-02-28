@@ -187,6 +187,10 @@ value})``. Possible options are:
     `explicitChildren` is set to `true`. Added in 0.2.5.
   * `charsAsChildren` (default `false`): Determines whether chars should be
     considered children if `explicitChildren` is on. Added in 0.2.5.
+  * `async` (default `false`): Should the callbacks be async? This *might* be
+    an incompatible change if your code depends on sync execution of callbacks.
+    xml2js 0.3 might change this default, so the recommendation is to not
+    depend on sync execution anyway. Added in 0.2.6.
 
 Updating to new version
 =======================

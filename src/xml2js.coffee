@@ -31,6 +31,8 @@ exports.defaults =
     explicitChildren: false
     childkey: '@@'
     charsAsChildren: false
+    # callbacks are async? not in 0.1 mode
+    async: false
 
   "0.2":
     explicitCharkey: false
@@ -48,6 +50,8 @@ exports.defaults =
     explicitChildren: false
     childkey: '$$'
     charsAsChildren: false
+    # not async in 0.2 mode either
+    async: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -193,11 +197,17 @@ class exports.Parser extends events.EventEmitter
     if cb? and typeof cb is "function"
       @on "end", (result) ->
         @reset()
-        process.nextTick ->
+        if @options.async
+          process.nextTick ->
+            cb null, result
+        else
           cb null, result
       @on "error", (err) ->
         @reset()
-        process.nextTick ->
+        if @options.async
+          process.nextTick ->
+            cb err
+        else
           cb err
 
     if str.toString().trim() is ''
