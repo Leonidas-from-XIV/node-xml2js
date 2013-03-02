@@ -135,8 +135,8 @@ class exports.Parser extends events.EventEmitter
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
           obj = obj[charkey]
 
-      if @options.emptyTag != undefined && isEmpty obj
-        obj = @options.emptyTag
+      if isEmpty obj && stack.length > 0
+        obj = @options.emptyTag != undefined ? @options.emptyTag : '';
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")

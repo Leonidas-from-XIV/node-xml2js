@@ -31,7 +31,7 @@ validator = (xpath, currentValue, newValue) ->
   if xpath == '/sample/validatortest/numbertest'
     return Number(newValue)
   else if xpath in ['/sample/arraytest', '/sample/validatortest/emptyarray', '/sample/validatortest/oneitemarray']
-    if not ('item' of newValue)
+    if not newValue || not ('item' of newValue)
       return {'item': []}
   else if xpath in ['/sample/arraytest/item', '/sample/validatortest/emptyarray/item', '/sample/validatortest/oneitemarray/item']
     if not currentValue
@@ -148,7 +148,7 @@ module.exports =
     assert.deepEqual r, {root: {}})
 
   'test default empty tag result': skeleton(undefined, (r) ->
-    assert.deepEqual r.sample.emptytest, [{}])
+    assert.deepEqual r.sample.emptytest, [''])
 
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     equ r.sample.emptytest[0], null)
@@ -186,7 +186,7 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest, 'Character data here!'
     equ r.sample.cdatatest, 'CDATA here!'
-    assert.deepEqual r.sample.nochartest[0], {}
+    assert.equal r.sample.nochartest[0], ''
     equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
     equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
     equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
@@ -274,3 +274,22 @@ module.exports =
     equ r.sample["pfx:top"][0].$["pfx:attr"].uri, 'http://foo.com'
     equ r.sample["pfx:top"][0].middle[0].$ns.local, 'middle'
     equ r.sample["pfx:top"][0].middle[0].$ns.uri, 'http://bar.com')
+
+  'test callback should be called once': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
+    i = 0;
+    try
+      xml2js.parseString xml, (err, parsed) ->
+        i = i + 1
+        # throw something custom
+        throw new Error 'Custom error message'
+    catch e
+      equ i, 1
+      equ e.message, 'Custom error message'
+      test.finish()
+
+  'test empty CDATA': (test) ->
+    xml = '<xml><Label><![CDATA[]]></Label><MsgId>5850440872586764820</MsgId></xml>'
+    xml2js.parseString xml, (err, parsed) ->
+      equ parsed.xml.Label[0], ''
+      test.finish()
