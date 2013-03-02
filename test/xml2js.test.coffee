@@ -31,7 +31,7 @@ validator = (xpath, currentValue, newValue) ->
   if xpath == '/sample/validatortest/numbertest'
     return Number(newValue)
   else if xpath in ['/sample/arraytest', '/sample/validatortest/emptyarray', '/sample/validatortest/oneitemarray']
-    if not newValue || not ('item' of newValue)
+    if not newValue or not ('item' of newValue)
       return {'item': []}
   else if xpath in ['/sample/arraytest/item', '/sample/validatortest/emptyarray/item', '/sample/validatortest/oneitemarray/item']
     if not currentValue
