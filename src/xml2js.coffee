@@ -1,4 +1,4 @@
-sax = require 'sax'
+htmlparser = require 'htmlparser2'
 events = require 'events'
 
 # Underscore has a nice function for this, but we try to go without dependencies
@@ -74,13 +74,7 @@ class exports.Parser extends events.EventEmitter
     # remove all previous listeners for events, to prevent event listener
     # accumulation
     @removeAllListeners()
-    # make the SAX parser. tried trim and normalize, but they are not
-    # very helpful
-    @saxParser = sax.parser true, {
-      trim: false,
-      normalize: false,
-      xmlns: @options.xmlns
-    }
+    @saxParser = {}
 
     # emit one error event if the sax parser fails. this is mostly a hack, but
     # the sax parser isn't state of the art either.
@@ -100,17 +94,17 @@ class exports.Parser extends events.EventEmitter
     attrkey = @options.attrkey
     charkey = @options.charkey
 
-    @saxParser.onopentag = (node) =>
+    @saxParser.onopentag = (node, attribs) =>
       obj = {}
       obj[charkey] = ""
       unless @options.ignoreAttrs
-        for own key of node.attributes
+        for own key of attribs
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
           if @options.mergeAttrs
-            obj[key] = node.attributes[key]
+            obj[key] = attribs[key]
           else
-            obj[attrkey][key] = node.attributes[key]
+            obj[attrkey][key] = attribs[key]
 
       # need a place to store the node name
       obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
@@ -196,6 +190,12 @@ class exports.Parser extends events.EventEmitter
       if s
         s[charkey] += text
 
+    @htmlparser = new htmlparser.Parser {
+      onopentag: @saxParser.onopentag,
+      ontext: @saxParser.ontext,
+      onclosetag: @saxParser.onclosetag
+    }
+
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"
       @on "end", (result) ->
@@ -217,7 +217,8 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write str.toString()
+    @htmlparser.write str.toString()
+    @htmlparser.done()
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
