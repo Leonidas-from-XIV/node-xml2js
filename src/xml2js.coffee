@@ -60,7 +60,9 @@ class exports.ValidationError extends Error
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
     # copy this versions default options
-    @options = {}
+    @options = {
+        strict: true
+    };
     @options[key] = value for own key, value of exports.defaults["0.2"]
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
@@ -76,7 +78,7 @@ class exports.Parser extends events.EventEmitter
     @removeAllListeners()
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
-    @saxParser = sax.parser true, {
+    @saxParser = sax.parser @options.strict, {
       trim: false,
       normalize: false,
       xmlns: @options.xmlns
@@ -217,7 +219,7 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write str.toString()
+    @saxParser.write(str.toString()).end()
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
