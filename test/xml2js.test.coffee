@@ -293,3 +293,9 @@ module.exports =
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.xml.Label[0], ''
       test.finish()
+
+  'test non-strict parsing': (test) ->
+    html = '<html><head></head><body><br></body></html>'
+    xml2js.parseString html, strict: false, (err, parsed) ->
+      equ err, null
+      test.finish()

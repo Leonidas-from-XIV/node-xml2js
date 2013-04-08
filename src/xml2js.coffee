@@ -33,6 +33,7 @@ exports.defaults =
     charsAsChildren: false
     # callbacks are async? not in 0.1 mode
     async: false
+    strict: true
 
   "0.2":
     explicitCharkey: false
@@ -52,6 +53,7 @@ exports.defaults =
     charsAsChildren: false
     # not async in 0.2 mode either
     async: false
+    strict: true
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -76,7 +78,7 @@ class exports.Parser extends events.EventEmitter
     @removeAllListeners()
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
-    @saxParser = sax.parser true, {
+    @saxParser = sax.parser @options.strict, {
       trim: false,
       normalize: false,
       xmlns: @options.xmlns

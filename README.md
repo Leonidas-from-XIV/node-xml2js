@@ -191,6 +191,9 @@ value})``. Possible options are:
     an incompatible change if your code depends on sync execution of callbacks.
     xml2js 0.3 might change this default, so the recommendation is to not
     depend on sync execution anyway. Added in 0.2.6.
+  * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
+    Defaults to `true` which is *highly* recommended, since parsing HTML which
+    is not well-formed XML might yield just about anything. Added in 0.2.7.
 
 Updating to new version
 =======================
