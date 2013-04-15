@@ -142,10 +142,10 @@ module.exports =
 
   'test enabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    assert.deepEqual r, {})
+    assert.deepEqual r, '')
 
   'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
-    assert.deepEqual r, {root: {}})
+    assert.deepEqual r, {root: ''})
 
   'test default empty tag result': skeleton(undefined, (r) ->
     assert.deepEqual r.sample.emptytest, [''])
@@ -292,6 +292,12 @@ module.exports =
     xml = '<xml><Label><![CDATA[]]></Label><MsgId>5850440872586764820</MsgId></xml>'
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.xml.Label[0], ''
+      test.finish()
+
+  'test CDATA whitespaces result': (test) ->
+    xml = '<spacecdatatest><![CDATA[ ]]></spacecdatatest>'
+    xml2js.parseString xml, (err, parsed) ->
+      equ parsed.spacecdatatest, ' '
       test.finish()
 
   'test non-strict parsing': (test) ->
