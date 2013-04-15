@@ -167,6 +167,7 @@ module.exports =
     equ r.sample.cdatatest[0].attrobj.desc, 'Test for CDATA'
     equ r.sample.cdatatest[0].attrobj.misc, 'true'
     equ r.sample.cdatatest[0].charobj, 'CDATA here!'
+    equ r.sample.cdatawhitespacetest[0].charobj, '   '
     equ r.sample.nochartest[0].attrobj.desc, 'No data'
     equ r.sample.nochartest[0].attrobj.misc, 'false')
 
