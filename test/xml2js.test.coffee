@@ -4,6 +4,7 @@ fs = require 'fs'
 util = require 'util'
 assert = require 'assert'
 path = require 'path'
+os = require 'os'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
 
@@ -16,7 +17,8 @@ skeleton = (options, checks) ->
       checks r
       test.finish()
     if not xmlString
-      fs.readFile fileName, (err, data) ->
+      fs.readFile fileName, 'utf8', (err, data) ->
+        data = data.split(os.EOL).join('\n')
         x2js.parseString data
     else
       x2js.parseString xmlString
