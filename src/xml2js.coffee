@@ -125,9 +125,12 @@ class exports.Parser extends events.EventEmitter
       nodeName = obj["#name"]
       delete obj["#name"]
 
+      cdata = obj.cdata
+      delete obj.cdata
+
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
-      if obj[charkey].match(/^\s*$/)
+      if obj[charkey].match(/^\s*$/) and not cdata
         emptyStr = obj[charkey]
         delete obj[charkey]
       else
@@ -194,10 +197,17 @@ class exports.Parser extends events.EventEmitter
         @resultObject = obj
         @emit "end", @resultObject
 
-    @saxParser.ontext = @saxParser.oncdata = (text) =>
+    ontext = (text) =>
       s = stack[stack.length - 1]
       if s
         s[charkey] += text
+        s
+
+    @saxParser.ontext = ontext
+    @saxParser.oncdata = (text) =>
+      s = ontext text
+      if s
+        s.cdata = true
 
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"
