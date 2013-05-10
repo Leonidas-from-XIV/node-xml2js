@@ -128,6 +128,7 @@ class exports.Parser extends events.EventEmitter
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
       if obj[charkey].match(/^\s*$/)
+        emptyStr = obj[charkey]
         delete obj[charkey]
       else
         obj[charkey] = obj[charkey].trim() if @options.trim
@@ -137,11 +138,11 @@ class exports.Parser extends events.EventEmitter
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
           obj = obj[charkey]
 
-      if (isEmpty obj) and stack.length > 0
+      if (isEmpty obj)
         obj = if @options.emptyTag != undefined
           @options.emptyTag
         else
-          ''
+          emptyStr
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
