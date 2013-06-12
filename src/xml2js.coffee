@@ -61,6 +61,8 @@ class exports.ValidationError extends Error
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
+    # if this was called without 'new', create an instance with new and return
+    return new exports.Parser opts unless @ instanceof exports.Parser
     # copy this versions default options
     @options = {}
     @options[key] = value for own key, value of exports.defaults["0.2"]

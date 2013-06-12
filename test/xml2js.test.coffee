@@ -308,3 +308,14 @@ module.exports =
     xml2js.parseString html, strict: false, (err, parsed) ->
       equ err, null
       test.finish()
+
+  'test construction with new and without': (test) ->
+    demo = '<xml><foo>Bar</foo></xml>'
+    withNew = new xml2js.Parser
+    withNew.parseString demo, (err, resWithNew) ->
+      equ err, undefined
+      withoutNew = xml2js.Parser()
+      withoutNew.parseString demo, (err, resWithoutNew) ->
+        equ err, undefined
+        assert.deepEqual resWithNew, resWithoutNew
+        test.done()
