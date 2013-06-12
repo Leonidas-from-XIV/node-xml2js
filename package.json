@@ -40,7 +40,7 @@
     "sax" : "0.5.x"
   },
   "devDependencies" : {
-    "coffee-script" : ">=1.6.1",
+    "coffee-script" : ">=1.6.3",
     "zap" : ">=0.2.5",
     "docco" : ">=0.6.2"
   }
