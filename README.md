@@ -62,7 +62,7 @@ Simple as pie usage
 -------------------
 
 That's right, if you have been using xml-simple or a home-grown
-wrapper, this is was added in 0.1.11 just for you:
+wrapper, this was added in 0.1.11 just for you:
 
 ```javascript
 var fs = require('fs'),
@@ -156,7 +156,7 @@ easily `inspect(result)`.
 Options
 =======
 
-Apart from the default settings, there is a number of options that can be
+Apart from the default settings, there are a number of options that can be
 specified for the parser. Options are specified by ``new Parser({optionName:
 value})``. Possible options are:
 
