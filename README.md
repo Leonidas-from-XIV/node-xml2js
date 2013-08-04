@@ -235,6 +235,7 @@ Running tests, development
 ==========================
 
 [![Build Status](https://secure.travis-ci.org/Leonidas-from-XIV/node-xml2js.png?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
+[![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml2js.png)](https://david-dm.org/Leonidas-from-XIV/node-xml2js)
 
 The development requirements are handled by npm, you just need to install them.
 We also have a number of unit tests, they can be run using `npm test` directly
