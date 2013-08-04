@@ -95,6 +95,9 @@ class exports.Parser extends events.EventEmitter
     charkey = @options.charkey
 
     @saxParser.onopentag = (node, attribs) =>
+      # in case of sax.js node.name, htmlparser2 uses just node
+      name = if node.name? then node.name else node
+
       obj = {}
       obj[charkey] = ""
       unless @options.ignoreAttrs
@@ -107,7 +110,7 @@ class exports.Parser extends events.EventEmitter
             obj[attrkey][key] = attribs[key]
 
       # need a place to store the node name
-      obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
+      obj["#name"] = if @options.normalizeTags then name.toLowerCase() else name
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
