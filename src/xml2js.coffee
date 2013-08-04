@@ -112,7 +112,8 @@ class exports.Parser extends events.EventEmitter
       # need a place to store the node name
       obj["#name"] = if @options.normalizeTags then name.toLowerCase() else name
       if (@options.xmlns)
-        obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
+        local = /([^:]*:)?([^:]*)/.exec(name)[2]
+        obj[@options.xmlnskey] = {uri: node.uri, local: local}
       stack.push obj
 
     @saxParser.onclosetag = =>
