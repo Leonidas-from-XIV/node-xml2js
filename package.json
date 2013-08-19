@@ -43,5 +43,11 @@
     "coffee-script" : ">=1.6.3",
     "zap" : ">=0.2.5",
     "docco" : ">=0.6.2"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/Leonidas-from-XIV/node-xml2js/master/LICENSE"
+    }
+  ]
 }
