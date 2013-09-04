@@ -1,5 +1,6 @@
 sax = require 'sax'
 events = require 'events'
+bom = require './bom'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
@@ -232,7 +233,7 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write str.toString()
+    @saxParser.write bom.stripBOM str.toString()
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
