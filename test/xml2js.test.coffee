@@ -4,6 +4,7 @@ fs = require 'fs'
 util = require 'util'
 assert = require 'assert'
 path = require 'path'
+os = require 'os'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
 
@@ -16,10 +17,12 @@ skeleton = (options, checks) ->
       checks r
       test.finish()
     if not xmlString
-      fs.readFile fileName, (err, data) ->
+      fs.readFile fileName, 'utf8', (err, data) ->
+        data = data.split(os.EOL).join('\n')
         x2js.parseString data
     else
       x2js.parseString xmlString
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -31,7 +34,7 @@ validator = (xpath, currentValue, newValue) ->
   if xpath == '/sample/validatortest/numbertest'
     return Number(newValue)
   else if xpath in ['/sample/arraytest', '/sample/validatortest/emptyarray', '/sample/validatortest/oneitemarray']
-    if not ('item' of newValue)
+    if not newValue or not ('item' of newValue)
       return {'item': []}
   else if xpath in ['/sample/arraytest/item', '/sample/validatortest/emptyarray/item', '/sample/validatortest/oneitemarray/item']
     if not currentValue
@@ -96,6 +99,38 @@ module.exports =
     equ r.sample.listtest[0].item[1], 'Qux.'
     equ r.sample.listtest[0].item[2], 'Quux.')
 
+  'test parse with explicitChildren': skeleton(explicitChildren: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$.chartest[0].$.desc, 'Test for CHARs'
+    equ r.sample.$$.chartest[0]._, 'Character data here!'
+    equ r.sample.$$.cdatatest[0].$.desc, 'Test for CDATA'
+    equ r.sample.$$.cdatatest[0].$.misc, 'true'
+    equ r.sample.$$.cdatatest[0]._, 'CDATA here!'
+    equ r.sample.$$.nochartest[0].$.desc, 'No data'
+    equ r.sample.$$.nochartest[0].$.misc, 'false'
+    equ r.sample.$$.listtest[0].$$.item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
+    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[0], 'Foo(1)'
+    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[1], 'Foo(2)'
+    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[2], 'Foo(3)'
+    equ r.sample.$$.listtest[0].$$.item[0].$$.subitem[3], 'Foo(4)'
+    equ r.sample.$$.listtest[0].$$.item[1], 'Qux.'
+    equ r.sample.$$.listtest[0].$$.item[2], 'Quux.'
+    equ r.sample.$$.nochildrentest[0].$$, undefined
+    # determine number of items in object
+    equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
+
+  'test element without children': skeleton(explicitChildren: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$.nochildrentest[0].$$, undefined)
+
+  'test parse with explicitChildren and charsAsChildren': skeleton(explicitChildren: true, charsAsChildren: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$.chartest[0].$$._, 'Character data here!'
+    equ r.sample.$$.cdatatest[0].$$._, 'CDATA here!'
+    equ r.sample.$$.listtest[0].$$.item[0].$$._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
+    # determine number of items in object
+    equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
+
   'test text trimming, normalize': skeleton(trim: true, normalize: true, (r) ->
     equ r.sample.whitespacetest[0]._, 'Line One Line Two')
 
@@ -110,13 +145,13 @@ module.exports =
 
   'test enabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    assert.deepEqual r, {})
+    assert.deepEqual r, '')
 
   'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
-    assert.deepEqual r, {root: {}})
+    assert.deepEqual r, {root: ''})
 
   'test default empty tag result': skeleton(undefined, (r) ->
-    assert.deepEqual r.sample.emptytest, [{}])
+    assert.deepEqual r.sample.emptytest, [''])
 
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     equ r.sample.emptytest[0], null)
@@ -135,6 +170,7 @@ module.exports =
     equ r.sample.cdatatest[0].attrobj.desc, 'Test for CDATA'
     equ r.sample.cdatatest[0].attrobj.misc, 'true'
     equ r.sample.cdatatest[0].charobj, 'CDATA here!'
+    equ r.sample.cdatawhitespacetest[0].charobj, '   '
     equ r.sample.nochartest[0].attrobj.desc, 'No data'
     equ r.sample.nochartest[0].attrobj.misc, 'false')
 
@@ -154,7 +190,7 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest, 'Character data here!'
     equ r.sample.cdatatest, 'CDATA here!'
-    assert.deepEqual r.sample.nochartest[0], {}
+    assert.equal r.sample.nochartest[0], ''
     equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
     equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
     equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
@@ -166,25 +202,40 @@ module.exports =
   'test simple callback mode': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
-      assert.equal err, null
+      equ err, null
       x2js.parseString data, (err, r) ->
-        assert.equal err, null
+        equ err, null
         # just a single test to check whether we parsed anything
-        assert.equal r.sample.chartest[0]._, 'Character data here!'
+        equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
   'test double parse': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
-      assert.equal err, null
+      equ err, null
       x2js.parseString data, (err, r) ->
-        assert.equal err, null
+        equ err, null
         # make sure we parsed anything
-        assert.equal r.sample.chartest[0]._, 'Character data here!'
+        equ r.sample.chartest[0]._, 'Character data here!'
         x2js.parseString data, (err, r) ->
-          assert.equal err, null
-          assert.equal r.sample.chartest[0]._, 'Character data here!'
+          equ err, null
+          equ r.sample.chartest[0]._, 'Character data here!'
           test.finish()
+
+  'test simple function without options': (test) ->
+    fs.readFile fileName, (err, data) ->
+      xml2js.parseString data, (err, r) ->
+        equ err, null
+        equ r.sample.chartest[0]._, 'Character data here!'
+        test.finish()
+
+  'test simple function with options': (test) ->
+    fs.readFile fileName, (err, data) ->
+      # well, {} still counts as option, right?
+      xml2js.parseString data, {}, (err, r) ->
+        equ err, null
+        equ r.sample.chartest[0]._, 'Character data here!'
+        test.finish()
 
   'test validator': skeleton(validator: validator, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -204,7 +255,18 @@ module.exports =
   'test validation error': (test) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
-      assert.equal err, 'Validation error!'
+      equ err.message, 'Validation error!'
+      test.finish()
+
+  'test error throwing': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test>content is ok<test>'
+    try
+      xml2js.parseString xml, (err, parsed) ->
+        throw new Error 'error throwing in callback'
+      throw new Error 'error throwing outside'
+    catch e
+      # don't catch the exception that was thrown by callback
+      equ e.message, 'error throwing outside'
       test.finish()
 
   'test xmlns': skeleton(xmlns: true, (r) ->
@@ -216,3 +278,45 @@ module.exports =
     equ r.sample["pfx:top"][0].$["pfx:attr"].uri, 'http://foo.com'
     equ r.sample["pfx:top"][0].middle[0].$ns.local, 'middle'
     equ r.sample["pfx:top"][0].middle[0].$ns.uri, 'http://bar.com')
+
+  'test callback should be called once': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
+    i = 0
+    try
+      xml2js.parseString xml, (err, parsed) ->
+        i = i + 1
+        # throw something custom
+        throw new Error 'Custom error message'
+    catch e
+      equ i, 1
+      equ e.message, 'Custom error message'
+      test.finish()
+
+  'test empty CDATA': (test) ->
+    xml = '<xml><Label><![CDATA[]]></Label><MsgId>5850440872586764820</MsgId></xml>'
+    xml2js.parseString xml, (err, parsed) ->
+      equ parsed.xml.Label[0], ''
+      test.finish()
+
+  'test CDATA whitespaces result': (test) ->
+    xml = '<spacecdatatest><![CDATA[ ]]></spacecdatatest>'
+    xml2js.parseString xml, (err, parsed) ->
+      equ parsed.spacecdatatest, ' '
+      test.finish()
+
+  'test non-strict parsing': (test) ->
+    html = '<html><head></head><body><br></body></html>'
+    xml2js.parseString html, strict: false, (err, parsed) ->
+      equ err, null
+      test.finish()
+
+  'test construction with new and without': (test) ->
+    demo = '<xml><foo>Bar</foo></xml>'
+    withNew = new xml2js.Parser
+    withNew.parseString demo, (err, resWithNew) ->
+      equ err, undefined
+      withoutNew = xml2js.Parser()
+      withoutNew.parseString demo, (err, resWithoutNew) ->
+        equ err, undefined
+        assert.deepEqual resWithNew, resWithoutNew
+        test.done()

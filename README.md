@@ -24,16 +24,46 @@ install xml2js` which will download xml2js and all dependencies.
 Usage
 =====
 
-This will have to do, unless you're looking for some fancy extensive
-documentation. If you're looking for every single option and usage, see the
-unit tests.
+No extensive tutorials required because you are a smart developer! The task of
+parsing XML should be an easy one, so let's make it so! Here's some examples.
+
+Shoot-and-forget usage
+----------------------
+
+You want to parse XML as simple and easy as possible? It's dangerous to go
+alone, take this:
+
+```javascript
+var parseString = require('xml2js').parseString;
+var xml = "<root>Hello xml2js!</root>"
+parseString(xml, function (err, result) {
+    console.dir(result);
+});
+```
+
+Can't get easier than this, right? This works starting with `xml2js` 0.2.3.
+With CoffeeScript it looks like this:
+
+```coffeescript
+{parseString} = require 'xml2js'
+xml = "<root>Hello xml2js!</root>"
+parseString xml, (err, result) ->
+    console.dir result
+```
+
+If you need some special options, fear not, `xml2js` supports a number of
+options (see below), you can specify these as second argument:
+
+```javascript
+parseString(xml, {trim: true}, function (err, result) {
+});
+```
 
 Simple as pie usage
 -------------------
 
-The simplest way to use it, is to use the optional callback interface added in
-0.1.11. That's right, if you have been using xml-simple or a home-grown
-wrapper, this is for you:
+That's right, if you have been using xml-simple or a home-grown
+wrapper, this was added in 0.1.11 just for you:
 
 ```javascript
 var fs = require('fs'),
@@ -48,8 +78,34 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 });
 ```
 
-Look ma, no event listeners! Alternatively you can still use the traditional
-`addListener` variant:
+Look ma, no event listeners!
+
+You can also use `xml2js` from
+[CoffeeScript](http://jashkenas.github.com/coffee-script/), further reducing
+the clutter:
+
+```coffeescript
+fs = require 'fs',
+xml2js = require 'xml2js'
+
+parser = new xml2js.Parser()
+fs.readFile __dirname + '/foo.xml', (err, data) ->
+  parser.parseString data, (err, result) ->
+    console.dir result
+    console.log 'Done.'
+```
+
+But what happens if you forget the `new` keyword to create a new `Parser`? In
+the middle of a nightly coding session, it might get lost, after all. Worry
+not, we got you covered! Starting with 0.2.8 you can also leave it out, in
+which case `xml2js` will helpfully add it for you, no bad surprises and
+inexplicable bugs!
+
+"Traditional" usage
+-------------------
+
+Alternatively you can still use the traditional `addListener` variant that was
+supported since forever:
 
 ```javascript
 var fs = require('fs'),
@@ -65,20 +121,13 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 });
 ```
 
-You can also use xml2js from
-[CoffeeScript](http://jashkenas.github.com/coffee-script/), further reducing
-the clutter:
+If you want to parse multiple files, you have multiple possibilites:
 
-```coffeescript
-fs = require 'fs',
-xml2js = require 'xml2js'
-
-parser = new xml2js.Parser()
-fs.readFile __dirname + '/foo.xml', (err, data) ->
-  parser.parseString data, (err, result) ->
-    console.dir result
-    console.log 'Done.'
-```
+  * You can create one `xml2js.Parser` per file. That's the recommended one
+    and is promised to always *just work*.
+  * You can call `reset()` on your parser object.
+  * You can hope everything goes well anyway. This behaviour is not
+    guaranteed work always, if ever. Use option #1 if possible. Thanks!
 
 Objects can be also be used to rebuild the XML:
 
@@ -124,7 +173,7 @@ easily `inspect(result)`.
 Options
 =======
 
-Apart from the default settings, there is a number of options that can be
+Apart from the default settings, there are a number of options that can be
 specified for the parser. Options are specified by ``new Parser({optionName:
 value})``. Possible options are:
 
@@ -154,11 +203,32 @@ value})``. Possible options are:
   * `xmlns` (default `false`): Give each element a field usually called '$ns'
     (the first character is the same as attrkey) that contains its local name
     and namespace URI.
+  * `explicitChildren` (default `false`): Put child elements to separate
+    property. Doesn't work with `mergeAttrs = true`. If element has no children
+    then "children" won't be created. Added in 0.2.5.
+  * `childkey` (default `$$`): Prefix that is used to access child elements if
+    `explicitChildren` is set to `true`. Added in 0.2.5.
+  * `charsAsChildren` (default `false`): Determines whether chars should be
+    considered children if `explicitChildren` is on. Added in 0.2.5.
+  * `async` (default `false`): Should the callbacks be async? This *might* be
+    an incompatible change if your code depends on sync execution of callbacks.
+    xml2js 0.3 might change this default, so the recommendation is to not
+    depend on sync execution anyway. Added in 0.2.6.
+  * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
+    Defaults to `true` which is *highly* recommended, since parsing HTML which
+    is not well-formed XML might yield just about anything. Added in 0.2.7.
+
+Options for the `Builder` class
+-------------------------------
+
   * `rootName` (default `root`): root element name to be used in case
-     `explicitiRoot` is `false` or to override the root element name. This
-     setting is only used for `Builder` class (js to xml conversion).
-  * `pretty` (default `true`): prettify generated xml. This setting is 
-     only used for `Builder` class (js to xml conversion).   
+     `explicitiRoot` is `false` or to override the root element name.
+  * `pretty` (default `true`): prettify generated xml.
+  * `xmldec` (default `{'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}`:
+    XML declaration attributes.
+    * `xmldec.version` A version number string, e.g. 1.0
+    * `xmldec.encoding` Encoding declaration, e.g. UTF-8
+    * `xmldec.standalone` standalone document declaration: true or false
 
 Updating to new version
 =======================
@@ -194,6 +264,7 @@ Running tests, development
 ==========================
 
 [![Build Status](https://secure.travis-ci.org/Leonidas-from-XIV/node-xml2js.png?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
+[![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml2js.png)](https://david-dm.org/Leonidas-from-XIV/node-xml2js)
 
 The development requirements are handled by npm, you just need to install them.
 We also have a number of unit tests, they can be run using `npm test` directly

@@ -1,6 +1,7 @@
 sax = require 'sax'
 events = require 'events'
 builder = require 'xmlbuilder'
+bom = require './bom'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
@@ -26,8 +27,16 @@ exports.defaults =
     # cause collisions.
     mergeAttrs: false
     explicitRoot: false
-    validator: null,
+    validator: null
     xmlns : false
+    # fold children elements into dedicated property (works only in 0.2)
+    explicitChildren: false
+    childkey: '@@'
+    charsAsChildren: false
+    # callbacks are async? not in 0.1 mode
+    async: false
+    strict: true
+
   "0.2":
     explicitCharkey: false
     trim: false
@@ -39,13 +48,19 @@ exports.defaults =
     ignoreAttrs: false
     mergeAttrs: false
     explicitRoot: true
-    validator: null,
-    xmlns : false,
+    validator: null
+    xmlns : false
+    explicitChildren: false
+    childkey: '$$'
+    charsAsChildren: false
+    # not async in 0.2 mode either
+    async: false
+    strict: true
     # xml building options
-    rootName: 'root',
-    xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true},
-    doctype: null,
+    rootName: 'root'
     pretty: true
+    xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
+    doctype: null
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -114,6 +129,8 @@ class exports.Builder
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
+    # if this was called without 'new', create an instance with new and return
+    return new exports.Parser opts unless @ instanceof exports.Parser
     # copy this versions default options
     @options = {}
     @options[key] = value for own key, value of exports.defaults["0.2"]
@@ -131,7 +148,7 @@ class exports.Parser extends events.EventEmitter
     @removeAllListeners()
     # make the SAX parser. tried trim and normalize, but they are not
     # very helpful
-    @saxParser = sax.parser true, {
+    @saxParser = sax.parser @options.strict, {
       trim: false,
       normalize: false,
       xmlns: @options.xmlns
@@ -178,9 +195,13 @@ class exports.Parser extends events.EventEmitter
       nodeName = obj["#name"]
       delete obj["#name"]
 
+      cdata = obj.cdata
+      delete obj.cdata
+
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
-      if obj[charkey].match(/^\s*$/)
+      if obj[charkey].match(/^\s*$/) and not cdata
+        emptyStr = obj[charkey]
         delete obj[charkey]
       else
         obj[charkey] = obj[charkey].trim() if @options.trim
@@ -190,12 +211,35 @@ class exports.Parser extends events.EventEmitter
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
           obj = obj[charkey]
 
-      if @options.emptyTag != undefined && isEmpty obj
-        obj = @options.emptyTag
+      if (isEmpty obj)
+        obj = if @options.emptyTag != undefined
+          @options.emptyTag
+        else
+          emptyStr
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
-        obj = @options.validator(xpath, s and s[nodeName], obj)
+        try
+          obj = @options.validator(xpath, s and s[nodeName], obj)
+        catch err
+          @emit "error", err
+
+      # put children into <childkey> property and unfold chars if necessary
+      if @options.explicitChildren and not @options.mergeAttrs and typeof obj is 'object'
+        node = {}
+        # separate attributes
+        if @options.attrkey of obj
+          node[@options.attrkey] = obj[@options.attrkey]
+          delete obj[@options.attrkey]
+        # separate char data
+        if not @options.charsAsChildren and @options.charkey of obj
+          node[@options.charkey] = obj[@options.charkey]
+          delete obj[@options.charkey]
+
+        if Object.getOwnPropertyNames(obj).length > 0
+          node[@options.childkey] = obj
+
+        obj = node
 
       # check whether we closed all the open tags
       if stack.length > 0
@@ -223,29 +267,55 @@ class exports.Parser extends events.EventEmitter
         @resultObject = obj
         @emit "end", @resultObject
 
-    @saxParser.ontext = @saxParser.oncdata = (text) =>
+    ontext = (text) =>
       s = stack[stack.length - 1]
       if s
         s[charkey] += text
+        s
+
+    @saxParser.ontext = ontext
+    @saxParser.oncdata = (text) =>
+      s = ontext text
+      if s
+        s.cdata = true
 
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"
       @on "end", (result) ->
         @reset()
-        cb null, result
+        if @options.async
+          process.nextTick ->
+            cb null, result
+        else
+          cb null, result
       @on "error", (err) ->
         @reset()
-        cb err
+        if @options.async
+          process.nextTick ->
+            cb err
+        else
+          cb err
 
     if str.toString().trim() is ''
       @emit "end", null
       return true
 
-    try
-      @saxParser.write str.toString()
-    catch ex
-      if ex instanceof exports.ValidationError
-        @emit("error", ex.message)
-      else
-        throw ex
+    @saxParser.write bom.stripBOM str.toString()
 
+exports.parseString = (str, a, b) ->
+  # let's determine what we got as arguments
+  if b?
+    if typeof b == 'function'
+      cb = b
+    if typeof a == 'object'
+      options = a
+  else
+    # well, b is not set, so a has to be a callback
+    if typeof a == 'function'
+      cb = a
+    # and options should be empty - default
+    options = {}
+
+  # the rest is super-easy
+  parser = new exports.Parser options
+  parser.parseString str, cb
