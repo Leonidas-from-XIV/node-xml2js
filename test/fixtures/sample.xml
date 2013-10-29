@@ -8,7 +8,7 @@
         Line One
         Line Two
     </whitespacetest>
-    <listtest>
+    <listtest attr="Attribute">
         <item>
             This <subitem>Foo(1)</subitem> is
             <subitem>Foo(2)</subitem>
@@ -19,6 +19,7 @@
         </item>
         <item>Qux.</item>
         <item>Quux.</item>
+        <single>Single</single>
     </listtest>
     <arraytest>
         <item><subitem>Baz.</subitem></item>

@@ -75,6 +75,16 @@ class exports.Parser extends events.EventEmitter
 
     @reset()
 
+  assignOrPush: (obj, key, newValue) =>
+    if key not of obj
+      if not @options.explicitArray
+        obj[key] = newValue
+      else
+        obj[key] = [newValue]
+    else
+      obj[key] = [obj[key]] if not (obj[key] instanceof Array)
+      obj[key].push newValue
+
   reset: =>
     # remove all previous listeners for events, to prevent event listener
     # accumulation
@@ -112,10 +122,11 @@ class exports.Parser extends events.EventEmitter
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
+          newValue = node.attributes[key]
           if @options.mergeAttrs
-            obj[key] = node.attributes[key]
+            @assignOrPush obj, key, newValue
           else
-            obj[attrkey][key] = node.attributes[key]
+            obj[attrkey][key] = newValue
 
       # need a place to store the node name
       obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
@@ -176,19 +187,7 @@ class exports.Parser extends events.EventEmitter
 
       # check whether we closed all the open tags
       if stack.length > 0
-        if not @options.explicitArray
-          if nodeName not of s
-            s[nodeName] = obj
-          else if s[nodeName] instanceof Array
-            s[nodeName].push obj
-          else
-            old = s[nodeName]
-            s[nodeName] = [old]
-            s[nodeName].push obj
-        else
-          if not (s[nodeName] instanceof Array)
-            s[nodeName] = []
-          s[nodeName].push obj
+        @assignOrPush s, nodeName, obj
       else
         # if explicitRoot was specified, wrap stuff in the root tag name
         if @options.explicitRoot
