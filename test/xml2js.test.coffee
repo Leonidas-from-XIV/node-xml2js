@@ -43,7 +43,7 @@ validator = (xpath, currentValue, newValue) ->
   return newValue
 
 # shortcut, because it is quite verbose
-equ = assert.equal
+equ = assert.strictEqual
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
@@ -84,19 +84,39 @@ module.exports =
 
   'test parse with mergeAttrs': skeleton(mergeAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.chartest[0].desc, 'Test for CHARs'
+    equ r.sample.chartest[0].desc[0], 'Test for CHARs'
     equ r.sample.chartest[0]._, 'Character data here!'
-    equ r.sample.cdatatest[0].desc, 'Test for CDATA'
-    equ r.sample.cdatatest[0].misc, 'true'
+    equ r.sample.cdatatest[0].desc[0], 'Test for CDATA'
+    equ r.sample.cdatatest[0].misc[0], 'true'
     equ r.sample.cdatatest[0]._, 'CDATA here!'
-    equ r.sample.nochartest[0].desc, 'No data'
-    equ r.sample.nochartest[0].misc, 'false'
+    equ r.sample.nochartest[0].desc[0], 'No data'
+    equ r.sample.nochartest[0].misc[0], 'false'
     equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
     equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
     equ r.sample.listtest[0].item[0].subitem[2], 'Foo(3)'
     equ r.sample.listtest[0].item[0].subitem[3], 'Foo(4)'
     equ r.sample.listtest[0].item[1], 'Qux.'
-    equ r.sample.listtest[0].item[2], 'Quux.')
+    equ r.sample.listtest[0].item[2], 'Quux.'
+    equ r.sample.listtest[0].single[0], 'Single'
+    equ r.sample.listtest[0].attr[0], 'Attribute')
+
+  'test parse with mergeAttrs and not explicitArray': skeleton(mergeAttrs: true, explicitArray: false, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest.desc, 'Test for CHARs'
+    equ r.sample.chartest._, 'Character data here!'
+    equ r.sample.cdatatest.desc, 'Test for CDATA'
+    equ r.sample.cdatatest.misc, 'true'
+    equ r.sample.cdatatest._, 'CDATA here!'
+    equ r.sample.nochartest.desc, 'No data'
+    equ r.sample.nochartest.misc, 'false'
+    equ r.sample.listtest.item[0].subitem[0], 'Foo(1)'
+    equ r.sample.listtest.item[0].subitem[1], 'Foo(2)'
+    equ r.sample.listtest.item[0].subitem[2], 'Foo(3)'
+    equ r.sample.listtest.item[0].subitem[3], 'Foo(4)'
+    equ r.sample.listtest.item[1], 'Qux.'
+    equ r.sample.listtest.item[2], 'Quux.'
+    equ r.sample.listtest.single, 'Single'
+    equ r.sample.listtest.attr, 'Attribute')
 
   'test parse with explicitChildren': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -187,9 +207,9 @@ module.exports =
 
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.chartest, 'Character data here!'
-    equ r.sample.cdatatest, 'CDATA here!'
-    assert.equal r.sample.nochartest[0], ''
+    equ r.sample.chartest[0], 'Character data here!'
+    equ r.sample.cdatatest[0], 'CDATA here!'
+    equ r.sample.nochartest[0], ''
     equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
     equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
     equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
@@ -313,9 +333,9 @@ module.exports =
     demo = '<xml><foo>Bar</foo></xml>'
     withNew = new xml2js.Parser
     withNew.parseString demo, (err, resWithNew) ->
-      equ err, undefined
+      equ err, null
       withoutNew = xml2js.Parser()
       withoutNew.parseString demo, (err, resWithoutNew) ->
-        equ err, undefined
+        equ err, null
         assert.deepEqual resWithNew, resWithoutNew
         test.done()
