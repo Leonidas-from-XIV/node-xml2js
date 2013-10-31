@@ -9,7 +9,6 @@
         Line Two
     </whitespacetest>
     <listtest>
-
         <item>
             This <subitem>Foo(1)</subitem> is
             <subitem>Foo(2)</subitem>
@@ -18,7 +17,6 @@
             data!
             <subitem>Foo(4)</subitem>
         </item>
-
         <item>Qux.</item>
         <item>Quux.</item>
     </listtest>
