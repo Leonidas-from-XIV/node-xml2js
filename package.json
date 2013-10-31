@@ -43,7 +43,8 @@
   "devDependencies" : {
     "coffee-script" : ">=1.6.3",
     "zap" : ">=0.2.5",
-    "docco" : ">=0.6.2"
+    "docco" : ">=0.6.2",
+    "diff" : ">=1.0.7"
   },
   "licenses": [
     {
