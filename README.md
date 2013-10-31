@@ -129,22 +129,6 @@ If you want to parse multiple files, you have multiple possibilites:
   * You can hope everything goes well anyway. This behaviour is not
     guaranteed work always, if ever. Use option #1 if possible. Thanks!
 
-Objects can be also be used to rebuild the XML:
-
-```javascript
-var fs = require('fs'),
-    xml2js = require('xml2js');
-
-var obj = { name: "Super", Surname: "Man", age: 23};
-
-var builder = new xml2js.Builder();
-var xml = builder.buildObject(obj);
-```
-
-At the moment, a one to one bi-directional conversion is guaranteed only for
-default configuration, except for `attrkey`, `charkey` and `explicitArray` options
-you can redefine to your taste. 
-
 So you wanna some JSON?
 -----------------------
 
@@ -169,6 +153,25 @@ truncates the output with `…`? Don't fear, there's also a solution for that,
 you just need to increase the `maxLength` limit by creating a custom inspector
 `var inspect = require('eyes').inspector({maxLength: false})` and then you can
 easily `inspect(result)`.
+
+XML builder usage
+-----------------
+
+Objects can be also be used to build XML:
+
+```javascript
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+var obj = { name: "Super", Surname: "Man", age: 23};
+
+var builder = new xml2js.Builder();
+var xml = builder.buildObject(obj);
+```
+
+At the moment, a one to one bi-directional conversion is guaranteed only for
+default configuration, except for `attrkey`, `charkey` and `explicitArray` options
+you can redefine to your taste. Writing CDATA is not currently supported.
 
 Options
 =======
