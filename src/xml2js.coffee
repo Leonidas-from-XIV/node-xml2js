@@ -58,9 +58,9 @@ exports.defaults =
     strict: true
     # xml building options
     rootName: 'root'
-    pretty: true
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
     doctype: null
+    renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -125,7 +125,7 @@ class exports.Builder
 
     rootElement = builder.create(rootName, @options.xmldec, @options.doctype)
 
-    render(rootElement, rootObj).end(pretty: @options.pretty)
+    render(rootElement, rootObj).end(@options.renderOpts)
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->

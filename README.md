@@ -223,12 +223,19 @@ Options for the `Builder` class
 
   * `rootName` (default `root`): root element name to be used in case
      `explicitiRoot` is `false` or to override the root element name.
-  * `pretty` (default `true`): prettify generated xml.
-  * `xmldec` (default `{'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}`:
+  * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
+    Rendering options for xmlbuilder-js.
+    * pretty: prettify generated XML
+    * indent: whitespace for indentation (only when pretty)
+    * newline: newline char (only when pretty)
+  * `xmldec` (default `{ 'version': '1.0', 'encoding': 'UTF-8', 'standalone': true }`:
     XML declaration attributes.
     * `xmldec.version` A version number string, e.g. 1.0
     * `xmldec.encoding` Encoding declaration, e.g. UTF-8
     * `xmldec.standalone` standalone document declaration: true or false
+  * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
+
+renderOpts, xmldec and doctype pass through to [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js)
 
 Updating to new version
 =======================

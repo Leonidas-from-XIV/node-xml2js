@@ -9,6 +9,8 @@ diff = require 'diff'
 
 # shortcut, because it is quite verbose
 equ = assert.equal
+
+# equality test with diff output
 diffeq = (expected, actual) ->
   diffless = "Index: test\n===================================================================\n--- test\texpected\n+++ test\tactual\n"
   patch = diff.createPatch('test', expected, actual, 'expected', 'actual')
@@ -18,20 +20,20 @@ module.exports =
   'test building basic XML structure': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label></Label><MsgId>5850440872586764820</MsgId></xml>'
     obj = {"xml":{"Label":[""],"MsgId":["5850440872586764820"]}}
-    builder = new xml2js.Builder({pretty: false})
+    builder = new xml2js.Builder(renderOpts: { pretty: false })
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test setting XML declaration': (test) ->
-    expected = '<?xml version="1.0" encoding="WTF-8" standalone="no"?>'
+    expected = '<?xml version="1.2" encoding="WTF-8" standalone="no"?><root/>'
     opts = {
-      pretty: false
-      xmldec: {'version': '1.0', 'encoding': 'WTF-8', 'standalone': false}
+      renderOpts: { pretty: false }
+      xmldec: {'version': '1.2', 'encoding': 'WTF-8', 'standalone': false}
     }
     builder = new xml2js.Builder(opts)
     actual = builder.buildObject {}
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test pretty by default': (test) ->
@@ -45,43 +47,58 @@ module.exports =
     builder = new xml2js.Builder()
     obj = {"xml":{"MsgId":["5850440872586764820"]}}
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
+    test.finish()
+
+  'test setting indentation': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+          <MsgId>5850440872586764820</MsgId>
+      </xml>
+
+    """
+    opts = { renderOpts: { pretty: true, indent: '    ' } }
+    builder = new xml2js.Builder(opts)
+    obj = {"xml":{"MsgId":["5850440872586764820"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
     test.finish()
 
   'test explicit rootName is always used: 1. when there is only one element': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
-    opts = { pretty: false, rootName: 'FOO' }
+    opts = { renderOpts: { pretty: false }, rootName: 'FOO' }
     builder = new xml2js.Builder(opts)
     obj = {"MsgId":["5850440872586764820"]}
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test explicit rootName is always used: 2. when there are multiple elements': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
-    opts = { pretty: false, rootName: 'FOO' }
+    opts = { renderOpts: { pretty: false }, rootName: 'FOO' }
     builder = new xml2js.Builder(opts)
     obj = {"MsgId":["5850440872586764820"]}
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test default rootName is used when there is more than one element in the hash': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><MsgId>5850440872586764820</MsgId><foo>bar</foo></root>'
-    opts = { pretty: false }
+    opts = { renderOpts: { pretty: false } }
     builder = new xml2js.Builder(opts)
     obj = {"MsgId":["5850440872586764820"],"foo":"bar"}
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test when there is only one first-level element in the hash, that is used as root': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><first><MsgId>5850440872586764820</MsgId><foo>bar</foo></first>'
-    opts = { pretty: false }
+    opts = { renderOpts: { pretty: false } }
     builder = new xml2js.Builder(opts)
     obj = {"first":{"MsgId":["5850440872586764820"],"foo":"bar"}}
     actual = builder.buildObject obj
-    diffeq actual, expected
+    diffeq expected, actual
     test.finish()
 
   'test parser -> builder roundtrip': (test) ->
