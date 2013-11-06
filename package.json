@@ -23,7 +23,9 @@
     "Jackson Tian <shyvo1987@gmail.com> (http://weibo.com/shyvo)",
     "Mikhail Zyatin <mikhail.zyatin@gmail.com> (https://github.com/Sitin)",
     "Chris Tavares <ctavares@microsoft.com> (https://github.com/christav)",
-    "Frank Xu <yyfrankyy@gmail.com> (http://f2e.us/)"
+    "Frank Xu <yyfrankyy@gmail.com> (http://f2e.us/)",
+    "Guido D'Albore <guido@bitstorm.it> (http://www.bitstorm.it/)",
+    "Jack Senechal (http://jacksenechal.com/)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
