@@ -25,7 +25,8 @@
     "Chris Tavares <ctavares@microsoft.com> (https://github.com/christav)",
     "Frank Xu <yyfrankyy@gmail.com> (http://f2e.us/)",
     "Guido D'Albore <guido@bitstorm.it> (http://www.bitstorm.it/)",
-    "Jack Senechal (http://jacksenechal.com/)"
+    "Jack Senechal (http://jacksenechal.com/)",
+    "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
