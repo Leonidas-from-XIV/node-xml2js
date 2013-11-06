@@ -8,8 +8,9 @@ what you're looking for!
 Description
 ===========
 
-Simple XML to JavaScript object converter. Uses
-[sax-js](https://github.com/isaacs/sax-js/).
+Simple XML to JavaScript object converter. It supports bi-directional conversion.
+Uses [sax-js](https://github.com/isaacs/sax-js/) and 
+[xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js/).
 
 Note: If you're looking for a full DOM parser, you probably want
 [JSDom](https://github.com/tmpvar/jsdom).
@@ -153,6 +154,25 @@ you just need to increase the `maxLength` limit by creating a custom inspector
 `var inspect = require('eyes').inspector({maxLength: false})` and then you can
 easily `inspect(result)`.
 
+XML builder usage
+-----------------
+
+Objects can be also be used to build XML:
+
+```javascript
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+var obj = { name: "Super", Surname: "Man", age: 23};
+
+var builder = new xml2js.Builder();
+var xml = builder.buildObject(obj);
+```
+
+At the moment, a one to one bi-directional conversion is guaranteed only for
+default configuration, except for `attrkey`, `charkey` and `explicitArray` options
+you can redefine to your taste. Writing CDATA is not currently supported.
+
 Options
 =======
 
@@ -200,6 +220,25 @@ value})``. Possible options are:
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
     is not well-formed XML might yield just about anything. Added in 0.2.7.
+
+Options for the `Builder` class
+-------------------------------
+
+  * `rootName` (default `root`): root element name to be used in case
+     `explicitiRoot` is `false` or to override the root element name.
+  * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
+    Rendering options for xmlbuilder-js.
+    * pretty: prettify generated XML
+    * indent: whitespace for indentation (only when pretty)
+    * newline: newline char (only when pretty)
+  * `xmldec` (default `{ 'version': '1.0', 'encoding': 'UTF-8', 'standalone': true }`:
+    XML declaration attributes.
+    * `xmldec.version` A version number string, e.g. 1.0
+    * `xmldec.encoding` Encoding declaration, e.g. UTF-8
+    * `xmldec.standalone` standalone document declaration: true or false
+  * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
+
+renderOpts, xmldec and doctype pass through to [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js)
 
 Updating to new version
 =======================

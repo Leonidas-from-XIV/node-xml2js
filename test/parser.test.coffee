@@ -22,6 +22,7 @@ skeleton = (options, checks) ->
         x2js.parseString data
     else
       x2js.parseString xmlString
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -280,7 +281,7 @@ module.exports =
 
   'test callback should be called once': (test) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
-    i = 0;
+    i = 0
     try
       xml2js.parseString xml, (err, parsed) ->
         i = i + 1

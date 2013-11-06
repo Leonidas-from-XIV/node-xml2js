@@ -1,5 +1,6 @@
 sax = require 'sax'
 events = require 'events'
+builder = require 'xmlbuilder'
 bom = require './bom'
 
 # Underscore has a nice function for this, but we try to go without dependencies
@@ -55,10 +56,76 @@ exports.defaults =
     # not async in 0.2 mode either
     async: false
     strict: true
+    # xml building options
+    rootName: 'root'
+    xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
+    doctype: null
+    renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
 
 class exports.ValidationError extends Error
   constructor: (message) ->
     @message = message
+
+class exports.Builder
+  constructor: (opts) ->
+    # copy this versions default options
+    @options = {}
+    @options[key] = value for own key, value of exports.defaults["0.2"]
+    # overwrite them with the specified options, if any
+    @options[key] = value for own key, value of opts
+
+  buildObject: (rootObj) ->
+    attrkey = @options.attrkey
+    charkey = @options.charkey
+
+    # If there is a sane-looking first element to use as the root,
+    # and the user hasn't specified a non-default rootName,
+    if ( Object.keys(rootObj).length is 1 ) and ( @options.rootName == exports.defaults['0.2'].rootName )
+      # we'll take the first element as the root element
+      rootName = Object.keys(rootObj)[0]
+      rootObj = rootObj[rootName]
+    else
+      # otherwise we'll use whatever they've set, or the default
+      rootName = @options.rootName
+
+    render = (element, obj) ->
+      if typeof obj isnt 'object'
+        # single element, just append it as text
+        element.txt obj
+      else
+        for own key, child of obj
+          # Case #1 Attribute
+          if key is attrkey
+            if typeof child is "object"
+              # Inserts tag attributes
+              for attr, value of child
+                element = element.att(attr, value)
+
+          # Case #2 Char data (CDATA, etc.)
+          else if key is charkey
+            element = element.txt(child)
+
+          # Case #3 Array data
+          else if typeof child is 'object' and child?.constructor? and child?.constructor?.name? and child?.constructor?.name is 'Array'
+            for own index, entry of child
+              if typeof entry is 'string'
+                element = element.ele(key, entry).up()
+              else
+                element = arguments.callee(element.ele(key), entry).up()
+
+          # Case #4 Objects
+          else if typeof child is "object"
+            element = arguments.callee(element.ele(key), child).up()
+
+          # Case #5 String and remaining types
+          else
+            element = element.ele(key, child.toString()).up()
+
+      element
+
+    rootElement = builder.create(rootName, @options.xmldec, @options.doctype)
+
+    render(rootElement, rootObj).end(@options.renderOpts)
 
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
