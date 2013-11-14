@@ -1,7 +1,10 @@
-sax = require 'sax'
-events = require 'events'
-builder = require 'xmlbuilder'
-bom = require './bom'
+[ events, builder, sax, bom ] = 
+[
+  require 'events'
+  require 'xmlbuilder'
+  require 'sax'
+  require './bom'
+]
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
