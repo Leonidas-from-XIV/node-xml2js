@@ -9,7 +9,7 @@ Description
 ===========
 
 Simple XML to JavaScript object converter. It supports bi-directional conversion.
-Uses [sax-js](https://github.com/isaacs/sax-js/) and 
+Uses [sax-js](https://github.com/isaacs/sax-js/) and
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js/).
 
 Note: If you're looking for a full DOM parser, you probably want
@@ -157,13 +157,13 @@ easily `inspect(result)`.
 XML builder usage
 -----------------
 
-Objects can be also be used to build XML:
+Since 0.4.0, objects can be also be used to build XML:
 
 ```javascript
 var fs = require('fs'),
     xml2js = require('xml2js');
 
-var obj = { name: "Super", Surname: "Man", age: 23};
+var obj = {name: "Super", Surname: "Man", age: 23};
 
 var builder = new xml2js.Builder();
 var xml = builder.buildObject(obj);
