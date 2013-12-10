@@ -183,6 +183,11 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ Object.keys(r.sample.tagcasetest).length, 1)
 
+  'test enabled lowerCamelCaseTags': skeleton(lowerCamelCaseTags: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ Object.keys(r.sample.tagcasetest).length, 1
+    equ Object.keys(r.sample.tagcasetest[0])[0], 'tAg')
+
   'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].attrobj.desc, 'Test for CHARs'
