@@ -36,6 +36,7 @@ exports.defaults =
     # callbacks are async? not in 0.1 mode
     async: false
     strict: true
+    stripPrefix: false
 
   "0.2":
     explicitCharkey: false
@@ -56,6 +57,7 @@ exports.defaults =
     # not async in 0.2 mode either
     async: false
     strict: true
+    stripPrefix: false
     # xml building options
     rootName: 'root'
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
@@ -181,22 +183,26 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    stripPrefix = @options.stripPrefix
+    prefixMatch = new RegExp /(?!xmlns)^.*:/
 
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
       unless @options.ignoreAttrs
         for own key of node.attributes
+          objkey = if @options.stripPrefix then key.replace(prefixMatch, '') else key
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
           newValue = node.attributes[key]
           if @options.mergeAttrs
-            @assignOrPush obj, key, newValue
+            @assignOrPush obj, objkey, newValue
           else
-            obj[attrkey][key] = newValue
+            obj[attrkey][objkey] = newValue
 
       # need a place to store the node name
-      obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
+      nodeName = if @options.normalizeTags then node.name.toLowerCase() else node.name
+      obj["#name"] = if @options.stripPrefix then nodeName.replace(prefixMatch, '') else nodeName
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
