@@ -299,6 +299,12 @@ module.exports =
     equ r.sample["pfx:top"][0].middle[0].$ns.local, 'middle'
     equ r.sample["pfx:top"][0].middle[0].$ns.uri, 'http://bar.com')
 
+  'test stripPrefix': skeleton(stripPrefix: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample["top"][0].$["attr"], 'baz'
+    equ r.sample["top"][0].$["xmlns:pfx"], 'http://foo.com'
+  )
+
   'test callback should be called once': (test) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
     i = 0

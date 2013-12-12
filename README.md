@@ -220,6 +220,8 @@ value})``. Possible options are:
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
     is not well-formed XML might yield just about anything. Added in 0.2.7.
+  * `stripPrefix` (default `false`): Strip namespace prefixes from element and 
+    attribute names. Added in 0.4.1.
 
 Options for the `Builder` class
 -------------------------------
