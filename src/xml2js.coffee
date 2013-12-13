@@ -7,6 +7,13 @@ bom = require './bom'
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
+normalizeTag = (name) ->
+  return name.toLowerCase()
+
+processName = (processors, processedName) ->
+  processedName = process(processedName) for process in processors
+  return processedName
+
 exports.defaults =
   "0.1":
     explicitCharkey: false
@@ -36,6 +43,8 @@ exports.defaults =
     # callbacks are async? not in 0.1 mode
     async: false
     strict: true
+    attrNameProcessor: null
+    tagNameProcessor: null
 
   "0.2":
     explicitCharkey: false
@@ -56,6 +65,8 @@ exports.defaults =
     # not async in 0.2 mode either
     async: false
     strict: true
+    attrNameProcessor: null
+    tagNameProcessor: null
     # xml building options
     rootName: 'root'
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
@@ -139,6 +150,10 @@ class exports.Parser extends events.EventEmitter
     # define the key used for namespaces
     if @options.xmlns
       @options.xmlnskey = @options.attrkey + "ns"
+    if @options.normalizeTags
+      if ! @options.tagNameProcessor
+        @options.tagNameProcessor = []
+      @options.tagNameProcessor.push normalizeTag
 
     @reset()
 
@@ -190,13 +205,14 @@ class exports.Parser extends events.EventEmitter
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
           newValue = node.attributes[key]
+          processedKey = if @options.attrNameProcessor then processName(@options.attrNameProcessor, key) else key
           if @options.mergeAttrs
-            @assignOrPush obj, key, newValue
+            @assignOrPush obj, processedKey, newValue
           else
-            obj[attrkey][key] = newValue
+            obj[attrkey][processedKey] = newValue
 
       # need a place to store the node name
-      obj["#name"] = if @options.normalizeTags then node.name.toLowerCase() else node.name
+      obj["#name"] = if @options.tagNameProcessor then processName(@options.tagNameProcessor, node.name) else node.name
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj

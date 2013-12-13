@@ -23,6 +23,12 @@ skeleton = (options, checks) ->
     else
       x2js.parseString xmlString
 
+nameToUpperCase = (name) ->
+  return name.toUpperCase()
+
+nameCutoff = (name) ->
+  return name.substr(0, 4)
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -340,3 +346,23 @@ module.exports =
         equ err, null
         assert.deepEqual resWithNew, resWithoutNew
         test.done()
+
+  'test single attrNameProcessor': skeleton(attrNameProcessor: [nameToUpperCase], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWERCASEATTR'), true)
+
+  'test multiple attrNameProcessor': skeleton(attrNameProcessor: [nameToUpperCase, nameCutoff], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
+
+  'test single tagNameProcessor': skeleton(tagNameProcessor: [nameToUpperCase], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.hasOwnProperty('SAMPLE'), true
+    equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
+
+  'test multiple tagNameProcessor': skeleton(tagNameProcessor: [nameToUpperCase, nameCutoff], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.hasOwnProperty('SAMP'), true
+    equ r.SAMP.hasOwnProperty('TAGN'), true)
