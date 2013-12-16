@@ -173,6 +173,41 @@ At the moment, a one to one bi-directional conversion is guaranteed only for
 default configuration, except for `attrkey`, `charkey` and `explicitArray` options
 you can redefine to your taste. Writing CDATA is not currently supported.
 
+Processing attribute and tag names
+----------------------------------
+
+Since 0.4.1 you can optionally provide the parser with attribute and tag name processors:
+
+```javascript
+
+function nameToUpperCase(name){
+    return name.toUpperCase();
+}
+
+//transform all attribute and tag names to uppercase
+parseString(xml, {tagNameProcessors: [nameToUpperCase], attrNameProcessors: [nameToUpperCase]}, function (err, result) {
+});
+```
+
+The `tagNameProcessors` and `attrNameProcessors` options both accept an `Array` of functions with the following signature:
+```javascript
+function (name){
+  //do something with `name`
+  return name
+}
+```
+
+Some processors are provided out-of-the-box and can be found in `lib/processors.js`:
+
+- `normalize`: transforms the name to lowercase.
+(Automatically used when `options.normalize` is set to `true`)
+
+- `firstCharLowerCase`: transforms the first character to lower case.
+E.g. 'MyTagName' becomes 'myTagName'
+
+- `stripPrefix`: strips the xml namespace prefix. E.g `<foo:Bar/>` will become 'Bar'.
+(N.B.: the `xmlns` prefix is NOT stripped.)
+
 Options
 =======
 
@@ -220,6 +255,24 @@ value})``. Possible options are:
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
     is not well-formed XML might yield just about anything. Added in 0.2.7.
+  * `attrNameProcessors` (default: `null`): Allows the addition of attribute name processing functions.
+    Accepts an `Array` of functions with following signature:
+    ```javascript
+    function (name){
+        //do something with `name`
+        return name
+    }
+    ```
+    Added in 0.4.1
+  * `tagNameProcessors` (default: `null`):Allows the addition of tag name processing functions.
+    Accepts an `Array` of functions with following signature:
+    ```javascript
+    function (name){
+      //do something with `name`
+      return name
+    }
+    ```
+    Added in 0.4.1
 
 Options for the `Builder` class
 -------------------------------

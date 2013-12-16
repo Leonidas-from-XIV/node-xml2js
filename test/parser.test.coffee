@@ -347,22 +347,22 @@ module.exports =
         assert.deepEqual resWithNew, resWithoutNew
         test.done()
 
-  'test single attrNameProcessor': skeleton(attrNameProcessor: [nameToUpperCase], (r)->
+  'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWERCASEATTR'), true)
 
-  'test multiple attrNameProcessor': skeleton(attrNameProcessor: [nameToUpperCase, nameCutoff], (r)->
+  'test multiple attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
 
-  'test single tagNameProcessor': skeleton(tagNameProcessor: [nameToUpperCase], (r)->
+  'test single tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMPLE'), true
     equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
 
-  'test multiple tagNameProcessor': skeleton(tagNameProcessor: [nameToUpperCase, nameCutoff], (r)->
+  'test multiple tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)

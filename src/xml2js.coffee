@@ -2,13 +2,11 @@ sax = require 'sax'
 events = require 'events'
 builder = require 'xmlbuilder'
 bom = require './bom'
+processors = require './processors'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
-
-normalizeTag = (name) ->
-  return name.toLowerCase()
 
 processName = (processors, processedName) ->
   processedName = process(processedName) for process in processors
@@ -43,8 +41,8 @@ exports.defaults =
     # callbacks are async? not in 0.1 mode
     async: false
     strict: true
-    attrNameProcessor: null
-    tagNameProcessor: null
+    attrNameProcessors: null
+    tagNameProcessors: null
 
   "0.2":
     explicitCharkey: false
@@ -65,8 +63,8 @@ exports.defaults =
     # not async in 0.2 mode either
     async: false
     strict: true
-    attrNameProcessor: null
-    tagNameProcessor: null
+    attrNameProcessors: null
+    tagNameProcessors: null
     # xml building options
     rootName: 'root'
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
@@ -151,9 +149,9 @@ class exports.Parser extends events.EventEmitter
     if @options.xmlns
       @options.xmlnskey = @options.attrkey + "ns"
     if @options.normalizeTags
-      if ! @options.tagNameProcessor
-        @options.tagNameProcessor = []
-      @options.tagNameProcessor.push normalizeTag
+      if ! @options.tagNameProcessors
+        @options.tagNameProcessors = []
+      @options.tagNameProcessors.unshift processors.normalize
 
     @reset()
 
@@ -205,14 +203,14 @@ class exports.Parser extends events.EventEmitter
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
           newValue = node.attributes[key]
-          processedKey = if @options.attrNameProcessor then processName(@options.attrNameProcessor, key) else key
+          processedKey = if @options.attrNameProcessors then processName(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
             @assignOrPush obj, processedKey, newValue
           else
             obj[attrkey][processedKey] = newValue
 
       # need a place to store the node name
-      obj["#name"] = if @options.tagNameProcessor then processName(@options.tagNameProcessor, node.name) else node.name
+      obj["#name"] = if @options.tagNameProcessors then processName(@options.tagNameProcessors, node.name) else node.name
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
