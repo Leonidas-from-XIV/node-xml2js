@@ -50,4 +50,6 @@
     <pfx:top xmlns:pfx="http://foo.com" pfx:attr="baz">
         <middle xmlns="http://bar.com"/>
     </pfx:top>
+    <attrNameProcessTest camelCaseAttr="camelCaseAttrValue" lowercaseattr="lowercaseattr" />
+    <tagNameProcessTest/>
 </sample>
