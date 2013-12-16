@@ -12,6 +12,8 @@ processName = (processors, processedName) ->
   processedName = process(processedName) for process in processors
   return processedName
 
+exports.processors = processors
+
 exports.defaults =
   "0.1":
     explicitCharkey: false
