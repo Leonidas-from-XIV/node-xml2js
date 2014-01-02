@@ -26,7 +26,8 @@
     "Frank Xu <yyfrankyy@gmail.com> (http://f2e.us/)",
     "Guido D'Albore <guido@bitstorm.it> (http://www.bitstorm.it/)",
     "Jack Senechal (http://jacksenechal.com/)",
-    "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)"
+    "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)",
+    "Camille Reynders <info@creynders.be> (http://www.creynders.be/)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
