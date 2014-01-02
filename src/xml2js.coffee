@@ -315,7 +315,7 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write bom.stripBOM str.toString()
+    @saxParser.write(bom.stripBOM str.toString()).close()
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments

@@ -291,8 +291,10 @@ module.exports =
         throw new Error 'error throwing in callback'
       throw new Error 'error throwing outside'
     catch e
-      # don't catch the exception that was thrown by callback
-      equ e.message, 'error throwing outside'
+      # the stream is finished by the time the parseString method is called
+      # so the callback, which is synchronous, will bubble the inner error
+      # out to here, make sure that happens
+      equ e.message, 'error throwing in callback'
       test.finish()
 
   'test xmlns': skeleton(xmlns: true, (r) ->
@@ -345,7 +347,13 @@ module.exports =
       withoutNew.parseString demo, (err, resWithoutNew) ->
         equ err, null
         assert.deepEqual resWithNew, resWithoutNew
-        test.done()
+        test.finish()
+
+  'test not closed but well formed xml': (test) ->
+    xml = "<test>"
+    xml2js.parseString xml, (err, parsed) ->
+      assert.equal err.message, 'Unclosed root tag\nLine: 0\nColumn: 6\nChar: '
+      test.finish()
 
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10

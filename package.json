@@ -27,7 +27,8 @@
     "Guido D'Albore <guido@bitstorm.it> (http://www.bitstorm.it/)",
     "Jack Senechal (http://jacksenechal.com/)",
     "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)",
-    "Camille Reynders <info@creynders.be> (http://www.creynders.be/)"
+    "Camille Reynders <info@creynders.be> (http://www.creynders.be/)",
+    "Taylor Gautier (https://github.com/tsgautier)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
