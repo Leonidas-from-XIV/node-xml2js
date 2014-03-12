@@ -181,11 +181,14 @@ class exports.Parser extends events.EventEmitter
 
     # emit one error event if the sax parser fails. this is mostly a hack, but
     # the sax parser isn't state of the art either.
-    err = false
+    @saxParser.errThrown = false
     @saxParser.onerror = (error) =>
-      if ! err
-        err = true
+      @saxParser.resume()
+      if ! @saxParser.errThrown
+        @saxParser.errThrown = true
         @emit "error", error
+
+
 
     # always use the '#' key, even if there are no subkeys
     # setting this property by and is deprecated, yet still supported.
@@ -315,7 +318,12 @@ class exports.Parser extends events.EventEmitter
       @emit "end", null
       return true
 
-    @saxParser.write(bom.stripBOM str.toString()).close()
+    try
+      @saxParser.write(bom.stripBOM str.toString()).close()
+    catch err
+      unless @saxParser.errThrown
+        @emit 'error', err
+        @saxParser.errThrown = true
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
