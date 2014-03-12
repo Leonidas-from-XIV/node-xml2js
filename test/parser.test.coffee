@@ -248,6 +248,13 @@ module.exports =
           equ r.sample.chartest[0]._, 'Character data here!'
           test.finish()
 
+  'test element with garbage XML': (test) ->
+    x2js = new xml2js.Parser()
+    xmlString = "<<>fdfsdfsdf<><<><??><<><>!<>!<!<>!."
+    x2js.parseString xmlString, (err, result) ->
+      assert.notEqual err, null
+      test.finish()
+
   'test simple function without options': (test) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, (err, r) ->
