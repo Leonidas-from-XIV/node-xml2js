@@ -28,7 +28,8 @@
     "Jack Senechal (http://jacksenechal.com/)",
     "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)",
     "Camille Reynders <info@creynders.be> (http://www.creynders.be/)",
-    "Taylor Gautier (https://github.com/tsgautier)"
+    "Taylor Gautier (https://github.com/tsgautier)",
+    "Todd Bryan (https://github.com/toddrbryan)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
@@ -46,8 +47,8 @@
     "xmlbuilder" : ">=0.4.2"
   },
   "devDependencies" : {
-    "coffee-script" : ">=1.6.3",
-    "zap" : ">=0.2.5",
+    "coffee-script" : ">=1.7.1",
+    "zap" : ">=0.2.6",
     "docco" : ">=0.6.2",
     "diff" : ">=1.0.8"
   },
