@@ -278,7 +278,7 @@ Options for the `Builder` class
 -------------------------------
 
   * `rootName` (default `root`): root element name to be used in case
-     `explicitiRoot` is `false` or to override the root element name.
+     `explicitRoot` is `false` or to override the root element name.
   * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
     Rendering options for xmlbuilder-js.
     * pretty: prettify generated XML
