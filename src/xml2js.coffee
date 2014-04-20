@@ -26,6 +26,7 @@ exports.defaults =
     attrkey: "@"
     # set default char object key
     charkey: "#"
+    cdatakey:"dat"
     # always put child nodes in an array
     explicitArray: false
     # ignore all attributes regardless
@@ -53,6 +54,7 @@ exports.defaults =
     normalizeTags: false
     attrkey: "$"
     charkey: "_"
+    cdatakey:"dat"
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
@@ -88,6 +90,7 @@ class exports.Builder
   buildObject: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
+    cdatakey = @options.cdatakey
 
     # If there is a sane-looking first element to use as the root,
     # and the user hasn't specified a non-default rootName,
@@ -116,6 +119,10 @@ class exports.Builder
           else if key is charkey
             element = element.txt(child)
 
+          # Case #2.1 CDATA data (CDATA, etc.)
+          else if key is cdatakey
+            element = element.dat(child)
+
           # Case #3 Array data
           else if typeof child is 'object' and child?.constructor? and child?.constructor?.name? and child?.constructor?.name is 'Array'
             for own index, entry of child
@@ -127,6 +134,7 @@ class exports.Builder
           # Case #4 Objects
           else if typeof child is "object"
             element = arguments.callee(element.ele(key), child).up()
+
 
           # Case #5 String and remaining types
           else
