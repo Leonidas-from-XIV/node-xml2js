@@ -72,6 +72,7 @@ exports.defaults =
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
     doctype: null
     renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
+    headless: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -134,7 +135,7 @@ class exports.Builder
 
       element
 
-    rootElement = builder.create(rootName, @options.xmldec, @options.doctype)
+    rootElement = builder.create(rootName, @options.xmldec, @options.doctype, @options.headless)
 
     render(rootElement, rootObj).end(@options.renderOpts)
 
