@@ -64,6 +64,22 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test headless option': (test) ->
+    expected = """
+      <xml>
+          <MsgId>5850440872586764820</MsgId>
+      </xml>
+
+    """
+    opts =
+      renderOpts: pretty: true, indent: '    '
+      headless: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["5850440872586764820"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test explicit rootName is always used: 1. when there is only one element': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
     opts = renderOpts: {pretty: false}, rootName: 'FOO'
