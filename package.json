@@ -29,7 +29,8 @@
     "Matthias Hölzl <tc@xantira.com> (https://github.com/hoelzl)",
     "Camille Reynders <info@creynders.be> (http://www.creynders.be/)",
     "Taylor Gautier (https://github.com/tsgautier)",
-    "Todd Bryan (https://github.com/toddrbryan)"
+    "Todd Bryan (https://github.com/toddrbryan)",
+    "Leore Avidar <leore.avidar@gmail.com> (http://leoreavidar.com/)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
