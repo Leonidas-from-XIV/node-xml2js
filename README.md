@@ -290,8 +290,10 @@ Options for the `Builder` class
     * `xmldec.encoding` Encoding declaration, e.g. UTF-8
     * `xmldec.standalone` standalone document declaration: true or false
   * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
+  * `headless` (default: `false`): omit the XML header
 
-renderOpts, xmldec and doctype pass through to [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js)
+`renderOpts`, `xmldec`,`doctype` and `headless` pass through to
+[xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
 
 Updating to new version
 =======================
