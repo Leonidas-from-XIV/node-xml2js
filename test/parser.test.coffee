@@ -327,6 +327,23 @@ module.exports =
       equ e.message, 'Custom error message'
       test.finish()
 
+  'test no error event after end': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
+    i = 0
+    x2js = new xml2js.Parser()
+    x2js.on 'error', ->
+      i = i + 1
+
+    x2js.on 'end', ->
+      #This is a userland callback doing something with the result xml.
+      #Errors in here should not be passed to the parser's 'error' callbacks
+      throw new Error('some error in happy path')
+
+    x2js.parseString(xml)
+
+    equ i, 0
+    test.finish()
+
   'test empty CDATA': (test) ->
     xml = '<xml><Label><![CDATA[]]></Label><MsgId>5850440872586764820</MsgId></xml>'
     xml2js.parseString xml, (err, parsed) ->

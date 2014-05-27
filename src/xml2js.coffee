@@ -285,6 +285,7 @@ class exports.Parser extends events.EventEmitter
           obj[nodeName] = old
 
         @resultObject = obj
+        @saxParser.ended = true
         @emit "end", @resultObject
 
     ontext = (text) =>
@@ -323,7 +324,7 @@ class exports.Parser extends events.EventEmitter
     try
       @saxParser.write(bom.stripBOM str.toString()).close()
     catch err
-      unless @saxParser.errThrown
+      unless @saxParser.errThrown or @saxParser.ended
         @emit 'error', err
         @saxParser.errThrown = true
 
