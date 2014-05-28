@@ -190,7 +190,9 @@ class exports.Parser extends events.EventEmitter
         @saxParser.errThrown = true
         @emit "error", error
 
-
+    # another hack to avoid throwing exceptions when the parsing has ended
+    # but the user-supplied callback throws an error
+    @saxParser.ended = false
 
     # always use the '#' key, even if there are no subkeys
     # setting this property by and is deprecated, yet still supported.
@@ -285,6 +287,8 @@ class exports.Parser extends events.EventEmitter
           obj[nodeName] = old
 
         @resultObject = obj
+        # parsing has ended, mark that so we won't throw exceptions from
+        # here anymore
         @saxParser.ended = true
         @emit "end", @resultObject
 

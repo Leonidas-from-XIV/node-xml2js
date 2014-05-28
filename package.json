@@ -30,7 +30,8 @@
     "Camille Reynders <info@creynders.be> (http://www.creynders.be/)",
     "Taylor Gautier (https://github.com/tsgautier)",
     "Todd Bryan (https://github.com/toddrbryan)",
-    "Leore Avidar <leore.avidar@gmail.com> (http://leoreavidar.com/)"
+    "Leore Avidar <leore.avidar@gmail.com> (http://leoreavidar.com/)",
+    "Dave Aitken <dave.aitken@gmail.com> (http://www.actionshrimp.com/)",
   ],
   "main" : "./lib/xml2js",
   "directories" : {
