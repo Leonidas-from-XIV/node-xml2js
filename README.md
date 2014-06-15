@@ -234,7 +234,7 @@ value})``. Possible options are:
     text nodes.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child
-    attribute object. This option is ignored if `ignoreAttrs` is `false`.
+    attribute object. This option is ignored if `ignoreAttrs` is `true`.
   * `validator` (default `null`): You can specify a callable that validates
     the resulting structure somehow, however you want. See unit tests
     for an example.
