@@ -221,7 +221,11 @@ class exports.Parser extends events.EventEmitter
       # need a place to store the node name
       obj["#name"] = if @options.tagNameProcessors then processName(@options.tagNameProcessors, node.name) else node.name
       if (@options.xmlns)
-        obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
+        uri = node.uri
+        for i in [stack.length - 1..0]
+          break if uri
+          uri = stack[i][@options.xmlnskey].uri
+        obj[@options.xmlnskey] = {uri: uri, local: node.local}
       stack.push obj
 
     @saxParser.onclosetag = =>
