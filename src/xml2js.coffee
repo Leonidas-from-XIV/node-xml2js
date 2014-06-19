@@ -225,7 +225,7 @@ class exports.Parser extends events.EventEmitter
         for i in [stack.length - 1..0]
           break if uri
           uri = stack[i][@options.xmlnskey].uri
-        obj[@options.xmlnskey] = {uri: uri, local: node.local}
+        obj[@options.xmlnskey] = {uri: uri, local: node.local, ns: node.ns}
       stack.push obj
 
     @saxParser.onclosetag = =>
