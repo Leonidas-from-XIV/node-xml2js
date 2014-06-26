@@ -116,6 +116,8 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+
+
   'test parser -> builder roundtrip': (test) ->
     fileName = path.join __dirname, '/fixtures/build_sample.xml'
     fs.readFile fileName, (err, xmlData) ->
@@ -126,3 +128,13 @@ module.exports =
         xmlActual = builder.buildObject obj
         diffeq xmlExpected, xmlActual
         test.finish()
+
+  'test building xml with CDATA structure': (test) ->
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><first><MsgId><![CDATA[5850440872586764820]]></MsgId><foo>bar</foo></first>'
+    opts = renderOpts: pretty: false
+    builder = new xml2js.Builder opts
+    obj = {"first":{"MsgId":[{"dat":"5850440872586764820"}],"foo":"bar"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+    
