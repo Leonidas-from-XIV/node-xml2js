@@ -118,7 +118,7 @@ class exports.Builder
             element = element.txt(child)
 
           # Case #3 Array data
-          else if typeof child is 'object' and child?.constructor? and child?.constructor?.name? and child?.constructor?.name is 'Array'
+          else if typeof child is 'object' and child instanceof Array
             for own index, entry of child
               if typeof entry is 'string'
                 element = element.ele(key, entry).up()
