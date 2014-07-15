@@ -31,7 +31,8 @@
     "Taylor Gautier (https://github.com/tsgautier)",
     "Todd Bryan (https://github.com/toddrbryan)",
     "Leore Avidar <leore.avidar@gmail.com> (http://leoreavidar.com/)",
-    "Dave Aitken <dave.aitken@gmail.com> (http://www.actionshrimp.com/)"
+    "Dave Aitken <dave.aitken@gmail.com> (http://www.actionshrimp.com/)",
+    "Shaney Orrowe <shaney.orrowe@practiceweb.co.uk>"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
