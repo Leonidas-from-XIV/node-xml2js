@@ -73,6 +73,7 @@ exports.defaults =
     doctype: null
     renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
     headless: false
+    chunkSize: 10000
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -158,6 +159,18 @@ class exports.Parser extends events.EventEmitter
       @options.tagNameProcessors.unshift processors.normalize
 
     @reset()
+
+  processAsync: =>
+    if @position > @str.length
+      @saxParser.close()
+      return
+
+    chunk = @str.substr @position, @options.chunkSize
+    @position += @options.chunkSize
+
+    @saxParser = @saxParser.write chunk
+
+    setImmediate @processAsync
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
@@ -308,25 +321,24 @@ class exports.Parser extends events.EventEmitter
     if cb? and typeof cb is "function"
       @on "end", (result) ->
         @reset()
-        if @options.async
-          process.nextTick ->
-            cb null, result
-        else
-          cb null, result
+        cb null, result
       @on "error", (err) ->
         @reset()
-        if @options.async
-          process.nextTick ->
-            cb err
-        else
-          cb err
+        cb err
 
-    if str.toString().trim() is ''
+    str = str.toString()
+    if str.trim() is ''
       @emit "end", null
       return true
 
     try
-      @saxParser.write(bom.stripBOM str.toString()).close()
+      str = bom.stripBOM str
+      if @options.async
+        @position = 0
+        @str = str
+        setImmediate @processAsync
+        @saxParser
+      @saxParser.write(str).close()
     catch err
       unless @saxParser.errThrown or @saxParser.ended
         @emit 'error', err
