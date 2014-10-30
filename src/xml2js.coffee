@@ -161,16 +161,17 @@ class exports.Parser extends events.EventEmitter
     @reset()
 
   processAsync: =>
-    if @position > @str.length
+    if @remaining.length <= @options.chunkSize
+      chunk = @remaining
+      @remaining = ''
+      # 
+      @saxParser = @saxParser.write chunk
       @saxParser.close()
-      return
-
-    chunk = @str.substr @position, @options.chunkSize
-    @position += @options.chunkSize
-
-    @saxParser = @saxParser.write chunk
-
-    setImmediate @processAsync
+    else
+      chunk = @remaining.substr 0, @options.chunkSize
+      @remaining = @remaining.substr @options.chunkSize, @remaining.length
+      @saxParser = @saxParser.write chunk
+      setImmediate @processAsync
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
@@ -334,8 +335,7 @@ class exports.Parser extends events.EventEmitter
     try
       str = bom.stripBOM str
       if @options.async
-        @position = 0
-        @str = str
+        @remaining = str
         setImmediate @processAsync
         @saxParser
       @saxParser.write(str).close()
