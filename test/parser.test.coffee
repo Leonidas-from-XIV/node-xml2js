@@ -270,6 +270,13 @@ module.exports =
         equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
+  'test async execution': (test) ->
+    fs.readFile fileName, (err, data) ->
+      xml2js.parseString data, async: true, (err, r) ->
+        equ err, null
+        equ r.sample.chartest[0]._, 'Character data here!'
+        test.finish()
+
   'test validator': skeleton(validator: validator, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ typeof r.sample.validatortest[0].stringtest[0], 'string'
