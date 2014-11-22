@@ -45,6 +45,7 @@ exports.defaults =
     strict: true
     attrNameProcessors: null
     tagNameProcessors: null
+    emptyTag: ''
 
   "0.2":
     explicitCharkey: false
@@ -74,6 +75,7 @@ exports.defaults =
     renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
     headless: false
     chunkSize: 10000
+    emptyTag: ''
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -260,10 +262,7 @@ class exports.Parser extends events.EventEmitter
           obj = obj[charkey]
 
       if (isEmpty obj)
-        obj = if @options.emptyTag != undefined
-          @options.emptyTag
-        else
-          emptyStr
+        obj = if @options.emptyTag != '' then @options.emptyTag else emptyStr
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")

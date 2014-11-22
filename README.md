@@ -226,8 +226,7 @@ value})``. Possible options are:
   * `normalize` (default: `false`): Trim whitespaces inside text nodes.
   * `explicitRoot` (default: `true`): Set this if you want to get the root
     node in the resulting object.
-  * `emptyTag` (default: `undefined`): what will the value of empty nodes be.
-    Default is `{}`.
+  * `emptyTag` (default: `''`): what will the value of empty nodes be.
   * `explicitArray` (default: `true`): Always put child nodes in an array if
     true; otherwise an array is created only if there is more than one.
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
