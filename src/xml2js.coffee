@@ -76,6 +76,7 @@ exports.defaults =
     headless: false
     chunkSize: 10000
     emptyTag: ''
+    attrsAsValues: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -175,9 +176,9 @@ class exports.Parser extends events.EventEmitter
       @saxParser = @saxParser.write chunk
       setImmediate @processAsync
 
-  assignOrPush: (obj, key, newValue) =>
+  assignOrPush: (obj, key, isAttribute, newValue) =>
     if key not of obj
-      if not @options.explicitArray
+      if (not @options.explicitArray) or (isAttribute and @options.attrsAsValues)
         obj[key] = newValue
       else
         obj[key] = [newValue]
@@ -230,7 +231,7 @@ class exports.Parser extends events.EventEmitter
           newValue = node.attributes[key]
           processedKey = if @options.attrNameProcessors then processName(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
-            @assignOrPush obj, processedKey, newValue
+            @assignOrPush obj, processedKey, true, newValue
           else
             obj[attrkey][processedKey] = newValue
 
@@ -290,7 +291,7 @@ class exports.Parser extends events.EventEmitter
 
       # check whether we closed all the open tags
       if stack.length > 0
-        @assignOrPush s, nodeName, obj
+        @assignOrPush s, nodeName, false, obj
       else
         # if explicitRoot was specified, wrap stuff in the root tag name
         if @options.explicitRoot
