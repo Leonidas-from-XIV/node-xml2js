@@ -411,6 +411,14 @@ module.exports =
     equ r.hasOwnProperty('SAMPLE'), true
     equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
 
+  'test single tagNameProcessors in simple callback': (test) ->
+    fs.readFile fileName, (err, data) ->
+      xml2js.parseString data, tagNameProcessors: [nameToUpperCase], (err, r)->
+        console.log 'Result object: ' + util.inspect r, false, 10
+        equ r.hasOwnProperty('SAMPLE'), true
+        equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true
+        test.finish()
+
   'test multiple tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
