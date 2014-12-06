@@ -235,6 +235,16 @@ module.exports =
         equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
+  'test simple callback with options': (test) ->
+    fs.readFile fileName, (err, data) ->
+      xml2js.parseString data,
+        trim: true
+        normalize: true,
+        (err, r) ->
+          console.log r
+          equ r.sample.whitespacetest[0]._, 'Line One Line Two'
+          test.finish()
+
   'test double parse': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
