@@ -234,6 +234,12 @@ value})``. Possible options are:
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as
     properties of the parent, instead of keying attributes off a child
     attribute object. This option is ignored if `ignoreAttrs` is `false`.
+  * `attrsAsValues` (default: `false`): When used with `mergeAttrs`, makes
+    attributes as values, even with `explicitArray` set to `true`. This can
+    make it easier to distinguish between properties that were attributes,
+    and properties that were content (content will be an array, attributes
+    will be strings). If `explicitArray` is `false`, setting this option will
+    have no effect.
   * `validator` (default `null`): You can specify a callable that validates
     the resulting structure somehow, however you want. See unit tests
     for an example.
