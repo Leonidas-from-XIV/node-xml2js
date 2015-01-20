@@ -171,7 +171,8 @@ var xml = builder.buildObject(obj);
 
 At the moment, a one to one bi-directional conversion is guaranteed only for
 default configuration, except for `attrkey`, `charkey` and `explicitArray` options
-you can redefine to your taste. Writing CDATA is not currently supported.
+you can redefine to your taste. Writing CDATA is supported via setting the `cdata`
+option to `true`.
 
 Processing attribute and tag names
 ----------------------------------
@@ -290,6 +291,7 @@ Options for the `Builder` class
     * `xmldec.standalone` standalone document declaration: true or false
   * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
   * `headless` (default: `false`): omit the XML header. Added in 0.4.3.
+  * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>`. Added in 0.4.5.
 
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).

@@ -373,6 +373,12 @@ module.exports =
       equ parsed.spacecdatatest, ' '
       test.finish()
 
+  'test escaped CDATA result': (test) ->
+    xml = '<spacecdatatest><![CDATA[]]]]><![CDATA[>]]></spacecdatatest>'
+    xml2js.parseString xml, (err, parsed) ->
+      equ parsed.spacecdatatest, ']]>'
+      test.finish()
+
   'test non-strict parsing': (test) ->
     html = '<html><head></head><body><br></body></html>'
     xml2js.parseString html, strict: false, (err, parsed) ->
