@@ -354,9 +354,14 @@ module.exports =
     x2js.on 'end', ->
       #This is a userland callback doing something with the result xml.
       #Errors in here should not be passed to the parser's 'error' callbacks
-      throw new Error('some error in happy path')
+      #Errors here should be propagated so that the user can see them and
+      #fix them.
+      throw new Error('some error in user-land')
 
-    x2js.parseString(xml)
+    try
+      x2js.parseString(xml)
+    catch e
+      equ e.message, 'some error in user-land'
 
     equ i, 0
     test.finish()
