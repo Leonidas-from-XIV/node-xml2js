@@ -342,7 +342,7 @@ class exports.Parser extends events.EventEmitter
       unless @saxParser.errThrown or @saxParser.ended
         @emit 'error', err
         @saxParser.errThrown = true
-      else
+      else if @saxParser.ended
         throw err
 
 exports.parseString = (str, a, b) ->
