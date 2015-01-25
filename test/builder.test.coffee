@@ -126,3 +126,63 @@ module.exports =
         xmlActual = builder.buildObject obj
         diffeq xmlExpected, xmlActual
         test.finish()
+
+  'test escapes escaped characters': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId>&amp;amp;&amp;lt;&amp;gt;</MsgId>
+      </xml>
+
+    """
+    builder = new xml2js.Builder
+    obj = {"xml":{"MsgId":["&amp;&lt;&gt;"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test cdata text nodes': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[& <<]]></MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["& <<"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test cdata text nodes with escaped end sequence': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[& <<]]]]><![CDATA[>]]></MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["& <<]]>"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test uses cdata only for chars &, <, >': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[& <<]]></MsgId>
+        <Message>Hello</Message>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["& <<"],"Message":["Hello"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()

@@ -12,6 +12,22 @@ processName = (processors, processedName) ->
   processedName = process(processedName) for process in processors
   return processedName
 
+requiresCDATA = (entry) ->
+  return entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0
+
+# Note that we do this manually instead of using xmlbuilder's `.dat` method
+# since it does not support escaping the CDATA close entity (throws an error if
+# it exists, and if it's pre-escaped).
+wrapCDATA = (entry) ->
+  return "<![CDATA[#{escapeCDATA entry}]]>"
+
+escapeCDATA = (entry) ->
+  # Split the CDATA section in two;
+  # The first contains the ']]'
+  # The second contains the '>'
+  # When later parsed, it will be put back together as ']]>'
+  return entry.replace ']]>', ']]]]><![CDATA[>'
+
 exports.processors = processors
 
 exports.defaults =
@@ -76,6 +92,7 @@ exports.defaults =
     headless: false
     chunkSize: 10000
     emptyTag: ''
+    cdata: false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -103,10 +120,13 @@ class exports.Builder
       # otherwise we'll use whatever they've set, or the default
       rootName = @options.rootName
 
-    render = (element, obj) ->
+    render = (element, obj) =>
       if typeof obj isnt 'object'
         # single element, just append it as text
-        element.txt obj
+        if @options.cdata && requiresCDATA obj
+          element.raw wrapCDATA obj
+        else
+          element.txt obj
       else
         for own key, child of obj
           # Case #1 Attribute
@@ -118,13 +138,19 @@ class exports.Builder
 
           # Case #2 Char data (CDATA, etc.)
           else if key is charkey
-            element = element.txt(child)
+            if @options.cdata && requiresCDATA child
+              element = element.raw wrapCDATA child
+            else
+              element = element.txt child
 
           # Case #3 Array data
           else if typeof child is 'object' and child instanceof Array
             for own index, entry of child
               if typeof entry is 'string'
-                element = element.ele(key, entry).up()
+                if @options.cdata && requiresCDATA entry
+                  element = element.ele(key).raw(wrapCDATA entry).up()
+                else
+                  element = element.ele(key, entry).up()
               else
                 element = arguments.callee(element.ele(key), entry).up()
 
@@ -166,7 +192,6 @@ class exports.Parser extends events.EventEmitter
     if @remaining.length <= @options.chunkSize
       chunk = @remaining
       @remaining = ''
-      # 
       @saxParser = @saxParser.write chunk
       @saxParser.close()
     else
