@@ -18,7 +18,7 @@ diffeq = (expected, actual) ->
 
 module.exports =
   'test building basic XML structure': (test) ->
-    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label></Label><MsgId>5850440872586764820</MsgId></xml>'
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label/><MsgId>5850440872586764820</MsgId></xml>'
     obj = {"xml":{"Label":[""],"MsgId":["5850440872586764820"]}}
     builder = new xml2js.Builder renderOpts: pretty: false
     actual = builder.buildObject obj
