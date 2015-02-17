@@ -144,7 +144,7 @@ class exports.Builder
               element = element.txt child
 
           # Case #3 Array data
-          else if typeof child is 'object' and child instanceof Array
+          else if Array.isArray child
             for own index, entry of child
               if typeof entry is 'string'
                 if @options.cdata && requiresCDATA entry
