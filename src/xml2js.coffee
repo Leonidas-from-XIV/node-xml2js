@@ -84,6 +84,7 @@ exports.defaults =
     strict: true
     attrNameProcessors: null
     tagNameProcessors: null
+    explicitArrayProcessor: null
     # xml building options
     rootName: 'root'
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
@@ -202,7 +203,8 @@ class exports.Parser extends events.EventEmitter
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
-      if not @options.explicitArray
+      array = if @options.explicitArrayProcessor then @options.explicitArrayProcessor(key, newValue) else @options.explicitArray
+      if not array
         obj[key] = newValue
       else
         obj[key] = [newValue]

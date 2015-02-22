@@ -273,6 +273,16 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.1
+  * `explicitArrayProcessor` (defult: `null`):Allow setting explicitArray in function.
+    Acceptsa function with the following signature:
+    ```
+    javascript
+    function (parentName, newChild){
+      //decide if based on parentName and newChild, the child should be placed in an array
+      return true/false
+    }
+    ```
+    Added in 0.4.5
 
 Options for the `Builder` class
 -------------------------------

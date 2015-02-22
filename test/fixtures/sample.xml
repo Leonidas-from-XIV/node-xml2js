@@ -52,4 +52,12 @@
     </pfx:top>
     <attrNameProcessTest camelCaseAttr="camelCaseAttrValue" lowercaseattr="lowercaseattr" />
     <tagNameProcessTest/>
+    <explicitArrayProcessorTest>
+        <item>
+            <one/>
+        </item>
+        <items>
+            <one/>
+        </items>
+    </explicitArrayProcessorTest>
 </sample>

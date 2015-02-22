@@ -29,6 +29,9 @@ nameToUpperCase = (name) ->
 nameCutoff = (name) ->
   return name.substr(0, 4)
 
+pluralTagName = (key, newValue) ->
+  return key.slice(-1) == 's'
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -434,3 +437,8 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test explicitArrayProcessor': skeleton(explicitArrayProcessor: pluralTagName, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.explicitArrayProcessorTest.item.one, ''
+    equ r.sample.explicitArrayProcessorTest.items[0].one, '')
