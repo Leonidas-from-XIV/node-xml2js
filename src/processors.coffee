@@ -10,3 +10,7 @@ exports.firstCharLowerCase = (str) ->
 exports.stripPrefix = (str) ->
   return str.replace(prefixMatch, '')
 
+exports.parseNumbers = (str) ->
+  if (!isNaN(str))
+    str = if str%1==0 then parseInt(str, 10) else parseFloat(str);
+  return str

@@ -52,4 +52,5 @@
     </pfx:top>
     <attrNameProcessTest camelCaseAttr="camelCaseAttrValue" lowercaseattr="lowercaseattr" />
     <tagNameProcessTest/>
+    <valueProcessTest>some value</valueProcessTest>
 </sample>

@@ -174,10 +174,10 @@ default configuration, except for `attrkey`, `charkey` and `explicitArray` optio
 you can redefine to your taste. Writing CDATA is supported via setting the `cdata`
 option to `true`.
 
-Processing attribute and tag names
-----------------------------------
+Processing attribute and tag names and values
+---------------------------------------------
 
-Since 0.4.1 you can optionally provide the parser with attribute and tag name processors:
+Since 0.4.1 you can optionally provide the parser with attribute and tag name processors as well as values:
 
 ```javascript
 
@@ -186,11 +186,11 @@ function nameToUpperCase(name){
 }
 
 //transform all attribute and tag names to uppercase
-parseString(xml, {tagNameProcessors: [nameToUpperCase], attrNameProcessors: [nameToUpperCase]}, function (err, result) {
+parseString(xml, {tagNameProcessors: [nameToUpperCase], attrNameProcessors: [nameToUpperCase], valueProcessors: [nameToUpperCase]}, function (err, result) {
 });
 ```
 
-The `tagNameProcessors` and `attrNameProcessors` options both accept an `Array` of functions with the following signature:
+The `tagNameProcessors`, `attrNameProcessors` and `valueProcessors` options both accept an `Array` of functions with the following signature:
 ```javascript
 function (name){
   //do something with `name`
@@ -208,6 +208,9 @@ E.g. 'MyTagName' becomes 'myTagName'
 
 - `stripPrefix`: strips the xml namespace prefix. E.g `<foo:Bar/>` will become 'Bar'.
 (N.B.: the `xmlns` prefix is NOT stripped.)
+
+- `parseNumbers`: parsers integer-like strings as integers and float-like strings as floats
+E.g. "0" becomes 0 and "15.56" becomes 15.56
 
 Options
 =======
@@ -273,6 +276,13 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.1
+  * `tagNameProcessors` (default: `null`):Allows the addition of value processing functions.
+    Accepts an `Array` of functions with following signature:
+    ```javascript
+    function (name){
+      //do something with `name`
+      return name
+    }
 
 Options for the `Builder` class
 -------------------------------

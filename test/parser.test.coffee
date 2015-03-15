@@ -417,6 +417,14 @@ module.exports =
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
 
+  'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.valueProcessTest[0], 'SOME VALUE')
+
+  'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.valueProcessTest[0], 'SOME')
+
   'test single tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMPLE'), true
