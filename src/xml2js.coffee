@@ -283,7 +283,7 @@ class exports.Parser extends events.EventEmitter
       else
         obj[charkey] = obj[charkey].trim() if @options.trim
         obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
-        obj[charkey] = if @options.valueProcessors then processName(@options.valueProcessors, obj[charkey]) else obj[charkey]
+        obj[charkey] = if @options.valueProcessors then processName @options.valueProcessors, obj[charkey] else obj[charkey]
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY

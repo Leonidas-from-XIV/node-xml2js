@@ -174,8 +174,8 @@ default configuration, except for `attrkey`, `charkey` and `explicitArray` optio
 you can redefine to your taste. Writing CDATA is supported via setting the `cdata`
 option to `true`.
 
-Processing attribute and tag names and values
----------------------------------------------
+Processing attribute, tag names and values
+------------------------------------------
 
 Since 0.4.1 you can optionally provide the parser with attribute and tag name processors as well as values:
 
@@ -186,11 +186,18 @@ function nameToUpperCase(name){
 }
 
 //transform all attribute and tag names to uppercase
-parseString(xml, {tagNameProcessors: [nameToUpperCase], attrNameProcessors: [nameToUpperCase], valueProcessors: [nameToUpperCase]}, function (err, result) {
+parseString(xml, {
+  tagNameProcessors: [nameToUpperCase],
+  attrNameProcessors: [nameToUpperCase],
+  valueProcessors: [nameToUpperCase]},
+  function (err, result) {
+    // processed data
 });
 ```
 
-The `tagNameProcessors`, `attrNameProcessors` and `valueProcessors` options both accept an `Array` of functions with the following signature:
+The `tagNameProcessors`, `attrNameProcessors` and `valueProcessors` options
+accept an `Array` of functions with the following signature:
+
 ```javascript
 function (name){
   //do something with `name`
@@ -258,8 +265,9 @@ value})``. Possible options are:
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
     is not well-formed XML might yield just about anything. Added in 0.2.7.
-  * `attrNameProcessors` (default: `null`): Allows the addition of attribute name processing functions.
-    Accepts an `Array` of functions with following signature:
+  * `attrNameProcessors` (default: `null`): Allows the addition of attribute
+    name processing functions. Accepts an `Array` of functions with following
+    signature:
     ```javascript
     function (name){
         //do something with `name`
@@ -267,8 +275,9 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.1
-  * `tagNameProcessors` (default: `null`):Allows the addition of tag name processing functions.
-    Accepts an `Array` of functions with following signature:
+  * `tagNameProcessors` (default: `null`): Allows the addition of tag name
+    processing functions. Accepts an `Array` of functions with following
+    signature:
     ```javascript
     function (name){
       //do something with `name`
@@ -276,13 +285,16 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.1
-  * `tagNameProcessors` (default: `null`):Allows the addition of value processing functions.
-    Accepts an `Array` of functions with following signature:
+  * `valueProcessors` (default: `null`): Allows the addition of value
+    processing functions. Accepts an `Array` of functions with following
+    signature:
     ```javascript
     function (name){
       //do something with `name`
       return name
     }
+    ```
+    Added in 0.4.6
 
 Options for the `Builder` class
 -------------------------------

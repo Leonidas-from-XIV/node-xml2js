@@ -8,9 +8,9 @@ exports.firstCharLowerCase = (str) ->
   return str.charAt(0).toLowerCase() + str.slice(1)
 
 exports.stripPrefix = (str) ->
-  return str.replace(prefixMatch, '')
+  return str.replace prefixMatch, ''
 
 exports.parseNumbers = (str) ->
-  if (!isNaN(str))
-    str = if str%1==0 then parseInt(str, 10) else parseFloat(str);
+  if !isNaN str
+    str = if str % 1 == 0 then parseInt str, 10 else parseFloat str
   return str
