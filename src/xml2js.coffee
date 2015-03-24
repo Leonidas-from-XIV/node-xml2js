@@ -162,7 +162,10 @@ class exports.Builder
 
           # Case #5 String and remaining types
           else
-            element = element.ele(key, child.toString()).up()
+            if @options.cdata && requiresCDATA child
+              element = element.ele(key).raw(wrapCDATA child).up()
+            else
+              element = element.ele(key, child.toString()).up()
 
       element
 

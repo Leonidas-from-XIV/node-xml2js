@@ -186,3 +186,18 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test uses cdata for string values of objects': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[& <<]]></MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"& <<"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
