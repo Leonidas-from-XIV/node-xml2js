@@ -323,7 +323,15 @@ class exports.Parser extends events.EventEmitter
         else if s
           # append current node onto parent's <childKey> array
           s[@options.childkey] = s[@options.childkey] or []
-          s[@options.childkey].push obj
+          # push a clone so that the node in the children array can receive the #name property while the original obj can do without it
+          objClone = {}
+          for own key of obj
+            objClone[key] = obj[key]
+          s[@options.childkey].push objClone
+          delete obj["#name"]
+          # re-check whether we can collapse the node now to just the charkey value
+          if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
+            obj = obj[charkey]
 
       # check whether we closed all the open tags
       if stack.length > 0
