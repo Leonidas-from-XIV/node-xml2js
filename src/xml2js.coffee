@@ -78,6 +78,7 @@ exports.defaults =
     validator: null
     xmlns : false
     explicitChildren: false
+    preserveChildrenOrder: false
     childkey: '$$'
     charsAsChildren: false
     # not async in 0.2 mode either
@@ -273,7 +274,7 @@ class exports.Parser extends events.EventEmitter
     @saxParser.onclosetag = =>
       obj = stack.pop()
       nodeName = obj["#name"]
-      delete obj["#name"]
+      delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
 
       cdata = obj.cdata
       delete obj.cdata
@@ -304,20 +305,25 @@ class exports.Parser extends events.EventEmitter
 
       # put children into <childkey> property and unfold chars if necessary
       if @options.explicitChildren and not @options.mergeAttrs and typeof obj is 'object'
-        node = {}
-        # separate attributes
-        if @options.attrkey of obj
-          node[@options.attrkey] = obj[@options.attrkey]
-          delete obj[@options.attrkey]
-        # separate char data
-        if not @options.charsAsChildren and @options.charkey of obj
-          node[@options.charkey] = obj[@options.charkey]
-          delete obj[@options.charkey]
+        if not @options.preserveChildrenOrder
+          node = {}
+          # separate attributes
+          if @options.attrkey of obj
+            node[@options.attrkey] = obj[@options.attrkey]
+            delete obj[@options.attrkey]
+          # separate char data
+          if not @options.charsAsChildren and @options.charkey of obj
+            node[@options.charkey] = obj[@options.charkey]
+            delete obj[@options.charkey]
 
-        if Object.getOwnPropertyNames(obj).length > 0
-          node[@options.childkey] = obj
+          if Object.getOwnPropertyNames(obj).length > 0
+            node[@options.childkey] = obj
 
-        obj = node
+          obj = node
+        else if s
+          # append current node onto parent's <childKey> array
+          s[@options.childkey] = s[@options.childkey] or []
+          s[@options.childkey].push obj
 
       # check whether we closed all the open tags
       if stack.length > 0
