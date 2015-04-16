@@ -36,7 +36,8 @@
     "Candle <candle@candle.me.uk>",
     "Jess Telford <hi@jes.st> (http://jes.st)",
     "Tom Hughes <<tom@compton.nu> (http://compton.nu/)",
-    "Piotr Rochala (http://rocha.la/)"
+    "Piotr Rochala (http://rocha.la/)",
+    "Ryan Gahl (https://github.com/ryedin)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
