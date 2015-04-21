@@ -354,6 +354,14 @@ class exports.Parser extends events.EventEmitter
       s = stack[stack.length - 1]
       if s
         s[charkey] += text
+
+        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and text.replace(/\\n/g, '').trim() isnt ''
+          s[@options.childkey] = s[@options.childkey] or []
+          charChild =
+            '#name': '__text__'
+          charChild[charkey] = text
+          s[@options.childkey].push charChild
+
         s
 
     @saxParser.ontext = ontext
