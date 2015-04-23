@@ -356,8 +356,12 @@ class exports.Parser extends events.EventEmitter
       @on "error", (err) ->
         @reset()
         cb err
+    try
+      str = str.toString()
+    catch err
+      @emit 'error', err
+      return true
 
-    str = str.toString()
     if str.trim() is ''
       @emit "end", null
       return true
