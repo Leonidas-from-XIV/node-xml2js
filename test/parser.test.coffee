@@ -454,6 +454,12 @@ module.exports =
       assert.equal err.message, 'Unclosed root tag\nLine: 0\nColumn: 6\nChar: '
       test.finish()
 
+  'test cdata-named node': (test) ->
+    xml = "<test><cdata>hello</cdata></test>"
+    xml2js.parseString xml, (err, parsed) ->
+      assert.equal parsed.test.cdata[0], 'hello'
+      test.finish()
+
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
