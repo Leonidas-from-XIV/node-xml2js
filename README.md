@@ -263,7 +263,7 @@ value})``. Possible options are:
     the "children" array and still be able to determine node names. The named
     (and potentially unordered) properties are also retained in this
     configuration at the same level as the ordered "children" array. Added in
-    0.4.6 to address https://github.com/Leonidas-from-XIV/node-xml2js/issues/31.
+    0.4.9.
   * `charsAsChildren` (default `false`): Determines whether chars should be
     considered children if `explicitChildren` is on. Added in 0.2.5.
   * `async` (default `false`): Should the callbacks be async? This *might* be
