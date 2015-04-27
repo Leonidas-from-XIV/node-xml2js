@@ -145,6 +145,47 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
 
+  'test parse with explicitChildren and preserveChildrenOrder': skeleton(explicitChildren: true, preserveChildrenOrder: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$[10]['#name'], 'ordertest'
+    equ r.sample.$$[10].$$[0]['#name'], 'one'
+    equ r.sample.$$[10].$$[0]._, '1'
+    equ r.sample.$$[10].$$[1]['#name'], 'two'
+    equ r.sample.$$[10].$$[1]._, '2'
+    equ r.sample.$$[10].$$[2]['#name'], 'three'
+    equ r.sample.$$[10].$$[2]._, '3'
+    equ r.sample.$$[10].$$[3]['#name'], 'one'
+    equ r.sample.$$[10].$$[3]._, '4'
+    equ r.sample.$$[10].$$[4]['#name'], 'two'
+    equ r.sample.$$[10].$$[4]._, '5'
+    equ r.sample.$$[10].$$[5]['#name'], 'three'
+    equ r.sample.$$[10].$$[5]._, '6')
+
+  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$[10]['#name'], 'ordertest'
+    equ r.sample.$$[10].$$[0]['#name'], 'one'
+    equ r.sample.$$[10].$$[0]._, '1'
+    equ r.sample.$$[10].$$[1]['#name'], 'two'
+    equ r.sample.$$[10].$$[1]._, '2'
+    equ r.sample.$$[10].$$[2]['#name'], 'three'
+    equ r.sample.$$[10].$$[2]._, '3'
+    equ r.sample.$$[10].$$[3]['#name'], 'one'
+    equ r.sample.$$[10].$$[3]._, '4'
+    equ r.sample.$$[10].$$[4]['#name'], 'two'
+    equ r.sample.$$[10].$$[4]._, '5'
+    equ r.sample.$$[10].$$[5]['#name'], 'three'
+    equ r.sample.$$[10].$$[5]._, '6'
+
+    # test text ordering with XML nodes in the middle
+    equ r.sample.$$[16]['#name'], 'textordertest'
+    equ r.sample.$$[16].$$[0]['#name'], '__text__'
+    equ r.sample.$$[16].$$[0]._, 'this is text with '
+    equ r.sample.$$[16].$$[1]['#name'], 'b'
+    equ r.sample.$$[16].$$[1]._, 'markup'
+    equ r.sample.$$[16].$$[2]['#name'], '__text__'
+    equ r.sample.$$[16].$$[2]._, ' in the middle')
+
   'test element without children': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$.nochildrentest[0].$$, undefined)

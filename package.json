@@ -37,7 +37,8 @@
     "Jess Telford <hi@jes.st> (http://jes.st)",
     "Tom Hughes <<tom@compton.nu> (http://compton.nu/)",
     "Piotr Rochala (http://rocha.la/)",
-    "Michael Avila (https://github.com/michaelavila)"
+    "Michael Avila (https://github.com/michaelavila)",
+    "Ryan Gahl (https://github.com/ryedin)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {

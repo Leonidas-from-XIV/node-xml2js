@@ -256,6 +256,14 @@ value})``. Possible options are:
     then "children" won't be created. Added in 0.2.5.
   * `childkey` (default `$$`): Prefix that is used to access child elements if
     `explicitChildren` is set to `true`. Added in 0.2.5.
+  * `preserveChildrenOrder` (default `false`): Modifies the behavior of
+    `explicitChildren` so that the value of the "children" property becomes an
+    ordered array. When this is `true`, every node will also get a `#name` field
+    whose value will correspond to the XML nodeName, so that you may iterate
+    the "children" array and still be able to determine node names. The named
+    (and potentially unordered) properties are also retained in this
+    configuration at the same level as the ordered "children" array. Added in
+    0.4.9.
   * `charsAsChildren` (default `false`): Determines whether chars should be
     considered children if `explicitChildren` is on. Added in 0.2.5.
   * `async` (default `false`): Should the callbacks be async? This *might* be
