@@ -276,8 +276,9 @@ class exports.Parser extends events.EventEmitter
       nodeName = obj["#name"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
 
-      cdata = obj.cdata
-      delete obj.cdata
+      if obj.cdata == true
+        cdata = obj.cdata
+        delete obj.cdata
 
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
