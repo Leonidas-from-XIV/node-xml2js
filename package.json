@@ -42,7 +42,8 @@
     "Piotr Rochala (http://rocha.la/)",
     "Michael Avila (https://github.com/michaelavila)",
     "Ryan Gahl (https://github.com/ryedin)",
-    "Eric Laberge <e.laberge@gmail.com> (https://github.com/elaberge)"
+    "Eric Laberge <e.laberge@gmail.com> (https://github.com/elaberge)",
+    "Benjamin E. Coe <ben@npmjs.com> (https://twitter.com/benjamincoe)"
   ],
   "main": "./lib/xml2js",
   "directories": {
