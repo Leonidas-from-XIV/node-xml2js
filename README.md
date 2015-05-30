@@ -140,7 +140,7 @@ Displaying results
 ------------------
 
 You might wonder why, using `console.dir` or `console.log` the output at some
-level is only `[Object]`. Don't worry, this is not because xml2js got lazy.
+level is only `[Object]`. Don't worry, this is not because `xml2js` got lazy.
 That's because Node uses `util.inspect` to convert the object into strings and
 that function stops after `depth=2` which is a bit low for most XML.
 
@@ -268,8 +268,8 @@ value})``. Possible options are:
     considered children if `explicitChildren` is on. Added in 0.2.5.
   * `async` (default `false`): Should the callbacks be async? This *might* be
     an incompatible change if your code depends on sync execution of callbacks.
-    xml2js 0.3 might change this default, so the recommendation is to not
-    depend on sync execution anyway. Added in 0.2.6.
+    Future versions of `xml2js` might change this default, so the recommendation
+    is to not depend on sync execution anyway. Added in 0.2.6.
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
     is not well-formed XML might yield just about anything. Added in 0.2.7.
@@ -340,13 +340,13 @@ var parser = new xml2js.Parser(xml2js.defaults["0.2"]);
 
 To get the 0.1 defaults in version 0.2 you can just use
 `xml2js.defaults["0.1"]` in the same place. This provides you with enough time
-to migrate to the saner way of parsing in xml2js 0.2. We try to make the
+to migrate to the saner way of parsing in `xml2js` 0.2. We try to make the
 migration as simple and gentle as possible, but some breakage cannot be
 avoided.
 
 So, what exactly did change and why? In 0.2 we changed some defaults to parse
 the XML in a more universal and sane way. So we disabled `normalize` and `trim`
-so xml2js does not cut out any text content. You can reenable this at will of
+so `xml2js` does not cut out any text content. You can reenable this at will of
 course. A more important change is that we return the root tag in the resulting
 JavaScript structure via the `explicitRoot` setting, so you need to access the
 first element. This is useful for anybody who wants to know what the root node
@@ -368,20 +368,20 @@ We also have a number of unit tests, they can be run using `npm test` directly
 from the project root. This runs zap to discover all the tests and execute
 them.
 
-If you like to contribute, keep in mind that xml2js is written in CoffeeScript,
-so don't develop on the JavaScript files that are checked into the repository
-for convenience reasons. Also, please write some unit test to check your
-behaviour and if it is some user-facing thing, add some documentation to this
-README, so people will know it exists. Thanks in advance!
+If you like to contribute, keep in mind that `xml2js` is written in
+CoffeeScript, so don't develop on the JavaScript files that are checked into
+the repository for convenience reasons. Also, please write some unit test to
+check your behaviour and if it is some user-facing thing, add some
+documentation to this README, so people will know it exists. Thanks in advance!
 
 Getting support
 ===============
 
 Please, if you have a problem with the library, first make sure you read this
 README. If you read this far, thanks, you're good. Then, please make sure your
-problem really is with xml2js. It is? Okay, then I'll look at it. Send me a
+problem really is with `xml2js`. It is? Okay, then I'll look at it. Send me a
 mail and we can talk. Please don't open issues, as I don't think that is the
 proper forum for support problems. Some problems might as well really be bugs
-in xml2js, if so I'll let you know to open an issue instead :)
+in `xml2js`, if so I'll let you know to open an issue instead :)
 
 But if you know you really found a bug, feel free to open an issue instead.
