@@ -266,7 +266,7 @@ class exports.Parser extends events.EventEmitter
             @assignOrPush obj, processedKey, newValue
           else
             obj[attrkey][processedKey] = newValue
-        if @options.explicitAttrs and attrkey not of obj
+        if @options.explicitAttrs and attrkey not of obj and not @options.mergeAttrs
           obj[attrkey] = {}
 
       # need a place to store the node name
