@@ -43,7 +43,8 @@
     "Michael Avila (https://github.com/michaelavila)",
     "Ryan Gahl (https://github.com/ryedin)",
     "Eric Laberge <e.laberge@gmail.com> (https://github.com/elaberge)",
-    "Benjamin E. Coe <ben@npmjs.com> (https://twitter.com/benjamincoe)"
+    "Benjamin E. Coe <ben@npmjs.com> (https://twitter.com/benjamincoe)",
+    "Stephen Cresswell (https://github.com/cressie176)"
   ],
   "main": "./lib/xml2js",
   "directories": {

@@ -216,8 +216,11 @@ E.g. 'MyTagName' becomes 'myTagName'
 - `stripPrefix`: strips the xml namespace prefix. E.g `<foo:Bar/>` will become 'Bar'.
 (N.B.: the `xmlns` prefix is NOT stripped.)
 
-- `parseNumbers`: parsers integer-like strings as integers and float-like strings as floats
+- `parseNumbers`: parses integer-like strings as integers and float-like strings as floats
 E.g. "0" becomes 0 and "15.56" becomes 15.56
+
+- `parseBooleans`: parses boolean-like strings to booleans
+E.g. "true" becomes true and "False" becomes false
 
 Options
 =======
