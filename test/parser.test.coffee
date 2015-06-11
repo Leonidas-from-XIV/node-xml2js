@@ -51,6 +51,7 @@ validator = (xpath, currentValue, newValue) ->
 
 # shortcut, because it is quite verbose
 equ = assert.strictEqual
+notEqu = assert.notEqual
 
 module.exports =
   'test parse with defaults': skeleton(undefined, (r) ->
@@ -275,6 +276,15 @@ module.exports =
         # just a single test to check whether we parsed anything
         equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
+
+  'test simple callback mode with false fileName': (test) ->
+    x2js = new xml2js.Parser()
+    fs.readFile 'nonExistFileName.xml', (err, data) ->
+      notEqu err, null
+      equ data, undefined
+      xml2js.parseString data, (err, r) ->
+        notEqu err, null
+        equ r, undefined
 
   'test simple callback with options': (test) ->
     fs.readFile fileName, (err, data) ->
