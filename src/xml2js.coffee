@@ -257,8 +257,6 @@ class exports.Parser extends events.EventEmitter
       obj = {}
       obj[charkey] = ""
       unless @options.ignoreAttrs
-        if @options.explicitAttrs and attrkey not of obj
-          obj[attrkey] = {}
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
@@ -268,6 +266,8 @@ class exports.Parser extends events.EventEmitter
             @assignOrPush obj, processedKey, newValue
           else
             obj[attrkey][processedKey] = newValue
+        if @options.explicitAttrs and attrkey not of obj
+          obj[attrkey] = {}
 
       # need a place to store the node name
       obj["#name"] = if @options.tagNameProcessors then processName(@options.tagNameProcessors, node.name) else node.name
