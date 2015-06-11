@@ -74,6 +74,8 @@ exports.defaults =
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
+    # Define attrkey on each node as an empty object even if no attributes
+    explicitAttrs: false
     explicitRoot: true
     validator: null
     xmlns : false
@@ -255,6 +257,8 @@ class exports.Parser extends events.EventEmitter
       obj = {}
       obj[charkey] = ""
       unless @options.ignoreAttrs
+        if @options.explicitAttrs and attrkey not of obj
+          obj[attrkey] = {}
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}

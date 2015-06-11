@@ -54,4 +54,5 @@
     <tagNameProcessTest/>
     <valueProcessTest>some value</valueProcessTest>
     <textordertest>this is text with <b>markup</b> in the middle</textordertest>
+    <noAttributes/>
 </sample>
