@@ -39,7 +39,8 @@
     "Piotr Rochala (http://rocha.la/)",
     "Michael Avila (https://github.com/michaelavila)",
     "Ryan Gahl (https://github.com/ryedin)",
-    "Eric Laberge <e.laberge@gmail.com> (https://github.com/elaberge)"
+    "Eric Laberge <e.laberge@gmail.com> (https://github.com/elaberge)",
+    "Stephen Cresswell (https://github.com/cressie176)"
   ],
   "main" : "./lib/xml2js",
   "directories" : {
