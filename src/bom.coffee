@@ -1,4 +1,5 @@
-"use strict";
+"use strict"
+
 xml2js = require '../lib/xml2js'
 
 exports.stripBOM = (str) ->
