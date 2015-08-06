@@ -6,3 +6,5 @@ node_js:
   - iojs
 
 after_success: npm run coveralls
+
+sudo: false
