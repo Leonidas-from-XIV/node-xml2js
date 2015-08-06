@@ -1,3 +1,4 @@
+"use strict";
 sax = require 'sax'
 events = require 'events'
 builder = require 'xmlbuilder'
