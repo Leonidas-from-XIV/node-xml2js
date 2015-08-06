@@ -1,3 +1,5 @@
+"use strict"
+
 # matches all xml prefixes, except for `xmlns:`
 prefixMatch = new RegExp /(?!xmlns)^.*:/
 
