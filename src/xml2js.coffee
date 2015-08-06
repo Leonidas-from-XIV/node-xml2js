@@ -155,11 +155,11 @@ class exports.Builder
                 else
                   element = element.ele(key, entry).up()
               else
-                element = arguments.callee(element.ele(key), entry).up()
+                element = render(element.ele(key), entry).up()
 
           # Case #4 Objects
           else if typeof child is "object"
-            element = arguments.callee(element.ele(key), child).up()
+            element = render(element.ele(key), child).up()
 
           # Case #5 String and remaining types
           else
