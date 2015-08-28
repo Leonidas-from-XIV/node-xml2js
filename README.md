@@ -324,7 +324,9 @@ Options for the `Builder` class
     * `xmldec.standalone` standalone document declaration: true or false
   * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
   * `headless` (default: `false`): omit the XML header. Added in 0.4.3.
-  * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>`. Added in 0.4.5.
+  * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>` instead of
+    escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
+    Added in 0.4.5.
 
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
