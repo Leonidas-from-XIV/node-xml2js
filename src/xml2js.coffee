@@ -392,7 +392,7 @@ class exports.Parser extends events.EventEmitter
       if @options.async
         @remaining = str
         setImmediate @processAsync
-        @saxParser
+        return @saxParser
       @saxParser.write(str).close()
     catch err
       unless @saxParser.errThrown or @saxParser.ended
