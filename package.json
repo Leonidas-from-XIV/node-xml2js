@@ -46,7 +46,8 @@
     "Benjamin E. Coe <ben@npmjs.com> (https://twitter.com/benjamincoe)",
     "Stephen Cresswell (https://github.com/cressie176)",
     "Pascal Ehlert <pascal@hacksrus.net> (http://www.hacksrus.net/)",
-    "Tom Spencer <fiznool@gmail.com> (http://fiznool.com/)"
+    "Tom Spencer <fiznool@gmail.com> (http://fiznool.com/)",
+    "Tristian Flanagan (https://github.com/tflanagan)"
   ],
   "main": "./lib/xml2js",
   "directories": {
