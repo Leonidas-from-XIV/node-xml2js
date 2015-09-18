@@ -121,7 +121,7 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 });
 ```
 
-If you want to parse multiple files, you have multiple possibilites:
+If you want to parse multiple files, you have multiple possibilities:
 
   * You can create one `xml2js.Parser` per file. That's the recommended one
     and is promised to always *just work*.
