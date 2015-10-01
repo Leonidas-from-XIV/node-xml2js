@@ -369,7 +369,7 @@ module.exports =
       # Make sure no future changes break this
       ++nCalled
       if nCalled > 1
-        throw new Error 'callback called multiple times'
+        test.fail 'callback called multiple times'
       # SAX Parser throws multiple errors when processing async. We need to catch and return the first error
       # and then squelch the rest. The only way to test this is to defer the test finish call until after the
       # current stack processes, which, if the test would fail, would contain and throw the additional errors
