@@ -198,16 +198,21 @@ class exports.Parser extends events.EventEmitter
     @reset()
 
   processAsync: =>
-    if @remaining.length <= @options.chunkSize
-      chunk = @remaining
-      @remaining = ''
-      @saxParser = @saxParser.write chunk
-      @saxParser.close()
-    else
-      chunk = @remaining.substr 0, @options.chunkSize
-      @remaining = @remaining.substr @options.chunkSize, @remaining.length
-      @saxParser = @saxParser.write chunk
-      setImmediate @processAsync
+    try
+      if @remaining.length <= @options.chunkSize
+        chunk = @remaining
+        @remaining = ''
+        @saxParser = @saxParser.write chunk
+        @saxParser.close()
+      else
+        chunk = @remaining.substr 0, @options.chunkSize
+        @remaining = @remaining.substr @options.chunkSize, @remaining.length
+        @saxParser = @saxParser.write chunk
+        setImmediate @processAsync
+    catch err
+      if ! @saxParser.errThrown
+        @saxParser.errThrown = true
+        @emit err
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj

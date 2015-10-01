@@ -362,6 +362,19 @@ module.exports =
       equ e.message, 'error throwing in callback'
       test.finish()
 
+  'test error throwing after an error (async)': (test) ->
+    xml = '<?xml version="1.0" encoding="utf-8"?><test node is not okay>content is ok</test node is not okay>'
+    nCalled = 0
+    xml2js.parseString xml, async: true, (err, parsed) ->
+      # Make sure no future changes break this
+      ++nCalled
+      if nCalled > 1
+        throw new Error 'callback called multiple times'
+      # SAX Parser throws multiple errors when processing async. We need to catch and return the first error
+      # and then squelch the rest. The only way to test this is to defer the test finish call until after the
+      # current stack processes, which, if the test would fail, would contain and throw the additional errors
+      setTimeout test.finish.bind test
+
   'test xmlns': skeleton(xmlns: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample["pfx:top"][0].$ns.local, 'top'
