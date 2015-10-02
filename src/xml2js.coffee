@@ -402,6 +402,23 @@ class exports.Parser extends events.EventEmitter
       else if @saxParser.ended
         throw err
 
+  parseStringSync: (str) =>
+    #assumption 1: sax events block when given a string instead of a stream
+    retval = undefined
+    err = undefined
+    cb = (_err, _retval) ->
+      retval = _retval
+      err = _err
+      return
+
+    #assumption 2: parseString will implicitly call cb (thus setting closure retval) before returing
+    @parseString str, cb
+    if err
+      throw err
+    retval
+
+
+
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
   if b?

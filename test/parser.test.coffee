@@ -156,10 +156,29 @@ module.exports =
     equ r.sample.$$[10].$$[2]._, '3'
     equ r.sample.$$[10].$$[3]['#name'], 'one'
     equ r.sample.$$[10].$$[3]._, '4'
-    equ r.sample.$$[10].$$[4]['#name'], 'two'
+    equ r.sample.$$[10].$$[4]['#name'], 'two' 
     equ r.sample.$$[10].$$[4]._, '5'
     equ r.sample.$$[10].$$[5]['#name'], 'three'
     equ r.sample.$$[10].$$[5]._, '6')
+
+  'test non-async parsing': (test) ->
+    x2js = new xml2js.Parser()
+    data = fs.readFileSync fileName, 'utf8'
+    xmldoc = x2js.parseStringSync data
+    assert.notEqual xmldoc, null
+    equ xmldoc.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+    test.finish()
+    
+  'test non-async with bad input': (test) ->
+    x2js = new xml2js.Parser()
+    data = fs.readFileSync fileName, 'utf8'
+    err = null
+    try
+      xmldoc = x2js.parseStringSync "< a moose bit my sister>";
+    catch _err
+      err = _err
+    assert.notEqual err, null
+    test.finish()
 
   'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
