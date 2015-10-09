@@ -473,6 +473,13 @@ module.exports =
       assert.equal parsed.test.cdata[0], 'hello'
       test.finish()
 
+  'test chunked processing': (test) ->
+    xml = "<longstuff>abcdefghijklmnopqrstuvwxyz</longstuff>"
+    xml2js.parseString xml, chunkSize: 10, (err, parsed) ->
+      equ err, null
+      equ parsed.longstuff, 'abcdefghijklmnopqrstuvwxyz'
+      test.finish()
+
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
