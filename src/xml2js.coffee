@@ -245,6 +245,11 @@ class exports.Parser extends events.EventEmitter
         @saxParser.errThrown = true
         @emit "error", error
 
+    @saxParser.onend = () =>
+      if ! @saxParser.ended
+        @saxParser.ended = true
+        @emit end, @resultObject
+
     # another hack to avoid throwing exceptions when the parsing has ended
     # but the user-supplied callback throws an error
     @saxParser.ended = false
