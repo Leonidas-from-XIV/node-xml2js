@@ -473,6 +473,12 @@ module.exports =
       assert.equal parsed.test.cdata[0], 'hello'
       test.finish()
 
+  'test onend with empty xml': (test) ->
+    xml = "<?xml version=\"1.0\"?>"
+    xml2js.parseString xml, (err, parsed) ->
+      assert.equal parsed, null
+      test.finish()
+
   'test chunked processing': (test) ->
     xml = "<longstuff>abcdefghijklmnopqrstuvwxyz</longstuff>"
     xml2js.parseString xml, chunkSize: 10, (err, parsed) ->
