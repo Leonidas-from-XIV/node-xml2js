@@ -479,6 +479,18 @@ module.exports =
       assert.equal parsed, null
       test.finish()
 
+  'test parsing null': (test) ->
+    xml = null
+    xml2js.parseString xml, (err, parsed) ->
+      assert.notEqual err, null
+      test.finish()
+
+  'test parsing undefined': (test) ->
+    xml = undefined
+    xml2js.parseString xml, (err, parsed) ->
+      assert.notEqual err, null
+      test.finish()
+
   'test chunked processing': (test) ->
     xml = "<longstuff>abcdefghijklmnopqrstuvwxyz</longstuff>"
     xml2js.parseString xml, chunkSize: 10, (err, parsed) ->
