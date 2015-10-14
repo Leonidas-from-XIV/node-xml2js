@@ -7,7 +7,7 @@
   ],
   "homepage": "https://github.com/Leonidas-from-XIV/node-xml2js",
   "version": "0.4.12",
-  "author": "Marek Kubica <marek@xivilization.net> (http://xivilization.net)",
+  "author": "Marek Kubica <marek@xivilization.net> (https://xivilization.net)",
   "contributors": [
     "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
     "Ben Weaver (http://benweaver.com/)",
@@ -47,7 +47,7 @@
     "Stephen Cresswell (https://github.com/cressie176)",
     "Pascal Ehlert <pascal@hacksrus.net> (http://www.hacksrus.net/)",
     "Tom Spencer <fiznool@gmail.com> (http://fiznool.com/)",
-    "Tristian Flanagan (https://github.com/tflanagan)"
+    "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)"
   ],
   "main": "./lib/xml2js",
   "directories": {
