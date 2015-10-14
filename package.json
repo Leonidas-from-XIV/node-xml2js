@@ -67,11 +67,11 @@
     "xmlbuilder": ">=2.4.6"
   },
   "devDependencies": {
-    "coffee-script": ">=1.9.0",
+    "coffee-script": ">=1.10.0",
     "coveralls": "^2.11.2",
     "diff": ">=1.0.8",
     "docco": ">=0.6.2",
-    "nyc": "^2.2.1",
+    "nyc": ">=2.2.1",
     "zap": ">=0.2.9"
   },
   "license": "MIT"
