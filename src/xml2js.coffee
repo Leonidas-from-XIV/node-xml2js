@@ -393,12 +393,12 @@ class exports.Parser extends events.EventEmitter
         @reset()
         cb err
 
-    str = str.toString()
-    if str.trim() is ''
-      @emit "end", null
-      return true
-
     try
+      str = str.toString()
+      if str.trim() is ''
+        @emit "end", null
+        return true
+
       str = bom.stripBOM str
       if @options.async
         @remaining = str
