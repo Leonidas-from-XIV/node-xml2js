@@ -364,7 +364,7 @@ variable amounts of subtags.
 Running tests, development
 ==========================
 
-[![Build Status](https://secure.travis-ci.org/Leonidas-from-XIV/node-xml2js.png?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
+[![Build Status](https://travis-ci.org/Leonidas-from-XIV/node-xml2js.svg?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
 [![Coverage Status](https://coveralls.io/repos/Leonidas-from-XIV/node-xml2js/badge.svg?branch=)](https://coveralls.io/r/Leonidas-from-XIV/node-xml2js?branch=master)
 [![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml2js.svg)](https://david-dm.org/Leonidas-from-XIV/node-xml2js)
 
