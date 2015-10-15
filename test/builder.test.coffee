@@ -127,6 +127,22 @@ module.exports =
         diffeq xmlExpected, xmlActual
         test.finish()
 
+  'test building obj with undefined value' : (test) ->
+    obj = { node: 'string', anothernode: undefined }
+    builder = new xml2js.Builder renderOpts: { pretty: false }
+    actual = builder.buildObject(obj);
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><node>string</node><anothernode/></root>'
+    equ actual, expected
+    test.finish();
+
+  'test building obj with null value' : (test) ->
+    obj = { node: 'string', anothernode: null }
+    builder = new xml2js.Builder renderOpts: { pretty: false }
+    actual = builder.buildObject(obj);
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><node>string</node><anothernode/></root>'
+    equ actual, expected
+    test.finish();
+
   'test escapes escaped characters': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
