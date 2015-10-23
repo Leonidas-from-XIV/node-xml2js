@@ -196,7 +196,7 @@ parseString(xml, {
 });
 ```
 
-The `tagNameProcessors`, `attrNameProcessors`, 'attrValueProcessors' and `valueProcessors` options
+The `tagNameProcessors`, `attrNameProcessors`, `attrValueProcessors` and `valueProcessors` options
 accept an `Array` of functions with the following signature:
 
 ```javascript
