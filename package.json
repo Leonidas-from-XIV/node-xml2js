@@ -47,7 +47,8 @@
     "Stephen Cresswell (https://github.com/cressie176)",
     "Pascal Ehlert <pascal@hacksrus.net> (http://www.hacksrus.net/)",
     "Tom Spencer <fiznool@gmail.com> (http://fiznool.com/)",
-    "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)"
+    "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)",
+    "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)"
   ],
   "main": "./lib/xml2js",
   "directories": {

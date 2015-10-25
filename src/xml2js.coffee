@@ -63,6 +63,7 @@ exports.defaults =
     async: false
     strict: true
     attrNameProcessors: null
+    attrValueProcessors: null
     tagNameProcessors: null
     valueProcessors: null
     emptyTag: ''
@@ -88,6 +89,7 @@ exports.defaults =
     async: false
     strict: true
     attrNameProcessors: null
+    attrValueProcessors: null
     tagNameProcessors: null
     valueProcessors: null
     # xml building options
@@ -273,7 +275,7 @@ class exports.Parser extends events.EventEmitter
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
-          newValue = node.attributes[key]
+          newValue = if @options.attrValueProcessors then processName(@options.attrValueProcessors, node.attributes[key]) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processName(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
             @assignOrPush obj, processedKey, newValue

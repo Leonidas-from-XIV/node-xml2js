@@ -178,13 +178,13 @@ module.exports =
     equ r.sample.$$[10].$$[5]._, '6'
 
     # test text ordering with XML nodes in the middle
-    equ r.sample.$$[16]['#name'], 'textordertest'
-    equ r.sample.$$[16].$$[0]['#name'], '__text__'
-    equ r.sample.$$[16].$$[0]._, 'this is text with '
-    equ r.sample.$$[16].$$[1]['#name'], 'b'
-    equ r.sample.$$[16].$$[1]._, 'markup'
-    equ r.sample.$$[16].$$[2]['#name'], '__text__'
-    equ r.sample.$$[16].$$[2]._, ' in the middle')
+    equ r.sample.$$[17]['#name'], 'textordertest'
+    equ r.sample.$$[17].$$[0]['#name'], '__text__'
+    equ r.sample.$$[17].$$[0]._, 'this is text with '
+    equ r.sample.$$[17].$$[1]['#name'], 'b'
+    equ r.sample.$$[17].$$[1]._, 'markup'
+    equ r.sample.$$[17].$$[2]['#name'], '__text__'
+    equ r.sample.$$[17].$$[2]._, ' in the middle')
 
   'test element without children': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -507,6 +507,16 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
+
+  'test single attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAMELCASEATTRVALUE'
+    equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWERCASEATTRVALUE')
+
+  'test multiple attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase, nameCutoff], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAME'
+    equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWE')
 
   'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10

@@ -50,7 +50,8 @@
     <pfx:top xmlns:pfx="http://foo.com" pfx:attr="baz">
         <middle xmlns="http://bar.com"/>
     </pfx:top>
-    <attrNameProcessTest camelCaseAttr="camelCaseAttrValue" lowercaseattr="lowercaseattr" />
+    <attrNameProcessTest camelCaseAttr="camelCaseAttrValue" lowercaseattr="lowercaseattrvalue" />
+    <attrValueProcessTest camelCaseAttr="camelCaseAttrValue" lowerCaseAttr="lowercaseattrvalue" />
     <tagNameProcessTest/>
     <valueProcessTest>some value</valueProcessTest>
     <textordertest>this is text with <b>markup</b> in the middle</textordertest>

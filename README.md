@@ -180,7 +180,7 @@ option to `true`.
 Processing attribute, tag names and values
 ------------------------------------------
 
-Since 0.4.1 you can optionally provide the parser with attribute and tag name processors as well as values:
+Since 0.4.1 you can optionally provide the parser with attribute name and tag name processors as well as element value processors (Since 0.4.14, you can also optionally provide the parser with attribute value processors):
 
 ```javascript
 
@@ -188,17 +188,18 @@ function nameToUpperCase(name){
     return name.toUpperCase();
 }
 
-//transform all attribute and tag names to uppercase
+//transform all attribute and tag names and values to uppercase
 parseString(xml, {
   tagNameProcessors: [nameToUpperCase],
   attrNameProcessors: [nameToUpperCase],
-  valueProcessors: [nameToUpperCase]},
+  valueProcessors: [nameToUpperCase],
+  attrValueProcessors: [nameToUpperCase]},
   function (err, result) {
     // processed data
 });
 ```
 
-The `tagNameProcessors`, `attrNameProcessors` and `valueProcessors` options
+The `tagNameProcessors`, `attrNameProcessors`, `attrValueProcessors` and `valueProcessors` options
 accept an `Array` of functions with the following signature:
 
 ```javascript
@@ -288,6 +289,16 @@ value})``. Possible options are:
         return name
     }
     ```
+    Added in 0.4.14
+  * `attrValueProcessors` (default: `null`): Allows the addition of attribute
+    value processing functions. Accepts an `Array` of functions with following
+    signature:
+    ```javascript
+    function (name){
+      //do something with `name`
+      return name
+    }
+    ```
     Added in 0.4.1
   * `tagNameProcessors` (default: `null`): Allows the addition of tag name
     processing functions. Accepts an `Array` of functions with following
@@ -299,7 +310,7 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.1
-  * `valueProcessors` (default: `null`): Allows the addition of value
+  * `valueProcessors` (default: `null`): Allows the addition of element value
     processing functions. Accepts an `Array` of functions with following
     signature:
     ```javascript
