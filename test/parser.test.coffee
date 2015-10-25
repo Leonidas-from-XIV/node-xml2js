@@ -510,11 +510,13 @@ module.exports =
 
   'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.valueProcessTest[0], 'SOME VALUE')
+    equ r.sample.valueProcessTest[0], 'SOME VALUE'
+    equ r.sample.chartest[0].$.desc, 'TEST FOR CHARS')
 
   'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.valueProcessTest[0], 'SOME')
+    equ r.sample.valueProcessTest[0], 'SOME'
+    equ r.sample.chartest[0].$.desc, 'TEST')
 
   'test single tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
