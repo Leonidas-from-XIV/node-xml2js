@@ -51,6 +51,9 @@
     "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)"
   ],
   "main": "./lib/xml2js",
+  "files": [
+    "./lib"
+  ],
   "directories": {
     "lib": "./lib"
   },
