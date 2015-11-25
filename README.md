@@ -324,7 +324,7 @@ value})``. Possible options are:
 Options for the `Builder` class
 -------------------------------
 
-  * `rootName` (default `root`): root element name to be used in case
+  * `rootName` (default `root` or the name of the root key of the object to build): root element name to be used in case
      `explicitRoot` is `false` or to override the root element name.
   * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
     Rendering options for xmlbuilder-js.
