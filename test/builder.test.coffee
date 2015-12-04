@@ -232,3 +232,151 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+
+  'test with tagNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <msgid>10</msgid>
+      </xml>
+
+    """
+    opts = tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":10}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with tagNameProcessors with attribute': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <msgid id="1">10</msgid>
+      </xml>
+
+    """
+    opts = tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":{"$":{"id":"1"},"_":10}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with valueProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value>200</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":2.0}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with valueProcessors with attributes': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value id="1">200</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo","Value":{"$":{"id":"1"},"_":2.0}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId attr-id="2">10</MsgId>
+      </xml>
+
+    """
+    opts = attrNameProcessors: [
+      ( name ) ->
+        return 'attr-' + name.toLowerCase();
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"$":{"Id":'2'},"_":'10'}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrValueProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId id="value-2">10</MsgId>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value ) ->
+        return 'value-' + value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"$":{"id":'2'},"_":'10'}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with all processors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <test>NothingToDo</test>
+        <value attr-id="value-2">200</value>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value ) ->
+        return 'value-' + value;
+    ],
+    attrNameProcessors: [
+      ( name ) ->
+        return 'attr-' + name.toLowerCase();
+    ],
+    valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ],
+    tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":"$":{"id":'2'},"_":2.0}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()

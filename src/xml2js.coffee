@@ -142,14 +142,17 @@ class exports.Builder
             if typeof child is "object"
               # Inserts tag attributes
               for attr, value of child
-                element = element.att(attr, value)
+                attrname = if @options.attrNameProcessors then processName(@options.attrNameProcessors, attr) else attr
+                attrvalue = if @options.attrValueProcessors then processName(@options.attrValueProcessors, value) else value
+                element = element.att(attrname, attrvalue)
 
           # Case #2 Char data (CDATA, etc.)
           else if key is charkey
-            if @options.cdata && requiresCDATA child
-              element = element.raw wrapCDATA child
+            childvalue = if @options.valueProcessors then processName(@options.valueProcessors, child) else child
+            if @options.cdata && requiresCDATA childvalue
+              element = element.raw wrapCDATA childvalue
             else
-              element = element.txt child
+              element = element.txt childvalue
 
           # Case #3 Array data
           else if Array.isArray child
@@ -164,16 +167,19 @@ class exports.Builder
 
           # Case #4 Objects
           else if typeof child is "object"
-            element = render(element.ele(key), child).up()
+            tagname = if @options.tagNameProcessors then processName(@options.tagNameProcessors, key) else key
+            element = render(element.ele(tagname), child).up()
 
           # Case #5 String and remaining types
           else
-            if typeof child is 'string' && @options.cdata && requiresCDATA child
-              element = element.ele(key).raw(wrapCDATA child).up()
+            tagname = if @options.tagNameProcessors then processName(@options.tagNameProcessors, key) else key
+            childvalue = if @options.valueProcessors then processName(@options.valueProcessors, child) else child
+            if typeof childvalue is 'string' && @options.cdata && requiresCDATA childvalue
+              element = element.ele(tagname).raw(wrapCDATA childvalue).up()
             else
-              if not child?
-                child = ''
-              element = element.ele(key, child.toString()).up()
+              if not childvalue?
+                childvalue = ''
+              element = element.ele(tagname, childvalue.toString()).up()
 
       element
 
