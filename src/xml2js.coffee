@@ -166,7 +166,7 @@ class exports.Builder
                 element = render(element.ele(key), entry).up()
 
           # Case #4 Objects
-          else if typeof child is "object"
+          else if typeof child is "object" && !(child instanceof Date)
             tagname = if @options.tagNameProcessors then processName(@options.tagNameProcessors, key) else key
             element = render(element.ele(tagname), child).up()
 
@@ -176,6 +176,8 @@ class exports.Builder
             childvalue = if @options.valueProcessors then processName(@options.valueProcessors, child) else child
             if typeof childvalue is 'string' && @options.cdata && requiresCDATA childvalue
               element = element.ele(tagname).raw(wrapCDATA childvalue).up()
+            else if childvalue instanceof Date
+              element = element.ele(tagname, childvalue.toJSON()).up()
             else
               if not childvalue?
                 childvalue = ''

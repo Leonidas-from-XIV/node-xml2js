@@ -380,3 +380,18 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+
+  'test with date': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <date>2015-12-04T00:00:00.000Z</date>
+      </xml>
+
+    """
+    builder = new xml2js.Builder
+    obj = {"xml":{"date":new Date( Date.UTC( 2015, 11, 4, 0, 0, 0, 0 ) )}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
