@@ -203,9 +203,28 @@ The `tagNameProcessors`, `attrNameProcessors`, `attrValueProcessors` and `valueP
 accept an `Array` of functions with the following signature:
 
 ```javascript
-function (name){
-  //do something with `name`
-  return name
+// tagNameProcessors
+function (tagName){
+  //do something with `tagName`
+  return tagName
+}
+
+// attrNameProcessors
+function (attrName, tagName){
+  //do something with `attrName`
+  return attrName
+}
+
+// attrValueProcessors
+function (attrValue, attrName, tagName){
+  //do something with `attrValue`
+  return attrValue
+}
+
+// valueProcessors
+function (value, tagName){
+  //do something with `value`
+  return value
 }
 ```
 

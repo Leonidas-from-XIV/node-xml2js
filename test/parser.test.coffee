@@ -178,13 +178,13 @@ module.exports =
     equ r.sample.$$[10].$$[5]._, '6'
 
     # test text ordering with XML nodes in the middle
-    equ r.sample.$$[17]['#name'], 'textordertest'
-    equ r.sample.$$[17].$$[0]['#name'], '__text__'
-    equ r.sample.$$[17].$$[0]._, 'this is text with '
-    equ r.sample.$$[17].$$[1]['#name'], 'b'
-    equ r.sample.$$[17].$$[1]._, 'markup'
-    equ r.sample.$$[17].$$[2]['#name'], '__text__'
-    equ r.sample.$$[17].$$[2]._, ' in the middle')
+    equ r.sample.$$[18]['#name'], 'textordertest'
+    equ r.sample.$$[18].$$[0]['#name'], '__text__'
+    equ r.sample.$$[18].$$[0]._, 'this is text with '
+    equ r.sample.$$[18].$$[1]['#name'], 'b'
+    equ r.sample.$$[18].$$[1]._, 'markup'
+    equ r.sample.$$[18].$$[2]['#name'], '__text__'
+    equ r.sample.$$[18].$$[2]._, ' in the middle')
 
   'test element without children': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -503,6 +503,13 @@ module.exports =
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWERCASEATTR'), true)
 
+  'test single attrNameProcessors with extra params': skeleton(attrNameProcessors: [(attrName, tagName) -> return if tagName == 'attrNameProcessTest' then 'changed_' + attrName else attrName ], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('changed_camelCaseAttr'), true
+    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('changed_lowercaseattr'), true
+    equ r.sample.attrValueProcessTest[0].$.hasOwnProperty('camelCaseAttr'), true
+    equ r.sample.attrValueProcessTest[0].$.hasOwnProperty('lowerCaseAttr'), true)
+
   'test multiple attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
@@ -513,6 +520,11 @@ module.exports =
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAMELCASEATTRVALUE'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWERCASEATTRVALUE')
 
+  'test single attrValueProcessors with extra params': skeleton(attrValueProcessors: [(attrValue, attrName, tagName) -> return if tagName == 'attrValueProcessTest' && attrName == 'camelCaseAttr' then 'changed_' + attrValue else attrValue], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'changed_camelCaseAttrValue'
+    equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'lowercaseattrvalue')
+
   'test multiple attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAME'
@@ -521,6 +533,11 @@ module.exports =
   'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME VALUE')
+
+  'test single valueProcessor with extra params': skeleton(valueProcessors: [(value, tagName) -> return if tagName == 'valueProcessTest' then 'changed ' + value else value], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.valueProcessTest[0], 'changed some value'
+    equ r.sample.valueProcessWithExtraParamsTest[0], 'Not changed Value')
 
   'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10

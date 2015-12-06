@@ -292,6 +292,26 @@ module.exports =
     test.finish()
 
 
+  'test with valueProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value>Changed</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value, tagName ) ->
+        return if tagName == 'Value' then 'Changed' else value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":"ValueToChange"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
   'test with valueProcessors with attributes': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -331,6 +351,26 @@ module.exports =
     test.finish()
 
 
+  'test with attrNameProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test id="1">Test</Test>
+        <Value id-changed="2">Value</Value>
+      </xml>
+
+    """
+    opts = attrNameProcessors: [
+      ( attrName, tagName ) ->
+        return if tagName == 'Value' then attrName + '-changed' else attrName;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": { "$":{"id":1},"_":'Test'}, "Value":{ "$":{"id":2},"_":'Value'}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
   'test with attrValueProcessors': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -345,6 +385,26 @@ module.exports =
     ]
     builder = new xml2js.Builder opts
     obj = {"xml":{"MsgId":"$":{"id":'2'},"_":'10'}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrValueProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test id="1">Test</Test>
+        <Value id="20">Value</Value>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value, attrName, tagName ) ->
+        return if tagName == 'Value' then value * 10 else value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": { "$":{"id":1},"_":'Test'}, "Value":{ "$":{"id":2},"_":'Value'}}}
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()

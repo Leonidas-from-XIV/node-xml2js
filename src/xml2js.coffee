@@ -15,6 +15,18 @@ processName = (processors, processedName) ->
   processedName = process(processedName) for process in processors
   return processedName
 
+processValue = (processors, processedValue, tagName) ->
+  processedValue = process(processedValue, tagName) for process in processors
+  return processedValue
+
+processAttrName = (processors, processedAttrName, tagName) ->
+  processedAttrName = process(processedAttrName, tagName) for process in processors
+  return processedAttrName
+
+processAttrValue = (processors, processedAttrValue, attrName, tagName) ->
+  processedAttrValue = process(processedAttrValue, attrName, tagName) for process in processors
+  return processedAttrValue
+
 requiresCDATA = (entry) ->
   return entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0
 
@@ -142,13 +154,13 @@ class exports.Builder
             if typeof child is "object"
               # Inserts tag attributes
               for attr, value of child
-                attrname = if @options.attrNameProcessors then processName(@options.attrNameProcessors, attr) else attr
-                attrvalue = if @options.attrValueProcessors then processName(@options.attrValueProcessors, value) else value
+                attrname = if @options.attrNameProcessors then processAttrName(@options.attrNameProcessors, attr, element.name) else attr
+                attrvalue = if @options.attrValueProcessors then processAttrValue(@options.attrValueProcessors, value, attrname, element.name) else value
                 element = element.att(attrname, attrvalue)
 
           # Case #2 Char data (CDATA, etc.)
           else if key is charkey
-            childvalue = if @options.valueProcessors then processName(@options.valueProcessors, child) else child
+            childvalue = if @options.valueProcessors then processValue(@options.valueProcessors, child, key) else child
             if @options.cdata && requiresCDATA childvalue
               element = element.raw wrapCDATA childvalue
             else
@@ -173,7 +185,7 @@ class exports.Builder
           # Case #5 String and remaining types
           else
             tagname = if @options.tagNameProcessors then processName(@options.tagNameProcessors, key) else key
-            childvalue = if @options.valueProcessors then processName(@options.valueProcessors, child) else child
+            childvalue = if @options.valueProcessors then processValue(@options.valueProcessors, child, tagname) else child
             if typeof childvalue is 'string' && @options.cdata && requiresCDATA childvalue
               element = element.ele(tagname).raw(wrapCDATA childvalue).up()
             else if childvalue instanceof Date
@@ -283,8 +295,8 @@ class exports.Parser extends events.EventEmitter
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
-          newValue = if @options.attrValueProcessors then processName(@options.attrValueProcessors, node.attributes[key]) else node.attributes[key]
-          processedKey = if @options.attrNameProcessors then processName(@options.attrNameProcessors, key) else key
+          processedKey = if @options.attrNameProcessors then processAttrName(@options.attrNameProcessors, key, node.name) else key
+          newValue = if @options.attrValueProcessors then processAttrValue(@options.attrValueProcessors, node.attributes[key], processedKey, node.name) else node.attributes[key]
           if @options.mergeAttrs
             @assignOrPush obj, processedKey, newValue
           else
@@ -313,7 +325,7 @@ class exports.Parser extends events.EventEmitter
       else
         obj[charkey] = obj[charkey].trim() if @options.trim
         obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
-        obj[charkey] = if @options.valueProcessors then processName @options.valueProcessors, obj[charkey] else obj[charkey]
+        obj[charkey] = if @options.valueProcessors then processValue @options.valueProcessors, obj[charkey], nodeName else obj[charkey]
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY

@@ -54,5 +54,6 @@
     <attrValueProcessTest camelCaseAttr="camelCaseAttrValue" lowerCaseAttr="lowercaseattrvalue" />
     <tagNameProcessTest/>
     <valueProcessTest>some value</valueProcessTest>
+    <valueProcessWithExtraParamsTest>Not changed Value</valueProcessWithExtraParamsTest>
     <textordertest>this is text with <b>markup</b> in the middle</textordertest>
 </sample>
