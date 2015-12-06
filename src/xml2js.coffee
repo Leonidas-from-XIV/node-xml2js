@@ -9,7 +9,7 @@ setImmediate = require('timers').setImmediate
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
-  return typeof thing is "object" && thing? && Object.keys(thing).length is 0
+  return !( thing instanceof Date ) && typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
 processName = (processors, processedName) ->
   processedName = process(processedName) for process in processors

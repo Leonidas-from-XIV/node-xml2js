@@ -539,6 +539,16 @@ module.exports =
     equ r.sample.valueProcessTest[0], 'changed some value'
     equ r.sample.valueProcessWithExtraParamsTest[0], 'Not changed Value')
 
+  'test single valueProcessor when returns Date obj': skeleton(valueProcessors: [
+      (value, tagName) ->
+        if ( tagName == 'dateValue' )
+          dateChunk = value.split( '-' )
+          value = new Date( parseInt( dateChunk[0] ), parseInt( dateChunk[1] ) - 1, parseInt(dateChunk[2] ) )
+        return value
+    ], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    assert.deepEqual r.sample.dateValue[0], new Date(2015,11,6))
+
   'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME')

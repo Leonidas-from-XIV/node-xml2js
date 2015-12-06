@@ -56,4 +56,5 @@
     <valueProcessTest>some value</valueProcessTest>
     <valueProcessWithExtraParamsTest>Not changed Value</valueProcessWithExtraParamsTest>
     <textordertest>this is text with <b>markup</b> in the middle</textordertest>
+    <dateValue>2015-12-06</dateValue>
 </sample>
