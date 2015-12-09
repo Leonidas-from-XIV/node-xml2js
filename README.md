@@ -323,6 +323,8 @@ value})``. Possible options are:
 
 Options for the `Builder` class
 -------------------------------
+These options are specified by ``new Builder({optionName: value})``.
+Possible options are:
 
   * `rootName` (default `root` or the root key name): root element name to be used in case
      `explicitRoot` is `false` or to override the root element name.
