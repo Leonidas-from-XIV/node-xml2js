@@ -219,8 +219,20 @@ class exports.Parser extends events.EventEmitter
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
+    hasComplexContent = false
+    hasAttributes = false
+    if (newValue)
+      hasAttributes = not this.options.ignoreAttrs and
+        newValue.hasOwnProperty(this.options.attrkey)
+      if newValue.hasComplexContent?
+        hasComplexContent = newValue.hasComplexContent
+        delete(newValue.hasComplexContent)
+    # even if newValue is null, still see if we should flatten it
+    shouldFlatten = @options.flattenSimpleContent and 
+      not hasComplexContent and not hasAttributes
+
     if key not of obj
-      if not @options.explicitArray
+      if not @options.explicitArray or shouldFlatten
         obj[key] = newValue
       else
         obj[key] = [newValue]
@@ -271,6 +283,11 @@ class exports.Parser extends events.EventEmitter
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
+
+      # update our parent node to indicate that it contains complex content
+      if stack.length > 1
+        stack[stack.length - 1].hasComplexContent = true;
+      
       unless @options.ignoreAttrs
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
@@ -334,6 +351,9 @@ class exports.Parser extends events.EventEmitter
             node[@options.charkey] = obj[@options.charkey]
             delete obj[@options.charkey]
 
+          # remove the hasComplexContent property before we copy obj to the new node
+          delete obj.hasComplexContent
+          
           if Object.getOwnPropertyNames(obj).length > 0
             node[@options.childkey] = obj
 
