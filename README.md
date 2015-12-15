@@ -320,6 +320,9 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.6
+  * `flattenSimpleContent` (default: `false`): Don't create an array for
+    child nodes with simple content and no attributes if true, even if 
+    `explicitArray` is true.
 
 Options for the `Builder` class
 -------------------------------
