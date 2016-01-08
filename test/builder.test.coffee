@@ -80,6 +80,23 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test allowSurrogateChars option': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+          <MsgId>\uD83D\uDC33</MsgId>
+      </xml>
+
+    """
+    opts =
+      renderOpts: pretty: true, indent: '    '
+      allowSurrogateChars: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["\uD83D\uDC33"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test explicit rootName is always used: 1. when there is only one element': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
     opts = renderOpts: {pretty: false}, rootName: 'FOO'
