@@ -49,7 +49,8 @@
     "Tom Spencer <fiznool@gmail.com> (http://fiznool.com/)",
     "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)",
     "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)",
-    "Bogdan Chadkin <trysound@yandex.ru> (https://github.com/TrySound)"
+    "Bogdan Chadkin <trysound@yandex.ru> (https://github.com/TrySound)",
+    "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)"
   ],
   "main": "./lib/xml2js",
   "files": [
