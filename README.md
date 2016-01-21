@@ -247,6 +247,8 @@ value})``. Possible options are:
   * `emptyTag` (default: `''`): what will the value of empty nodes be.
   * `explicitArray` (default: `true`): Always put child nodes in an array if
     true; otherwise an array is created only if there is more than one.
+  * `arrayForKeys` (default: []): Put child nodes in an array of specified keys.
+    Overides explicitArray: false, on the specified keys. Ex ['key1','key2'].
   * `ignoreAttrs` (default: `false`): Ignore all XML attributes and only create
     text nodes.
   * `mergeAttrs` (default: `false`): Merge attributes and child elements as

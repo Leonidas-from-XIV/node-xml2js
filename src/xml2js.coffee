@@ -48,6 +48,8 @@ exports.defaults =
     # always put child nodes in an array
     explicitArray: false
     # ignore all attributes regardless
+    arrayForKeys:[]
+    # Put childs as array on a given key. overiding explicitArray: false, on selected keys
     ignoreAttrs: false
     # merge attributes and child elements onto parent object.  this may
     # cause collisions.
@@ -76,6 +78,8 @@ exports.defaults =
     attrkey: "$"
     charkey: "_"
     explicitArray: true
+    arrayForKeys:[]
+    # Put childs as array on a given key. overiding explicitArray: false, on selected keys
     ignoreAttrs: false
     mergeAttrs: false
     explicitRoot: true
@@ -221,7 +225,7 @@ class exports.Parser extends events.EventEmitter
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
-      if not @options.explicitArray
+      if not @options.explicitArray and key not in @options.arrayForKeys
         obj[key] = newValue
       else
         obj[key] = [newValue]
