@@ -253,6 +253,18 @@ module.exports =
     equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
+  'test without arrayForKeys and without explicitArray': skeleton(explicitArray: false, arrayForKeys:[''], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    assert.ok r.sample.validatortest['oneitemarray'] not instanceof Array)
+
+  'test arrayForKeys on one tag without explicitArray': skeleton(explicitArray: false, arrayForKeys:['oneitemarray'], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    assert.ok r.sample.validatortest['oneitemarray'] instanceof Array)
+    
+  'test arrayForKeys on one tag with explicitArray': skeleton(explicitArray: true, arrayForKeys:['oneitemarray'], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    assert.ok r.sample.validatortest[0].oneitemarray instanceof Array)
+
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0], 'Character data here!'
