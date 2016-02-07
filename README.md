@@ -104,25 +104,8 @@ not, we got you covered! Starting with 0.2.8 you can also leave it out, in
 which case `xml2js` will helpfully add it for you, no bad surprises and
 inexplicable bugs!
 
-"Traditional" usage
--------------------
-
-Alternatively you can still use the traditional `addListener` variant that was
-supported since forever:
-
-```javascript
-var fs = require('fs'),
-    xml2js = require('xml2js');
-
-var parser = new xml2js.Parser();
-parser.addListener('end', function(result) {
-    console.dir(result);
-    console.log('Done.');
-});
-fs.readFile(__dirname + '/foo.xml', function(err, data) {
-    parser.parseString(data);
-});
-```
+Parsing multiple files
+----------------------
 
 If you want to parse multiple files, you have multiple possibilities:
 
