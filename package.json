@@ -50,7 +50,8 @@
     "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)",
     "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)",
     "Bogdan Chadkin <trysound@yandex.ru> (https://github.com/TrySound)",
-    "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)"
+    "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)",
+    "Cristhian Fernandez <crisfervil+github@gmail.com> (https://github.com/crisfervil)",
   ],
   "main": "./lib/xml2js",
   "files": [
