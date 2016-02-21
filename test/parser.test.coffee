@@ -253,6 +253,18 @@ module.exports =
     equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
+  'test child node without explicitArrayExcludes': skeleton(explicitArray: false, explicitArrayExcludes: [], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.arraytest.item[0].subitem, 'Baz.'
+    equ r.sample.arraytest.item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest.item[1].subitem[1], 'Bar.')
+
+  'test child node with explicitArrayExcludes': skeleton(explicitArray: false, explicitArrayExcludes: [item], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
+    equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
+
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0], 'Character data here!'
