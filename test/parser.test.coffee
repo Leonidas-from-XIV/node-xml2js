@@ -261,10 +261,9 @@ module.exports =
 
   'test child node with explicitArrayExcludes': skeleton(explicitArray: false, explicitArrayExcludes: ["item"], (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    console.log(r.sample.arraytest[0]);
-    equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
-    equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
-    equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
+    equ r.sample.arraytest.item[0].subitem, 'Baz.'
+    equ r.sample.arraytest.item[1].subitem, 'Foo.'
+    equ r.sample.arraytest.item[1].subitem, 'Bar.')
 
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
