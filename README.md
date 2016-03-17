@@ -84,7 +84,7 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 Look ma, no event listeners!
 
 You can also use `xml2js` from
-[CoffeeScript](http://jashkenas.github.com/coffee-script/), further reducing
+[CoffeeScript](https://github.com/jashkenas/coffeescript), further reducing
 the clutter:
 
 ```coffeescript
