@@ -78,6 +78,8 @@ exports.defaults =
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
+    # Define attrkey on each node as an empty object even if no attributes
+    explicitAttrs: false
     explicitRoot: true
     validator: null
     xmlns : false
@@ -282,6 +284,8 @@ class exports.Parser extends events.EventEmitter
             @assignOrPush obj, processedKey, newValue
           else
             obj[attrkey][processedKey] = newValue
+        if @options.explicitAttrs and attrkey not of obj and not @options.mergeAttrs
+          obj[attrkey] = {}
 
       # need a place to store the node name
       obj["#name"] = if @options.tagNameProcessors then processName(@options.tagNameProcessors, node.name) else node.name

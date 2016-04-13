@@ -107,6 +107,15 @@ module.exports =
     equ r.sample.listtest[0].single[0], 'Single'
     equ r.sample.listtest[0].attr[0], 'Attribute')
 
+  'test parse with explicitAttrs': skeleton(explicitAttrs: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ typeof r.sample.noAttributes[0].$, 'object'
+    equ Object.keys(r.sample.noAttributes[0].$).length, 0)
+
+  'test parse with explicitAttrs and mergeAttrs': skeleton(explicitAttrs: true, mergeAttrs: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ typeof r.sample.noAttributes[0].$, 'undefined')
+
   'test parse with mergeAttrs and not explicitArray': skeleton(mergeAttrs: true, explicitArray: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest.desc, 'Test for CHARs'
