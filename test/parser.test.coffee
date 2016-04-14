@@ -29,6 +29,10 @@ nameToUpperCase = (name) ->
 nameCutoff = (name) ->
   return name.substr(0, 4)
 
+getDate = (dateString) ->
+    dateParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec dateString
+    if dateParts? then new Date +dateParts[1], +dateParts[2] - 1, +dateParts[3]
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -530,6 +534,10 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMPLE'), true
     equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
+
+  'test Date valueProcessor': skeleton(__xmlString: '<date>2001-01-01</date>', valueProcessors: [getDate], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.date.getDate, new Date(2001,0,1).getDate)
 
   'test single tagNameProcessors in simple callback': (test) ->
     fs.readFile fileName, (err, data) ->
