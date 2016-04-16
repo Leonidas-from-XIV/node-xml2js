@@ -249,3 +249,226 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+
+  'test with tagNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <msgid>10</msgid>
+      </xml>
+
+    """
+    opts = tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":10}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with tagNameProcessors with attribute': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <msgid id="1">10</msgid>
+      </xml>
+
+    """
+    opts = tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":{"$":{"id":"1"},"_":10}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with valueProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value>200</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":2.0}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with valueProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value>Changed</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value, tagName ) ->
+        return if tagName == 'Value' then 'Changed' else value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":"ValueToChange"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with valueProcessors with attributes': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test>NothingToDo</Test>
+        <Value id="1">200</Value>
+      </xml>
+
+    """
+    opts = valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo","Value":{"$":{"id":"1"},"_":2.0}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId attr-id="2">10</MsgId>
+      </xml>
+
+    """
+    opts = attrNameProcessors: [
+      ( name ) ->
+        return 'attr-' + name.toLowerCase();
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"$":{"Id":'2'},"_":'10'}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrNameProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test id="1">Test</Test>
+        <Value id-changed="2">Value</Value>
+      </xml>
+
+    """
+    opts = attrNameProcessors: [
+      ( attrName, tagName ) ->
+        return if tagName == 'Value' then attrName + '-changed' else attrName;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": { "$":{"id":1},"_":'Test'}, "Value":{ "$":{"id":2},"_":'Value'}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrValueProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId id="value-2">10</MsgId>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value ) ->
+        return 'value-' + value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"$":{"id":'2'},"_":'10'}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with attrValueProcessors with extra params': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <Test id="1">Test</Test>
+        <Value id="20">Value</Value>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value, attrName, tagName ) ->
+        return if tagName == 'Value' then value * 10 else value;
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": { "$":{"id":1},"_":'Test'}, "Value":{ "$":{"id":2},"_":'Value'}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with all processors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <test>NothingToDo</test>
+        <value attr-id="value-2">200</value>
+      </xml>
+
+    """
+    opts = attrValueProcessors: [
+      ( value ) ->
+        return 'value-' + value;
+    ],
+    attrNameProcessors: [
+      ( name ) ->
+        return 'attr-' + name.toLowerCase();
+    ],
+    valueProcessors: [
+      ( value ) ->
+        return if isNaN( value ) then value else Number( value ).toFixed( 2 ).replace( '.', '' );
+    ],
+    tagNameProcessors: [
+      ( name ) ->
+        return name.toLowerCase()
+    ]
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"Test": "NothingToDo", "Value":"$":{"id":'2'},"_":2.0}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+
+  'test with date': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <date>2015-12-04T00:00:00.000Z</date>
+      </xml>
+
+    """
+    builder = new xml2js.Builder
+    obj = {"xml":{"date":new Date( Date.UTC( 2015, 11, 4, 0, 0, 0, 0 ) )}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
