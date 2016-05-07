@@ -183,8 +183,39 @@ module.exports =
     equ r.sample.$$[17].$$[0]._, 'this is text with '
     equ r.sample.$$[17].$$[1]['#name'], 'b'
     equ r.sample.$$[17].$$[1]._, 'markup'
-    equ r.sample.$$[17].$$[2]['#name'], '__text__'
-    equ r.sample.$$[17].$$[2]._, ' in the middle')
+    equ r.sample.$$[17].$$[2]['#name'], 'em'
+    equ r.sample.$$[17].$$[2]._, 'like this'
+    equ r.sample.$$[17].$$[3]['#name'], '__text__'
+    equ r.sample.$$[17].$$[3]._, ' in the middle')
+
+  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$$[35]['#name'], 'textordertest'
+    equ r.sample.$$[35].$$[0]['#name'], '__text__'
+    equ r.sample.$$[35].$$[0]._, 'this is text with '
+    equ r.sample.$$[35].$$[1]['#name'], 'b'
+    equ r.sample.$$[35].$$[1]._, 'markup'
+    equ r.sample.$$[35].$$[2]['#name'], '__text__'
+    equ r.sample.$$[35].$$[2]._, '   '
+    equ r.sample.$$[35].$$[3]['#name'], 'em'
+    equ r.sample.$$[35].$$[3]._, 'like this'
+    equ r.sample.$$[35].$$[4]['#name'], '__text__'
+    equ r.sample.$$[35].$$[4]._, ' in the middle')
+
+  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars and normalize': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, normalize: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    # normalized whitespace-only text node becomes empty string
+    equ r.sample.$$[35]['#name'], 'textordertest'
+    equ r.sample.$$[35].$$[0]['#name'], '__text__'
+    equ r.sample.$$[35].$$[0]._, 'this is text with'
+    equ r.sample.$$[35].$$[1]['#name'], 'b'
+    equ r.sample.$$[35].$$[1]._, 'markup'
+    equ r.sample.$$[35].$$[2]['#name'], '__text__'
+    equ r.sample.$$[35].$$[2]._, ''
+    equ r.sample.$$[35].$$[3]['#name'], 'em'
+    equ r.sample.$$[35].$$[3]._, 'like this'
+    equ r.sample.$$[35].$$[4]['#name'], '__text__'
+    equ r.sample.$$[35].$$[4]._, 'in the middle')
 
   'test element without children': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
