@@ -59,6 +59,8 @@ exports.defaults =
     explicitChildren: false
     childkey: '@@'
     charsAsChildren: false
+    # include white-space only text nodes
+    includeWhiteChars: false
     # callbacks are async? not in 0.1 mode
     async: false
     strict: true
@@ -85,6 +87,8 @@ exports.defaults =
     preserveChildrenOrder: false
     childkey: '$$'
     charsAsChildren: false
+    # include white-space only text nodes
+    includeWhiteChars: false
     # not async in 0.2 mode either
     async: false
     strict: true
@@ -374,11 +378,12 @@ class exports.Parser extends events.EventEmitter
       if s
         s[charkey] += text
 
-        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and text.replace(/\\n/g, '').trim() isnt ''
+        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and (@options.includeWhiteChars || text.replace(/\\n/g, '').trim() isnt '')
           s[@options.childkey] = s[@options.childkey] or []
           charChild =
             '#name': '__text__'
           charChild[charkey] = text
+          charChild[charkey] = charChild[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
           s[@options.childkey].push charChild
 
         s

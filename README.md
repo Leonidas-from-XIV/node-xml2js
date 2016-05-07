@@ -256,6 +256,8 @@ value})``. Possible options are:
     0.4.9.
   * `charsAsChildren` (default `false`): Determines whether chars should be
     considered children if `explicitChildren` is on. Added in 0.2.5.
+  * `includeWhiteChars` (default `false`): Determines whether whitespace-only
+     text nodes should be included. Added in 0.4.17.
   * `async` (default `false`): Should the callbacks be async? This *might* be
     an incompatible change if your code depends on sync execution of callbacks.
     Future versions of `xml2js` might change this default, so the recommendation
