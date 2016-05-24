@@ -166,6 +166,7 @@ class exports.Builder
           if not child?
             child = ''
           element = element.ele(key, child.toString()).up()
+      element
 
     render = (element, obj) =>
       if typeof obj isnt 'object'
