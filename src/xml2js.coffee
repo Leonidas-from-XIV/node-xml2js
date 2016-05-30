@@ -165,7 +165,8 @@ class exports.Builder
         else
           if not child?
             child = ''
-          element = element.ele(key, child.toString()).up()
+          else if key != '#name'
+            element = element.ele(key, child.toString()).up()
       element
 
     render = (element, obj) =>
