@@ -145,7 +145,7 @@ class exports.Builder
 
       # Case #3 Array data
       else if Array.isArray child
-        for own index, entry of child
+        for index, entry of child
           if typeof entry is 'string'
             if @options.cdata && requiresCDATA entry
               element = element.ele(key).raw(wrapCDATA entry).up()
@@ -164,7 +164,7 @@ class exports.Builder
           element = element.ele(key).raw(wrapCDATA child).up()
         else
           if not child?
-            child = ''
+            element = element.ele(key, "").up()
           else if key != '#name'
             element = element.ele(key, child.toString()).up()
       element
@@ -173,10 +173,10 @@ class exports.Builder
       if typeof obj isnt 'object'
         # single element, just append it as text
         if @options.cdata && requiresCDATA obj
-          element.raw wrapCDATA obj
+          element = element.raw wrapCDATA obj
         else
-          element.txt obj
-      else if Array.isArray obj["$$"]
+          element = element.txt obj
+      else if obj && Array.isArray obj["$$"]
         element = processKeyObject(element, "$", obj["$"])
         for child in obj["$$"]
           element = processKeyObject(element, child["#name"], child)
