@@ -378,7 +378,7 @@ class exports.Parser extends events.EventEmitter
       if s
         s[charkey] += text
 
-        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and (@options.includeWhiteChars || text.replace(/\\n/g, '').trim() isnt '')
+        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and (@options.includeWhiteChars or text.replace(/\\n/g, '').trim() isnt '')
           s[@options.childkey] = s[@options.childkey] or []
           charChild =
             '#name': '__text__'
