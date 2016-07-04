@@ -183,6 +183,63 @@ class exports.Builder
 
     render(rootElement, rootObj).end(@options.renderOpts)
 
+  ###
+  for use with objects that are created with the following options
+    preserveChildrenOrder: true
+    explicitChildren: true
+    charsAsChildren: true
+  ###
+  buildObjectExplicit: (rootObj) ->
+    attrkey = @options.attrkey
+    charkey = @options.charkey
+    childkey = @options.childkey
+
+    # If there is a sane-looking first element to use as the root,
+    # and the user hasn't specified a non-default rootName,
+    if ( Object.keys(rootObj).length is 1 ) and ( @options.rootName == exports.defaults['0.2'].rootName )
+      # we'll take the first element as the root element
+      rootName = Object.keys(rootObj)[0]
+      rootObj = rootObj[rootName]
+    else
+      # otherwise we'll use whatever they've set, or the default
+      rootName = @options.rootName
+      if Object.keys(rootObj).length
+        alternateRootObj = {
+          "#name": rootName,
+          "#{childkey}": if Array.isArray(rootObj) then rootObj else [rootObj]
+        }
+
+    ###
+    ok it goes like this:
+    - element is a XMLNode and obj is a property object that
+      can specify element
+    - element can have sub elements defined in property '$$' (= childkey var)
+    - other than the render method in buildObject this method is not supposed
+      to return anything but still calls itself recursivly to dispatch child
+      elements
+    ###
+    render = (element, obj) =>
+      element.att(attr, value) for attr, value of obj[attrkey] if obj[attrkey]
+
+      return unless obj[childkey]
+
+      for child in obj[childkey]
+        if child['#name'] == '__text__'
+          if @options.cdata and typeof child[charkey] is 'string' and requiresCDATA child[charkey]
+            element.raw wrapCDATA child[charkey]
+          else
+            element.txt child[charkey] if child[charkey]?
+          continue
+        render(element.ele(child['#name']), child)
+      return
+
+    rootElement = builder.create(rootName, @options.xmldec, @options.doctype,
+      headless: @options.headless
+      allowSurrogateChars: @options.allowSurrogateChars)
+
+    render(rootElement, alternateRootObj or rootObj)
+    rootElement.end(@options.renderOpts)
+
 class exports.Parser extends events.EventEmitter
   constructor: (opts) ->
     # if this was called without 'new', create an instance with new and return
@@ -268,6 +325,22 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    childkey = @options.childkey
+
+    trimChildTexts = (obj)=>
+      return if not @options.explicitChildren or not @options.preserveChildrenOrder or not @options.charsAsChildren
+      return unless obj[childkey]
+      obj[childkey] = obj[childkey].filter((item)->
+        return true if item['#name'] isnt '__text__'
+        item[charkey] = item[charkey].trim()
+        item[charkey] isnt ''
+      )
+      return
+
+    isSingleTextNode = (obj)=>
+      return false unless obj[childkey]
+      return false if obj[childkey].length > 1
+      obj[childkey][0]['#name'] is '__text__'
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -287,6 +360,7 @@ class exports.Parser extends events.EventEmitter
       obj["#name"] = if @options.tagNameProcessors then processName(@options.tagNameProcessors, node.name) else node.name
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
+      @emit('onopentag', obj["#name"], obj)
       stack.push obj
 
     @saxParser.onclosetag = =>
@@ -299,12 +373,17 @@ class exports.Parser extends events.EventEmitter
         delete obj.cdata
 
       s = stack[stack.length - 1]
-      # remove the '#' key altogether if it's blank
+      # remove the '_' key altogether if it's blank
       if obj[charkey].match(/^\s*$/) and not cdata
         emptyStr = obj[charkey]
+        # but it could still contain children with texts that need to get trimmed
+        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren
+          trimChildTexts obj unless isSingleTextNode(obj)
         delete obj[charkey]
       else
-        obj[charkey] = obj[charkey].trim() if @options.trim
+        if @options.trim
+          obj[charkey] = obj[charkey].trim()
+          trimChildTexts obj
         obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
         obj[charkey] = if @options.valueProcessors then processName @options.valueProcessors, obj[charkey] else obj[charkey]
         # also do away with '#' key altogether, if there's no subkeys
@@ -354,6 +433,7 @@ class exports.Parser extends events.EventEmitter
 
       # check whether we closed all the open tags
       if stack.length > 0
+        @emit('onclosetag', s, nodeName, obj)
         @assignOrPush s, nodeName, obj
       else
         # if explicitRoot was specified, wrap stuff in the root tag name
@@ -374,7 +454,7 @@ class exports.Parser extends events.EventEmitter
       if s
         s[charkey] += text
 
-        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and text.replace(/\\n/g, '').trim() isnt ''
+        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren
           s[@options.childkey] = s[@options.childkey] or []
           charChild =
             '#name': '__text__'
