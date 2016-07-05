@@ -249,3 +249,19 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test does not error on array values when checking for cdata': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId>10</MsgId>
+        <MsgId>12</MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":[10, 12]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
