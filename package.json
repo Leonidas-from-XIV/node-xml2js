@@ -6,7 +6,7 @@
     "json"
   ],
   "homepage": "https://github.com/Leonidas-from-XIV/node-xml2js",
-  "version": "0.4.16",
+  "version": "0.4.17",
   "author": "Marek Kubica <marek@xivilization.net> (https://xivilization.net)",
   "contributors": [
     "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
@@ -50,7 +50,8 @@
     "Tristian Flanagan <tflanagan@datacollaborative.com> (https://github.com/tflanagan)",
     "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)",
     "Bogdan Chadkin <trysound@yandex.ru> (https://github.com/TrySound)",
-    "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)"
+    "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)",
+    "Nicolas Maquet (https://github.com/nmaquet)"
   ],
   "main": "./lib/xml2js",
   "files": [
