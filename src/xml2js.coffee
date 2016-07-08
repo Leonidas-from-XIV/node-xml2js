@@ -283,7 +283,7 @@ class exports.Parser extends events.EventEmitter
           newValue = if @options.attrValueProcessors then processName(@options.attrValueProcessors, node.attributes[key]) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processName(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
-            @assignOrPush obj, processedKey, newValue
+            obj[processedKey] = newValue
           else
             obj[attrkey][processedKey] = newValue
 
