@@ -528,6 +528,17 @@ module.exports =
       equ err, null
       equ parsed.longstuff, 'abcdefghijklmnopqrstuvwxyz'
       test.finish()
+      
+  'test preserveChildrenOrderForMixedContent': (test) ->
+    xml = '<xml><p style="red">Paging</p><h1>inner Text <label>Label1</label> has this label <label>Label2</label></h1><MsgId>5850440872586764820</MsgId></xml>'
+    xml2js.parseString xml, mergeAttrs: false, explicitArray:false, preserveChildrenOrderForMixedContent:true, (err, parsed) ->
+      console.log 'Result preserveChildrenOrderForMixedContent : ' + JSON.stringify xml
+      equ parsed.hasOwnProperty('xml'), true
+      equ parsed.xml.p._, 'Paging'
+      equ parsed.xml.p.$.style, 'red'
+      equ parsed.xml.h1.$$[0]._, 'inner Text '
+      equ parsed.xml.h1.$$[1].label, 'Label1'
+      test.finish()
 
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -575,13 +586,3 @@ module.exports =
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
     
-'test preserveChildrenOrderForMixedContent': (test) ->
-    xml = '<xml><p style="red">Paging</p><h1>inner Text <label>Label1</label> has this label <label>Label2</label></h1><MsgId>5850440872586764820</MsgId></xml>'
-    xml2js.parseString xml, mergeAttrs: false, explicitArray:false, preserveChildrenOrderForMixedContent:true, (err, parsed) ->
-      console.log 'Result preserveChildrenOrderForMixedContent : ' + JSON.stringify xml
-      equ parsed.hasOwnProperty('xml'), true
-      equ parsed.xml.p._, 'Paging'
-      equ parsed.xml.p.$.style, 'red'
-      equ parsed.xml.h1.$$[0]._, 'inner Text '
-      equ parsed.xml.h1.$$[1].label, 'Label1'
-      test.finish()
