@@ -530,7 +530,7 @@ module.exports =
       test.finish()
       
   'test preserveChildrenOrderForMixedContent': (test) ->
-    xml = '<xml><p style="red">Paging</p><h1>inner Text <label>Label1</label> has this label <label>Label2</label></h1><MsgId>5850440872586764820</MsgId></xml>'
+    xml = '<xml>  <p style="red">Paging</p>  <h1 style="green">inner Text <label>Label1</label> has this label <label>Label2</label> </h1><h2 attr="123"><a href="#">xyz</a> has not shown the status<a> Then </a>, These are more Tests</h2><MsgId>5850440872586764820</MsgId></xml>'
     xml2js.parseString xml, mergeAttrs: false, explicitArray:false, preserveChildrenOrderForMixedContent:true, (err, parsed) ->
       console.log 'Result preserveChildrenOrderForMixedContent : ' + JSON.stringify xml
       equ parsed.hasOwnProperty('xml'), true
