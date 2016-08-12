@@ -162,19 +162,17 @@ module.exports =
     equ r.sample.$$[10].$$[5]._, '6')
 
   'test non-async parsing': (test) ->
-    x2js = new xml2js.Parser()
     data = fs.readFileSync fileName, 'utf8'
-    xmldoc = x2js.parseStringSync data
+    xmldoc = xml2js.parseStringSync data
     assert.notEqual xmldoc, null
     equ xmldoc.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
     test.finish()
     
   'test non-async with bad input': (test) ->
-    x2js = new xml2js.Parser()
     data = fs.readFileSync fileName, 'utf8'
     err = null
     try
-      xmldoc = x2js.parseStringSync "< a moose bit my sister>";
+      xmldoc = xml2js.parseStringSync "< a moose bit my sister>";
     catch _err
       err = _err
     assert.notEqual err, null
