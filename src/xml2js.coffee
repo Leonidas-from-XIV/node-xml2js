@@ -409,7 +409,6 @@ class exports.Parser extends events.EventEmitter
     cb = (_err, _retval) ->
       retval = _retval
       err = _err
-      return
 
     #assumption 2: parseString will implicitly call cb (thus setting closure retval) before returing
     @parseString str, cb
