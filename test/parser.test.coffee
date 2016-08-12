@@ -156,7 +156,7 @@ module.exports =
     equ r.sample.$$[10].$$[2]._, '3'
     equ r.sample.$$[10].$$[3]['#name'], 'one'
     equ r.sample.$$[10].$$[3]._, '4'
-    equ r.sample.$$[10].$$[4]['#name'], 'two' 
+    equ r.sample.$$[10].$$[4]['#name'], 'two'
     equ r.sample.$$[10].$$[4]._, '5'
     equ r.sample.$$[10].$$[5]['#name'], 'three'
     equ r.sample.$$[10].$$[5]._, '6')
