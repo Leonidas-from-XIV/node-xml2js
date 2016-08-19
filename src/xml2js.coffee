@@ -428,18 +428,21 @@ class exports.Parser extends events.EventEmitter
       return
 
     wrap = (s, text) =>
-      if text.replace(/\\n\\t\\r/g, '').trim() != ''
+      if text.match(/^ +$/) or text.replace(/\\n\\t\\r/g, '').trim() != ''
         charkey = @options.charkey
         keys = Object.keys(s)
         if keys.length > 0
           newObj =
             hasStrayText: true
             content: []
+          i=0;
           for k of keys
             if keys[k] != '$' and keys[k] != '#name' and (keys[k] != charkey or s[keys[k]] != "")
-              nObj = {}
-              nObj[keys[k]] = s[keys[k]]
-              newObj.content.push nObj
+              if i>0 or typeof s[keys[k]] != "string" or !s[keys[k]].match(/^\s*$/)
+                nObj = {}
+                nObj[keys[k]] = s[keys[k]]
+                newObj.content.push nObj
+              i++
           txtObj = {}
           txtObj[charkey] = text
           newObj.content.push txtObj
