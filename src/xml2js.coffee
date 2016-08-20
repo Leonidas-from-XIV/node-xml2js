@@ -105,6 +105,7 @@ exports.defaults =
     chunkSize: 10000
     emptyTag: ''
     cdata: false
+    preserveChildrenOrderForMixedContent:false
 
 class exports.ValidationError extends Error
   constructor: (message) ->
@@ -224,7 +225,11 @@ class exports.Parser extends events.EventEmitter
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
-    if key not of obj
+    if @options.preserveChildrenOrderForMixedContent and obj.hasStrayText
+      tObj = {};
+      tObj[key] = newValue;
+      obj.content.push(tObj);
+    else if key not of obj
       if not @options.explicitArray
         obj[key] = newValue
       else
@@ -295,6 +300,11 @@ class exports.Parser extends events.EventEmitter
 
     @saxParser.onclosetag = =>
       obj = stack.pop()
+      if @options.preserveChildrenOrderForMixedContent and obj and obj.hasStrayText and obj.content
+        obj[@options.childkey] = obj.content
+        delete obj.content
+        delete obj.hasStrayText
+
       nodeName = obj["#name"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
 
@@ -376,17 +386,72 @@ class exports.Parser extends events.EventEmitter
     ontext = (text) =>
       s = stack[stack.length - 1]
       if s
+        nodeName = s['#name']
+        if @options.preserveChildrenOrderForMixedContent
+          if s[charkey] and s[charkey].replace(/\\n\\t\\r/g, '').trim() != ''
+            s = wrap(s, text)
+            stack[stack.length - 1] = s
+            return s
+          else if s.hasStrayText
+            cloned = {}
+            txtObj = {}
+            txtObj[charkey] = text
+            keys = Object.keys(s)
+            if keys.length > 0
+              for k of keys
+                cloned[keys[k]] = s[keys[k]]
+              cloned.content.push txtObj
+            s = cloned
+            stack[stack.length - 1] = s
+            return s
+          else
+            keys = Object.keys(s)
+            hasStrayText = false
+            if keys.length > 0
+              for k of keys
+                if keys[k] != '$' and keys[k] != '#name' and (keys[k] != charkey or s[keys[k]] != "")
+                  hasStrayText = true
+                  break
+            if hasStrayText
+              s = wrap(s, text)
+              stack[stack.length - 1] = s
+              return s
         s[charkey] += text
-
-        if @options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and (@options.includeWhiteChars or text.replace(/\\n/g, '').trim() isnt '')
+        if not @options.preserveChildrenOrderForMixedContent and (@options.explicitChildren and @options.preserveChildrenOrder and @options.charsAsChildren and (@options.includeWhiteChars or text.replace(/\\n/g, '').trim() != ''))
           s[@options.childkey] = s[@options.childkey] or []
-          charChild =
-            '#name': '__text__'
+          charChild = '#name': '__text__'
           charChild[charkey] = text
-          charChild[charkey] = charChild[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
+          if @options.normalize
+            charChild[charkey] = charChild[charkey].replace(/\s{2,}/g, ' ').trim()
           s[@options.childkey].push charChild
+        return s
+      return
 
-        s
+    wrap = (s, text) =>
+      if text.match(/^ +$/) or text.replace(/\\n\\t\\r/g, '').trim() != ''
+        charkey = @options.charkey
+        keys = Object.keys(s)
+        if keys.length > 0
+          newObj =
+            hasStrayText: true
+            content: []
+          i=0;
+          for k of keys
+            if keys[k] != '$' and keys[k] != '#name' and (keys[k] != charkey or s[keys[k]] != "")
+              if i>0 or typeof s[keys[k]] != "string" or !s[keys[k]].match(/^\s*$/)
+                nObj = {}
+                nObj[keys[k]] = s[keys[k]]
+                newObj.content.push nObj
+              i++
+          txtObj = {}
+          txtObj[charkey] = text
+          newObj.content.push txtObj
+          newObj['#name'] = s['#name']
+          if s['$']
+            newObj['$'] = s['$']
+          newObj[charkey] = "";
+          return newObj
+      s
 
     @saxParser.ontext = ontext
     @saxParser.oncdata = (text) =>

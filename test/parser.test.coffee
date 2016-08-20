@@ -529,6 +529,18 @@ module.exports =
       equ parsed.longstuff, 'abcdefghijklmnopqrstuvwxyz'
       test.finish()
 
+  'test preserveChildrenOrderForMixedContent': (test) ->
+    xml = '<xml>  <p style="red">Paging</p>  <h1 style="green">inner Text <label>Label1</label> has this label <label>Label2</label> </h1><h2 attr="123"><a href="#">xyz</a> has not shown the status<a> Then </a>, These are more Tests</h2><MsgId>5850440872586764820</MsgId></xml>'
+    xml2js.parseString xml, mergeAttrs: false, explicitArray:false, preserveChildrenOrderForMixedContent:true, (err, parsed) ->
+      console.log 'Result preserveChildrenOrderForMixedContent : ' + JSON.stringify xml
+      equ parsed.hasOwnProperty('xml'), true
+      equ parsed.xml.$$[0].p._, 'Paging'
+      equ parsed.xml.$$[0].p.$.style, 'red'
+      equ parsed.xml.$$[1]._, '  '
+      equ parsed.xml.$$[2].h1.$$[0]._, 'inner Text '
+      equ parsed.xml.$$[2].h1.$$[1].label, 'Label1'
+      test.finish()
+
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
@@ -574,3 +586,22 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test parse with defaults': skeleton(undefined, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest[0].$.desc, 'Test for CHARs'
+    equ r.sample.chartest[0]._, 'Character data here!'
+    equ r.sample.cdatatest[0].$.desc, 'Test for CDATA'
+    equ r.sample.cdatatest[0].$.misc, 'true'
+    equ r.sample.cdatatest[0]._, 'CDATA here!'
+    equ r.sample.nochartest[0].$.desc, 'No data'
+    equ r.sample.nochartest[0].$.misc, 'false'
+    equ r.sample.listtest[0].item[0]._, '\n            This  is\n            \n            character\n            \n            data!\n            \n        '
+    equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+    equ r.sample.listtest[0].item[0].subitem[1], 'Foo(2)'
+    equ r.sample.listtest[0].item[0].subitem[2], 'Foo(3)'
+    equ r.sample.listtest[0].item[0].subitem[3], 'Foo(4)'
+    equ r.sample.listtest[0].item[1], 'Qux.'
+    equ r.sample.listtest[0].item[2], 'Quux.'
+    # determine number of items in object
+    equ Object.keys(r.sample.tagcasetest[0]).length, 3)
