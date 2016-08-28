@@ -132,53 +132,61 @@ class exports.Builder
       # otherwise we'll use whatever they've set, or the default
       rootName = @options.rootName
 
+    processKeyObject = (element, key, child) =>
+      # Case #1 Attribute
+      if key is attrkey
+        if typeof child is "object"
+          # Inserts tag attributes
+          for attr, value of child
+            element = element.att(attr, value)
+
+      # Case #2 Char data (CDATA, etc.)
+      else if key is charkey
+        if @options.cdata && requiresCDATA child
+          element = element.raw wrapCDATA child
+        else
+          element = element.txt child
+
+      # Case #3 Array data
+      else if Array.isArray child
+        for index, entry of child
+          if typeof entry is 'string'
+            if @options.cdata && requiresCDATA entry
+              element = element.ele(key).raw(wrapCDATA entry).up()
+            else
+              element = element.ele(key, entry).up()
+          else
+            element = render(element.ele(key), entry).up()
+
+      # Case #4 Objects
+      else if typeof child is "object"
+        element = render(element.ele(key), child).up()
+
+      # Case #5 String and remaining types
+      else
+        if typeof child is 'string' && @options.cdata && requiresCDATA child
+          element = element.ele(key).raw(wrapCDATA child).up()
+        else
+          if not child?
+            element = element.ele(key, "").up()
+          else if key != '#name'
+            element = element.ele(key, child.toString()).up()
+      element
+
     render = (element, obj) =>
       if typeof obj isnt 'object'
         # single element, just append it as text
         if @options.cdata && requiresCDATA obj
-          element.raw wrapCDATA obj
+          element = element.raw wrapCDATA obj
         else
-          element.txt obj
+          element = element.txt obj
+      else if obj && Array.isArray obj["$$"]
+        element = processKeyObject(element, "$", obj["$"])
+        for child in obj["$$"]
+          element = processKeyObject(element, child["#name"], child)
       else
         for own key, child of obj
-          # Case #1 Attribute
-          if key is attrkey
-            if typeof child is "object"
-              # Inserts tag attributes
-              for attr, value of child
-                element = element.att(attr, value)
-
-          # Case #2 Char data (CDATA, etc.)
-          else if key is charkey
-            if @options.cdata && requiresCDATA child
-              element = element.raw wrapCDATA child
-            else
-              element = element.txt child
-
-          # Case #3 Array data
-          else if Array.isArray child
-            for own index, entry of child
-              if typeof entry is 'string'
-                if @options.cdata && requiresCDATA entry
-                  element = element.ele(key).raw(wrapCDATA entry).up()
-                else
-                  element = element.ele(key, entry).up()
-              else
-                element = render(element.ele(key), entry).up()
-
-          # Case #4 Objects
-          else if typeof child is "object"
-            element = render(element.ele(key), child).up()
-
-          # Case #5 String and remaining types
-          else
-            if typeof child is 'string' && @options.cdata && requiresCDATA child
-              element = element.ele(key).raw(wrapCDATA child).up()
-            else
-              if not child?
-                child = ''
-              element = element.ele(key, child.toString()).up()
-
+          element = processKeyObject(element, key, child)
       element
 
     rootElement = builder.create(rootName, @options.xmldec, @options.doctype,

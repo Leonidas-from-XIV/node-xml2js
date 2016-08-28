@@ -574,3 +574,11 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test parsing for explicitly ordered children': (test) ->
+    xml = '<xml><foo>Bar1</foo><foo>Bar2</foo></xml>'
+    orderedChildren = new xml2js.Parser {preserveChildrenOrder: true, explicitChildren: true}
+    orderedChildren.parseString xml, (err, res) ->
+      equ res.xml.foo[0], "Bar1"
+      equ res.xml.foo[1], "Bar2"
+      test.finish()
