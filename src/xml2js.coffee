@@ -5,7 +5,6 @@ events = require 'events'
 builder = require 'xmlbuilder'
 bom = require './bom'
 processors = require './processors'
-setImmediate = require('timers').setImmediate
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
