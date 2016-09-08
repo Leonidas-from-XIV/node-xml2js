@@ -322,7 +322,7 @@ class exports.Parser extends events.EventEmitter
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
         try
-          obj = @options.validator(xpath, s and s[nodeName], obj)
+          obj = @options.validator(xpath, s and s[nodeName], obj, stack)
         catch err
           @emit "error", err
 

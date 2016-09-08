@@ -36,7 +36,7 @@ is an existing value at this path it is supplied in `currentValue` (e.g. this is
 later item in an array).
 If the validation fails it should throw a `ValidationError`.
 ###
-validator = (xpath, currentValue, newValue) ->
+validator = (xpath, currentValue, newValue, stack) ->
   if xpath == '/sample/validatortest/numbertest'
     return Number(newValue)
   else if xpath in ['/sample/arraytest', '/sample/validatortest/emptyarray', '/sample/validatortest/oneitemarray']
