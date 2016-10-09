@@ -4,7 +4,7 @@ builder = require 'xmlbuilder'
 defaults = require('./defaults').defaults
 
 requiresCDATA = (entry) ->
-  return entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0
+  return typeof entry is "string" && (entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0)
 
 # Note that we do this manually instead of using xmlbuilder's `.dat` method
 # since it does not support escaping the CDATA close entity (throws an error if
