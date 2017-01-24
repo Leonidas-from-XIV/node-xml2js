@@ -11,8 +11,8 @@ defaults = require('./defaults').defaults
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
-processItem = (processors, item) ->
-  item = process(item) for process in processors
+processItem = (processors, item, key) ->
+  item = process(item, key) for process in processors
   return item
 
 class exports.Parser extends events.EventEmitter
@@ -108,7 +108,7 @@ class exports.Parser extends events.EventEmitter
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
             obj[attrkey] = {}
-          newValue = if @options.attrValueProcessors then processItem(@options.attrValueProcessors, node.attributes[key]) else node.attributes[key]
+          newValue = if @options.attrValueProcessors then processItem(@options.attrValueProcessors, node.attributes[key], key) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processItem(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
             @assignOrPush obj, processedKey, newValue
@@ -138,7 +138,7 @@ class exports.Parser extends events.EventEmitter
       else
         obj[charkey] = obj[charkey].trim() if @options.trim
         obj[charkey] = obj[charkey].replace(/\s{2,}/g, " ").trim() if @options.normalize
-        obj[charkey] = if @options.valueProcessors then processItem @options.valueProcessors, obj[charkey] else obj[charkey]
+        obj[charkey] = if @options.valueProcessors then processItem @options.valueProcessors, obj[charkey], nodeName else obj[charkey]
         # also do away with '#' key altogether, if there's no subkeys
         # unless EXPLICIT_CHARKEY is set
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
