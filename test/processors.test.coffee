@@ -38,7 +38,7 @@ module.exports =
     equ processors.parseNumbers('123'), 123
     equ processors.parseNumbers('15.56'), 15.56
     equ processors.parseNumbers('10.00'), 10
-    equ processors.parseNumbers('1111111111111111111111111') '1111111111111111111111111'
+    equ processors.parseNumbers('1111111111111111111111111'), '1111111111111111111111111'
     test.done()
 
   'test parseBooleans': (test) ->
