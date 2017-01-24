@@ -182,13 +182,24 @@ parseString(xml, {
 });
 ```
 
-The `tagNameProcessors`, `attrNameProcessors`, `attrValueProcessors` and `valueProcessors` options
+The `tagNameProcessors` and `attrNameProcessors` options
 accept an `Array` of functions with the following signature:
 
 ```javascript
 function (name){
   //do something with `name`
   return name
+}
+```
+
+The `attrValueProcessors` and `valueProcessors` options
+accept an `Array` of functions with the following signature:
+
+```javascript
+function (value, name) {
+  //`name` will be the node name or attribute name
+  //do something with `value`, (optionally) dependent on the node/attr name
+  return value
 }
 ```
 
