@@ -182,7 +182,7 @@ parseString(xml, {
 });
 ```
 
-The `tagNameProcessors` option accept an `Array` 
+The `tagNameProcessors` option accepts an `Array` 
 of functions with the following signature:
 
 ```javascript
@@ -193,7 +193,7 @@ function (name, path){
 }
 ```
 
-The `attrNameProcessors` option accept an `Array` 
+The `attrNameProcessors` option accepts an `Array` 
 of functions with the following signature:
 
 ```javascript
