@@ -182,8 +182,19 @@ parseString(xml, {
 });
 ```
 
-The `tagNameProcessors` and `attrNameProcessors` options
-accept an `Array` of functions with the following signature:
+The `tagNameProcessors` option accept an `Array` 
+of functions with the following signature:
+
+```javascript
+function (name, path){
+  //do something with `name`
+  //path is array of nodo names e.g. ['parentName'] 
+  return name
+}
+```
+
+The `attrNameProcessors` option accept an `Array` 
+of functions with the following signature:
 
 ```javascript
 function (name){
