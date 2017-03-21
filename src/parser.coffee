@@ -149,10 +149,13 @@ class exports.Parser extends events.EventEmitter
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
-        try
-          obj = @options.validator(xpath, s and s[nodeName], obj)
-        catch err
-          @emit "error", err
+        # Wrap try/catch with an inner function to allow V8 to optimise the containing function
+        # See https://github.com/Leonidas-from-XIV/node-xml2js/pull/369
+        do =>
+          try
+            obj = @options.validator(xpath, s and s[nodeName], obj)
+          catch err
+            @emit "error", err
 
       # put children into <childkey> property and unfold chars if necessary
       if @options.explicitChildren and not @options.mergeAttrs and typeof obj is 'object'
