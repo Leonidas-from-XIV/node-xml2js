@@ -51,7 +51,8 @@
     "Tim Johns <timjohns@yahoo.com> (https://github.com/TimJohns)",
     "Bogdan Chadkin <trysound@yandex.ru> (https://github.com/TrySound)",
     "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)",
-    "Nicolas Maquet (https://github.com/nmaquet)"
+    "Nicolas Maquet (https://github.com/nmaquet)",
+    "Lovell Fuller (http://lovell.info/)"
   ],
   "main": "./lib/xml2js",
   "files": [
