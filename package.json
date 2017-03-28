@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "sax": ">=0.6.0",
+    "timers": "^0.1.1",
     "xmlbuilder": "^8.2.0"
   },
   "devDependencies": {
