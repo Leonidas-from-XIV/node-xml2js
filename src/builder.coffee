@@ -48,6 +48,11 @@ class exports.Builder
           element.raw wrapCDATA obj
         else
           element.txt obj
+      else if Array.isArray obj
+        # fix issue #119
+        for own index, child of obj
+          for key, entry of child
+            element = render(element.ele(key), entry).up()
       else
         for own key, child of obj
           # Case #1 Attribute
