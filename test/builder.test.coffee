@@ -133,6 +133,15 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test parsing a date': (test) ->
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><adate>2000-01-01T00:00:00.0</adate>'
+    opts = renderOpts: pretty: false
+    builder = new xml2js.Builder opts
+    obj = {"adate": new Date(2000, 0, 1, 1, 0, 0, 0)}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+    
   'test parser -> builder roundtrip': (test) ->
     fileName = path.join __dirname, '/fixtures/build_sample.xml'
     fs.readFile fileName, (err, xmlData) ->
