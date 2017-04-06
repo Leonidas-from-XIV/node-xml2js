@@ -160,6 +160,16 @@ default configuration, except for `attrkey`, `charkey` and `explicitArray` optio
 you can redefine to your taste. Writing CDATA is supported via setting the `cdata`
 option to `true`.
 
+To specify attributes:
+```javascript
+var xml2js = require('xml2js');
+
+var obj = {root: {$: {id: "my id"}, _: "my inner text"}};
+
+var builder = new xml2js.Builder();
+var xml = builder.buildObject(obj);
+```
+
 Processing attribute, tag names and values
 ------------------------------------------
 
