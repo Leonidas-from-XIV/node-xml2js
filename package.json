@@ -1,5 +1,5 @@
 {
-  "name": "myxml2js",
+  "name": "xml2js",
   "description": "Simple XML to JavaScript object converter.",
   "keywords": [
     "xml",
