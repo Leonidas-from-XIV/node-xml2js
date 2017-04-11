@@ -4,7 +4,7 @@ builder = require 'xmlbuilder'
 defaults = require('./defaults').defaults
 
 requiresCDATA = (entry) ->
-  return typeof entry is "string" && (entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0)
+  return (typeof entry is "object" && entry.cdata)  || (typeof entry is "string" && (entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0))
 
 # Note that we do this manually instead of using xmlbuilder's `.dat` method
 # since it does not support escaping the CDATA close entity (throws an error if
@@ -17,7 +17,7 @@ escapeCDATA = (entry) ->
   # The first contains the ']]'
   # The second contains the '>'
   # When later parsed, it will be put back together as ']]>'
-  return entry.replace ']]>', ']]]]><![CDATA[>'
+  return if typeof entry is "object" then JSON.stringify entry.value else entry.replace ']]>', ']]]]><![CDATA[>'
 
 class exports.Builder
   constructor: (opts) ->
@@ -44,6 +44,11 @@ class exports.Builder
     render = (element, obj) =>
       if typeof obj isnt 'object'
         # single element, just append it as text
+        if @options.cdata && requiresCDATA obj
+          element.raw wrapCDATA obj
+        else
+          element.txt obj
+      else if typeof obj is 'object' && obj.cdata
         if @options.cdata && requiresCDATA obj
           element.raw wrapCDATA obj
         else

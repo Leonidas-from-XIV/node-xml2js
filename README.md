@@ -342,6 +342,61 @@ Possible options are:
     escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
     Added in 0.4.5.
 
+When the `cdata` is true in options, you can also wrap text nodes in an object `{ cdata:true, value: ... }` gracefully.
+ 
+For example : `{name: "Super", Surname: "Man", fixedProperty: { cdata: true, value: "Don't translate me!"}}`
+
+Issue the following nodejs code:
+
+```
+const xml2js = require('xml2js');
+
+let detail = {
+    "goods_detail": [
+        {
+            "goods_id": "iphone6s_16G",
+            "wxpay_goods_id": "1001",
+            "goods_name": "iPhone6s 16G",
+            "quantity": 1,
+            "price": 528800,
+            "goods_category": "123456",
+            "body": "iPhone Made in China"
+        },
+        {
+            "goods_id": "iphone6s_32G",
+            "wxpay_goods_id": "1002",
+            "goods_name": "iPhone6s 32G",
+            "quantity": 1,
+            "price": 608800,
+            "goods_category": "123789",
+            "body": "iPhone Made in China"
+        }
+    ]
+};
+let obj = { name: "Super", Surname: "Man", age: 23,address: { province: 'JS', city: 'Suzhou' },Ï detail: { cdata: true, value: detail } , detail2 : '<![DATA[Do not translate me!]]>'};
+let builder = new xml2js.Builder({ rootName: 'xml', cdata: true });
+let xml = builder.buildObject(obj);
+
+console.log(xml);
+```
+
+You'll see below:
+
+```
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xml>
+  <name>Super</name>
+  <Surname>Man</Surname>
+  <age>23</age>
+  <address>
+    <province>JS</province>
+    <city>Suzhou</city>
+  </address>
+  <detail><![CDATA[{"goods_detail":[{"goods_id":"iphone6s_16G","wxpay_goods_id":"1001","goods_name":"iPhone6s 16G","quantity":1,"price":528800,"goods_category":"123456","body":"iPhone Made in China"},{"goods_id":"iphone6s_32G","wxpay_goods_id":"1002","goods_name":"iPhone6s 32G","quantity":1,"price":608800,"goods_category":"123789","body":"iPhone Made in China"}]}]]></detail>
+  <detail2><![CDATA[<![DATA[Do not translate me!]]]]><![CDATA[>]]></detail2>
+</xml>
+```
+
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
 
