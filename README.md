@@ -373,7 +373,7 @@ let detail = {
         }
     ]
 };
-let obj = { name: "Super", Surname: "Man", age: 23,address: { province: 'JS', city: 'Suzhou' },Ï detail: { cdata: true, value: detail } , detail2 : '<![DATA[Do not translate me!]]>'};
+let obj = { name: "Super", Surname: "Man", age: 23,address: { province: 'JS', city: 'Suzhou' }, detail: { cdata: true, value: detail } , detail2 : '<![DATA[Do not translate me!]]>'};
 let builder = new xml2js.Builder({ rootName: 'xml', cdata: true });
 let xml = builder.buildObject(obj);
 
