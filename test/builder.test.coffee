@@ -281,3 +281,18 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test always uses cdata for string values with forceCdata enabled': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[hello world]]></MsgId>
+      </xml>
+
+    """
+    opts = forceCdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":"hello world"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()

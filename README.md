@@ -341,6 +341,8 @@ Possible options are:
   * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>` instead of
     escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
     Added in 0.4.5.
+  * `forceCdata` (default: `false`): always wrap text nodes in `<![CDATA[ ... ]]>`,
+    even if not required.
 
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
