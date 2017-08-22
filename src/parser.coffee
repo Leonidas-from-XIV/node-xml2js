@@ -237,8 +237,8 @@ class exports.Parser extends events.EventEmitter
     try
       str = str.toString()
       if str.trim() is ''
-        @emit 'error', new Error "Empty string is not valid XML"
-        return
+        @emit "end", null
+        return true
 
       str = bom.stripBOM str
       if @options.async
