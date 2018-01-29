@@ -146,8 +146,7 @@ XML builder usage
 Since 0.4.0, objects can be also be used to build XML:
 
 ```javascript
-var fs = require('fs'),
-    xml2js = require('xml2js');
+var xml2js = require('xml2js');
 
 var obj = {name: "Super", Surname: "Man", age: 23};
 
