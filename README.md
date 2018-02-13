@@ -104,6 +104,26 @@ not, we got you covered! Starting with 0.2.8 you can also leave it out, in
 which case `xml2js` will helpfully add it for you, no bad surprises and
 inexplicable bugs!
 
+Synchronous usage
+------------------
+
+Forced into a sync use-case?  Use the `parseStringSync` method to execute parsing
+in a synchronous manner.  Failures will result in an thrown error.
+
+```javascript
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+var data = fs.readFileSync(__dirname + '/foo.xml', 'utf8');
+
+// With parser
+var parser = new xml2js.Parser(/* options */);
+var result = parser.parseStringSync(data);
+
+// Without parser
+var result = xml2js.parseStringSync(data /*, options */);
+```
+
 Parsing multiple files
 ----------------------
 

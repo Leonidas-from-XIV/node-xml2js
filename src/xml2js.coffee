@@ -18,3 +18,4 @@ exports.Builder = builder.Builder
 exports.Parser = parser.Parser
 
 exports.parseString = parser.parseString
+exports.parseStringSync = parser.parseStringSync
