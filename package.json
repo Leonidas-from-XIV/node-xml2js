@@ -63,9 +63,11 @@
     "lib": "./lib"
   },
   "scripts": {
+    "build": "cake build",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "doc": "cake doc"
   },
   "repository": {
     "type": "git",
@@ -73,6 +75,7 @@
   },
   "dependencies": {
     "sax": ">=0.6.0",
+    "util.promisify": "~1.0.0",
     "xmlbuilder": "~9.0.1"
   },
   "devDependencies": {

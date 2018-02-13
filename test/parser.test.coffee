@@ -5,8 +5,11 @@ util = require 'util'
 assert = require 'assert'
 path = require 'path'
 os = require 'os'
+promisify = require 'util.promisify'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
+
+readFilePromise = promisify fs.readFile
 
 skeleton = (options, checks) ->
   (test) ->
@@ -574,3 +577,52 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+
+  'test parseStringPromise parsing': (test) ->
+    x2js = new xml2js.Parser()
+    readFilePromise(fileName).then (data) ->
+      x2js.parseStringPromise data
+    .then (r) ->
+      # just a single test to check whether we parsed anything
+      equ r.sample.chartest[0]._, 'Character data here!'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+    
+  'test parseStringPromise with bad input': (test) ->
+    x2js = new xml2js.Parser()
+    x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
+      test.fail('Should fail')
+    .catch (err) ->
+      assert.notEqual err, null
+      test.finish()
+
+  'test global parseStringPromise parsing': (test) ->
+    readFilePromise(fileName).then (data) ->
+      xml2js.parseStringPromise data
+    .then (r) ->
+      assert.notEqual r, null
+      equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+
+  'test global parseStringPromise with options': (test) ->
+    readFilePromise(fileName).then (data) ->
+      xml2js.parseStringPromise data,
+        trim: true
+        normalize: true
+    .then (r) ->
+      assert.notEqual r, null
+      equ r.sample.whitespacetest[0]._, 'Line One Line Two'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+    
+  'test global parseStringPromise with bad input': (test) ->
+    xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
+      test.fail('Should fail')
+    .catch (err) ->
+      assert.notEqual err, null
+      test.finish()
