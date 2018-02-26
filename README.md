@@ -1,8 +1,8 @@
-node-xml2js
+node-xml-json-convert
 ===========
 
 Ever had the urge to parse XML? And wanted to access the data in some sane,
-easy way? Don't want to compile a C parser, for whatever reason? Then xml2js is
+easy way? Don't want to compile a C parser, for whatever reason? Then xml-json-convert is
 what you're looking for!
 
 Description
@@ -18,11 +18,11 @@ Note: If you're looking for a full DOM parser, you probably want
 Installation
 ============
 
-Simplest way to install `xml2js` is to use [npm](http://npmjs.org), just `npm
-install xml2js` which will download xml2js and all dependencies.
+Simplest way to install `xml-json-convert` is to use [npm](http://npmjs.org), just `npm
+install xml-json-convert` which will download xml-json-convert and all dependencies.
 
-xml2js is also available via [Bower](http://bower.io/), just `bower install
-xml2js` which will download xml2js and all dependencies.
+xml-json-convert is also available via [Bower](http://bower.io/), just `bower install
+xml-json-convert` which will download xml-json-convert and all dependencies.
 
 Usage
 =====
@@ -37,24 +37,24 @@ You want to parse XML as simple and easy as possible? It's dangerous to go
 alone, take this:
 
 ```javascript
-var parseString = require('xml2js').parseString;
-var xml = "<root>Hello xml2js!</root>"
+var parseString = require('xml-json-convert').parseString;
+var xml = "<root>Hello xml-json-convert!</root>"
 parseString(xml, function (err, result) {
     console.dir(result);
 });
 ```
 
-Can't get easier than this, right? This works starting with `xml2js` 0.2.3.
+Can't get easier than this, right? This works starting with `xml-json-convert` 0.2.3.
 With CoffeeScript it looks like this:
 
 ```coffeescript
-{parseString} = require 'xml2js'
-xml = "<root>Hello xml2js!</root>"
+{parseString} = require 'xml-json-convert'
+xml = "<root>Hello xml-json-convert!</root>"
 parseString xml, (err, result) ->
     console.dir result
 ```
 
-If you need some special options, fear not, `xml2js` supports a number of
+If you need some special options, fear not, `xml-json-convert` supports a number of
 options (see below), you can specify these as second argument:
 
 ```javascript
@@ -70,9 +70,9 @@ wrapper, this was added in 0.1.11 just for you:
 
 ```javascript
 var fs = require('fs'),
-    xml2js = require('xml2js');
+    xml-json-convert = require('xml-json-convert');
 
-var parser = new xml2js.Parser();
+var parser = new xml-json-convert.Parser();
 fs.readFile(__dirname + '/foo.xml', function(err, data) {
     parser.parseString(data, function (err, result) {
         console.dir(result);
@@ -83,15 +83,15 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 
 Look ma, no event listeners!
 
-You can also use `xml2js` from
+You can also use `xml-json-convert` from
 [CoffeeScript](https://github.com/jashkenas/coffeescript), further reducing
 the clutter:
 
 ```coffeescript
 fs = require 'fs',
-xml2js = require 'xml2js'
+xml-json-convert = require 'xml-json-convert'
 
-parser = new xml2js.Parser()
+parser = new xml-json-convert.Parser()
 fs.readFile __dirname + '/foo.xml', (err, data) ->
   parser.parseString data, (err, result) ->
     console.dir result
@@ -101,7 +101,7 @@ fs.readFile __dirname + '/foo.xml', (err, data) ->
 But what happens if you forget the `new` keyword to create a new `Parser`? In
 the middle of a nightly coding session, it might get lost, after all. Worry
 not, we got you covered! Starting with 0.2.8 you can also leave it out, in
-which case `xml2js` will helpfully add it for you, no bad surprises and
+which case `xml-json-convert` will helpfully add it for you, no bad surprises and
 inexplicable bugs!
 
 Parsing multiple files
@@ -109,7 +109,7 @@ Parsing multiple files
 
 If you want to parse multiple files, you have multiple possibilities:
 
-  * You can create one `xml2js.Parser` per file. That's the recommended one
+  * You can create one `xml-json-convert.Parser` per file. That's the recommended one
     and is promised to always *just work*.
   * You can call `reset()` on your parser object.
   * You can hope everything goes well anyway. This behaviour is not
@@ -126,7 +126,7 @@ Displaying results
 ------------------
 
 You might wonder why, using `console.dir` or `console.log` the output at some
-level is only `[Object]`. Don't worry, this is not because `xml2js` got lazy.
+level is only `[Object]`. Don't worry, this is not because `xml-json-convert` got lazy.
 That's because Node uses `util.inspect` to convert the object into strings and
 that function stops after `depth=2` which is a bit low for most XML.
 
@@ -146,11 +146,11 @@ XML builder usage
 Since 0.4.0, objects can be also be used to build XML:
 
 ```javascript
-var xml2js = require('xml2js');
+var xml-json-convert = require('xml-json-convert');
 
 var obj = {name: "Super", Surname: "Man", age: 23};
 
-var builder = new xml2js.Builder();
+var builder = new xml-json-convert.Builder();
 var xml = builder.buildObject(obj);
 ```
 
@@ -161,11 +161,11 @@ option to `true`.
 
 To specify attributes:
 ```javascript
-var xml2js = require('xml2js');
+var xml-json-convert = require('xml-json-convert');
 
 var obj = {root: {$: {id: "my id"}, _: "my inner text"}};
 
-var builder = new xml2js.Builder();
+var builder = new xml-json-convert.Builder();
 var xml = builder.buildObject(obj);
 ```
 
@@ -280,7 +280,7 @@ value})``. Possible options are:
      text nodes should be included. Added in 0.4.17.
   * `async` (default `false`): Should the callbacks be async? This *might* be
     an incompatible change if your code depends on sync execution of callbacks.
-    Future versions of `xml2js` might change this default, so the recommendation
+    Future versions of `xml-json-convert` might change this default, so the recommendation
     is to not depend on sync execution anyway. Added in 0.2.6.
   * `strict` (default `true`): Set sax-js to strict or non-strict parsing mode.
     Defaults to `true` which is *highly* recommended, since parsing HTML which
@@ -358,7 +358,7 @@ For example : `{name: "Super", Surname: "Man", fixedProperty: { cdata: true, val
 Issue the following nodejs code:
 
 ```
-const xml2js = require('xml2js');
+const xml-json-convert = require('xml-json-convert');
 
 let detail = {
     "goods_detail": [
@@ -383,7 +383,7 @@ let detail = {
     ]
 };
 let obj = { name: "Super", Surname: "Man", age: 23,address: { province: 'JS', city: 'Suzhou' }, detail: { cdata: true, value: detail } , detail2 : '<![DATA[Do not translate me!]]>'};
-let builder = new xml2js.Builder({ rootName: 'xml', cdata: true });
+let builder = new xml-json-convert.Builder({ rootName: 'xml', cdata: true });
 let xml = builder.buildObject(obj);
 
 console.log(xml);
@@ -417,41 +417,41 @@ the default settings for version 0.2, so these settings can be tried before the
 migration.
 
 ```javascript
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser(xml2js.defaults["0.2"]);
+var xml-json-convert = require('xml-json-convert');
+var parser = new xml-json-convert.Parser(xml-json-convert.defaults["0.2"]);
 ```
 
 To get the 0.1 defaults in version 0.2 you can just use
-`xml2js.defaults["0.1"]` in the same place. This provides you with enough time
-to migrate to the saner way of parsing in `xml2js` 0.2. We try to make the
+`xml-json-convert.defaults["0.1"]` in the same place. This provides you with enough time
+to migrate to the saner way of parsing in `xml-json-convert` 0.2. We try to make the
 migration as simple and gentle as possible, but some breakage cannot be
 avoided.
 
 So, what exactly did change and why? In 0.2 we changed some defaults to parse
 the XML in a more universal and sane way. So we disabled `normalize` and `trim`
-so `xml2js` does not cut out any text content. You can reenable this at will of
+so `xml-json-convert` does not cut out any text content. You can reenable this at will of
 course. A more important change is that we return the root tag in the resulting
 JavaScript structure via the `explicitRoot` setting, so you need to access the
 first element. This is useful for anybody who wants to know what the root node
 is and preserves more information. The last major change was to enable
 `explicitArray`, so everytime it is possible that one might embed more than one
-sub-tag into a tag, xml2js >= 0.2 returns an array even if the array just
+sub-tag into a tag, xml-json-convert >= 0.2 returns an array even if the array just
 includes one element. This is useful when dealing with APIs that return
 variable amounts of subtags.
 
 Running tests, development
 ==========================
 
-[![Build Status](https://travis-ci.org/Leonidas-from-XIV/node-xml2js.svg?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
-[![Coverage Status](https://coveralls.io/repos/Leonidas-from-XIV/node-xml2js/badge.svg?branch=)](https://coveralls.io/r/Leonidas-from-XIV/node-xml2js?branch=master)
-[![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml2js.svg)](https://david-dm.org/Leonidas-from-XIV/node-xml2js)
+[![Build Status](https://travis-ci.org/Leonidas-from-XIV/node-xml-json-convert.svg?branch=master)](https://travis-ci.org/Leonidas-from-XIV/node-xml-json-convert)
+[![Coverage Status](https://coveralls.io/repos/Leonidas-from-XIV/node-xml-json-convert/badge.svg?branch=)](https://coveralls.io/r/Leonidas-from-XIV/node-xml-json-convert?branch=master)
+[![Dependency Status](https://david-dm.org/Leonidas-from-XIV/node-xml-json-convert.svg)](https://david-dm.org/Leonidas-from-XIV/node-xml-json-convert)
 
 The development requirements are handled by npm, you just need to install them.
 We also have a number of unit tests, they can be run using `npm test` directly
 from the project root. This runs zap to discover all the tests and execute
 them.
 
-If you like to contribute, keep in mind that `xml2js` is written in
+If you like to contribute, keep in mind that `xml-json-convert` is written in
 CoffeeScript, so don't develop on the JavaScript files that are checked into
 the repository for convenience reasons. Also, please write some unit test to
 check your behaviour and if it is some user-facing thing, add some
@@ -462,9 +462,9 @@ Getting support
 
 Please, if you have a problem with the library, first make sure you read this
 README. If you read this far, thanks, you're good. Then, please make sure your
-problem really is with `xml2js`. It is? Okay, then I'll look at it. Send me a
+problem really is with `xml-json-convert`. It is? Okay, then I'll look at it. Send me a
 mail and we can talk. Please don't open issues, as I don't think that is the
 proper forum for support problems. Some problems might as well really be bugs
-in `xml2js`, if so I'll let you know to open an issue instead :)
+in `xml-json-convert`, if so I'll let you know to open an issue instead :)
 
 But if you know you really found a bug, feel free to open an issue instead.
