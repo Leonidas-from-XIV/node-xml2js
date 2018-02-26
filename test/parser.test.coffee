@@ -254,11 +254,8 @@ module.exports =
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     equ r.sample.emptytest[0], null)
 
-  'test invalid empty XML file': (test) ->
-    x2js = new xml2js.Parser()
-    x2js.parseString '', (err, r) ->
-      assert.notEqual err, null
-      test.finish()
+  'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
+    equ r, null)
 
   'test enabled normalizeTags': skeleton(normalizeTags: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10

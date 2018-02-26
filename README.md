@@ -146,8 +146,7 @@ XML builder usage
 Since 0.4.0, objects can be also be used to build XML:
 
 ```javascript
-var fs = require('fs'),
-    xml2js = require('xml2js');
+var xml2js = require('xml2js');
 
 var obj = {name: "Super", Surname: "Man", age: 23};
 
@@ -159,6 +158,16 @@ At the moment, a one to one bi-directional conversion is guaranteed only for
 default configuration, except for `attrkey`, `charkey` and `explicitArray` options
 you can redefine to your taste. Writing CDATA is supported via setting the `cdata`
 option to `true`.
+
+To specify attributes:
+```javascript
+var xml2js = require('xml2js');
+
+var obj = {root: {$: {id: "my id"}, _: "my inner text"}};
+
+var builder = new xml2js.Builder();
+var xml = builder.buildObject(obj);
+```
 
 Processing attribute, tag names and values
 ------------------------------------------
