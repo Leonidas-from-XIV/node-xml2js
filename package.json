@@ -1,5 +1,5 @@
 {
-  "name": "xml2js",
+  "name": "xml-json-converter",
   "description": "Simple XML to JavaScript object converter.",
   "keywords": [
     "xml",
@@ -69,7 +69,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Leonidas-from-XIV/node-xml2js.git"
+    "url": "https://github.com/qixin1991/node-xml2js.git"
   },
   "dependencies": {
     "sax": ">=0.6.0",
