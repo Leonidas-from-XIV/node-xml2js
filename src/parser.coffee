@@ -9,7 +9,7 @@ defaults = require('./defaults').defaults
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
-  return typeof thing is Object && thing? && Object.keys(thing).length is 0
+  return typeof thing is "object" && !thing instanceof Date && thing? && Object.keys(thing).length is 0
 
 processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
