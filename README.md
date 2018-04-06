@@ -325,6 +325,59 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.6
+  * `sourcemap` (default: `false`): Allows exporting node positions in the XML
+    source document. By default it adds to all nodes a non-enumerable property
+    called `$source` (doesn't show up during enumeration of the properties on the objects).
+    The name of the property and whether or not you want it enumerable can be
+    configured with the options below.
+  * `sourcemapkey` (default: `$source`): Change the key to use when exporting sourcemaps.
+  * `sourcemapEnumerable` (default: `false`): Make the sourcemap enumerable (visible).
+    Note that converting back the JSON to XML will include `$source` attributes
+    if you make them enumerable. Here's a small example:
+    ```javascript
+      xml = "<a>\n  <b>hello</b>\n</a>";
+      xml2js.parseString(xml, {sourcemap: true, sourcemapEnumerable: true}, (err, parsed) => {
+        console.log(JSON.stringify(parsed));
+      });
+    ```
+    This will output:
+    ```json
+    {
+      "a": {
+        "$source": {
+          "start": {
+            "line": 0,
+            "column": 3,
+            "position": 3
+          },
+          "end": {
+            "line": 2,
+            "column": 4,
+            "position": 23
+          }
+        },
+        "b": [
+          {
+            "_": "hello",
+            "$source": {
+              "start": {
+                "line": 1,
+                "column": 5,
+                "position": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 14,
+                "position": 18
+              }
+            }
+          }
+        ]
+      }
+    }
+    ```
+    If `sourcemapEnumerable` was not set, `$source` wouldn't appear in the generated
+    JSON but would be accessible the same way.
 
 Options for the `Builder` class
 -------------------------------
