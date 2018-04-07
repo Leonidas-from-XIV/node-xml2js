@@ -17,6 +17,25 @@ diffeq = (expected, actual) ->
   throw patch unless patch is diffless
 
 module.exports =
+  'test restores children order when $source is available': (test) ->
+    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><A>1</A><B>2</B><A>3</A></xml>'
+    obj = {"xml":{
+      "A":[{"_":"1"}, {"_": "3"}],
+      "B":[{"_": "2"}]
+    }}
+    definePosition = (node, value) ->
+      Object.defineProperty(node, '$source', {
+        value: {start: position: value}
+        enuerable: false
+      })
+    definePosition obj.xml.A[0], 64
+    definePosition obj.xml.A[1], 79
+    definePosition obj.xml.B[0], 71
+    builder = new xml2js.Builder renderOpts: pretty: false
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test building basic XML structure': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label/><MsgId>5850440872586764820</MsgId></xml>'
     obj = {"xml":{"Label":[""],"MsgId":["5850440872586764820"]}}
