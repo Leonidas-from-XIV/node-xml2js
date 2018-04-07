@@ -5,6 +5,7 @@ util = require 'util'
 assert = require 'assert'
 path = require 'path'
 os = require 'os'
+Promise = require 'promise-polyfill'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
 
@@ -380,19 +381,6 @@ module.exports =
       equ err.message, 'Validation error!'
       test.finish()
 
-  'test error throwing': (test) ->
-    xml = '<?xml version="1.0" encoding="utf-8"?><test>content is ok<test>'
-    try
-      xml2js.parseString xml, (err, parsed) ->
-        throw new Error 'error throwing in callback'
-      throw new Error 'error throwing outside'
-    catch e
-      # the stream is finished by the time the parseString method is called
-      # so the callback, which is synchronous, will bubble the inner error
-      # out to here, make sure that happens
-      equ e.message, 'error throwing in callback'
-      test.finish()
-
   'test error throwing after an error (async)': (test) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test node is not okay>content is ok</test node is not okay>'
     nCalled = 0
@@ -419,14 +407,10 @@ module.exports =
   'test callback should be called once': (test) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
     i = 0
-    try
-      xml2js.parseString xml, (err, parsed) ->
-        i = i + 1
-        # throw something custom
-        throw new Error 'Custom error message'
-    catch e
-      equ i, 1
-      equ e.message, 'Custom error message'
+    xml2js.parseString xml, (err, parsed) ->
+      i = i + 1
+      if i > 1
+        throw new Error 'Callback shoud be called once'
       test.finish()
 
   'test no error event after end': (test) ->
@@ -574,3 +558,14 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test return a promise': (test)->
+    xml = '<xml></xml>'
+    ret = xml2js.parseString(xml)
+    assert.ok ret instanceof Promise
+    ret
+      .then (r) ->
+        assert.ok r.hasOwnProperty 'xml'
+        test.finish()
+      .catch (err) ->
+        assert.ok false

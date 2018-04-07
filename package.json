@@ -72,6 +72,7 @@
     "url": "https://github.com/Leonidas-from-XIV/node-xml2js.git"
   },
   "dependencies": {
+    "promise-polyfill": "7.1.2",
     "sax": ">=0.6.0",
     "xmlbuilder": "~9.0.1"
   },

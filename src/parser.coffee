@@ -2,6 +2,7 @@
 
 sax = require 'sax'
 events = require 'events'
+Promise = require 'promise-polyfill'
 bom = require './bom'
 processors = require './processors'
 setImmediate = require('timers').setImmediate
@@ -225,33 +226,44 @@ class exports.Parser extends events.EventEmitter
       if s
         s.cdata = true
 
+  setupCallback: (event, callbacks) =>
+    @on event, (result) =>
+      @reset()
+      errToThrow = null
+      for cb in callbacks
+        try
+            cb result
+        catch err
+          errToThrow = err
+      if errToThrow
+        throw errToThrow
+
   parseString: (str, cb) =>
-    if cb? and typeof cb is "function"
-      @on "end", (result) ->
-        @reset()
-        cb null, result
-      @on "error", (err) ->
-        @reset()
-        cb err
+    new Promise (resolve, reject) =>
+      if not (cb? and typeof cb is "function")
+        cb = () ->
+      @setupCallback "end", [resolve, (r) -> (cb null, r)]
+      @setupCallback "error", [reject, cb]
 
-    try
-      str = str.toString()
-      if str.trim() is ''
-        @emit "end", null
-        return true
+      try
+        str = str.toString()
+        if str.trim() is ''
+          @emit "end", null
+          return true
 
-      str = bom.stripBOM str
-      if @options.async
-        @remaining = str
-        setImmediate @processAsync
-        return @saxParser
-      @saxParser.write(str).close()
-    catch err
-      unless @saxParser.errThrown or @saxParser.ended
-        @emit 'error', err
-        @saxParser.errThrown = true
-      else if @saxParser.ended
-        throw err
+        str = bom.stripBOM str
+        if @options.async
+          @remaining = str
+          setImmediate @processAsync
+          return @saxParser
+        @saxParser.write(str).close()
+      catch err
+        unless @saxParser.errThrown or @saxParser.ended
+          @emit 'error', err
+          @saxParser.errThrown = true
+        else if @saxParser.ended
+          throw err
+    .catch(()->) # disable unhandled promise rejection warnings
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
