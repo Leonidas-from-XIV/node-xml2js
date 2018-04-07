@@ -102,6 +102,8 @@ class exports.Builder
     for own key, value of obj
       if key is @options.attrkey or key is @options.charkey
         ret[key] = value
+      else if key is @options.sourcemapkey
+        continue # do not export metadata to the final XML
       else
         if Array.isArray value
           for child in value
