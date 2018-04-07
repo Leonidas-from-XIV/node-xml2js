@@ -84,8 +84,8 @@
     "nyc": ">=2.2.1",
     "zap": ">=0.2.9"
   },
-  "engines" : {
-    "node" : ">=4.0.0"
+  "engines": {
+    "node": ">=4.0.0"
   },
   "license": "MIT"
 }
