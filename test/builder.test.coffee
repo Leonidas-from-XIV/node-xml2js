@@ -1,5 +1,5 @@
 # use zap to run tests, it also detects CoffeeScript files
-xml2js = require '../lib/xml2js'
+xml2js = require '../src/xml2js'
 assert = require 'assert'
 fs = require 'fs'
 path = require 'path'
@@ -278,6 +278,27 @@ module.exports =
     opts = cdata: true
     builder = new xml2js.Builder opts
     obj = [{"MsgId": 10}, {"MsgId2": 12}]
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test building obj with array 2': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <request>
+        <headers>
+          <header method="INVITE" name="X-Mode" value="standard"/>
+          <header method="INVITE" name="X-Prop" value="default"/>
+        </headers>
+      </request>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {request: { headers: [
+      { header: { '$': { 'method': 'INVITE', name: 'X-Mode', value: 'standard' } } },
+      { header: { '$': { 'method': 'INVITE', name: 'X-Prop', value: 'default' } } }
+    ]}}
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
