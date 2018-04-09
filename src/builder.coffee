@@ -75,7 +75,6 @@ class exports.Builder
             # differently. Arrays of simple children will repeat the parent element, e.g. `<foo>1</foo><foo>2</foo>`,
             # while complex child arrays will be wrapped in their parent, e.g.
             # `<messages><message type="foo"/message>fuz<message type="bar"/>baz</messages>`
-            arrayElement = null
             for own index, entry of child
               if typeof entry isnt 'object'
                 # single element, just append it as text
