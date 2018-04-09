@@ -282,7 +282,7 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
-  'test building obj with array 2': (test) ->
+  'test building obj with nested array': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <request>
