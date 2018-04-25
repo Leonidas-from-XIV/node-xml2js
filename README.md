@@ -347,9 +347,10 @@ Possible options are:
   * `headless` (default: `false`): omit the XML header. Added in 0.4.3.
   * `allowSurrogateChars` (default: `false`): allows using characters from the Unicode
     surrogate blocks.
-  * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>` instead of
-    escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
+  * `cdata` (default: `false`): 
+    *  When `true` wrap text nodes in `<![CDATA[ ... ]]>` instead of escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
     Added in 0.4.5.
+    * When `'always'` all inner text wrapped in `<![CDATA[ ... ]]>` regardless of content.
 
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
