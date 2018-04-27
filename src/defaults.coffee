@@ -66,6 +66,7 @@ exports.defaults = {
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}
     doctype: null
     renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' }
+    stringify: null
     headless: false
     chunkSize: 10000
     emptyTag: ''

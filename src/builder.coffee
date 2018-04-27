@@ -97,6 +97,7 @@ class exports.Builder
 
     rootElement = builder.create(rootName, @options.xmldec, @options.doctype,
       headless: @options.headless
+      stringify: @options.stringify
       allowSurrogateChars: @options.allowSurrogateChars)
 
     render(rootElement, rootObj).end(@options.renderOpts)

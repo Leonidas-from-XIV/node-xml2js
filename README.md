@@ -345,13 +345,17 @@ Possible options are:
     * `xmldec.standalone` standalone document declaration: true or false
   * `doctype` (default `null`): optional DTD. Eg. `{'ext': 'hello.dtd'}`
   * `headless` (default: `false`): omit the XML header. Added in 0.4.3.
+  * `stringify` (default: `null`): a set of functions to use for converting values to strings
+    (see `xmlbuilder-js`'s
+    [XMLStringifier](https://github.com/oozcitak/xmlbuilder-js/blob/master/src/XMLStringifier.coffee)
+    class for more information)
   * `allowSurrogateChars` (default: `false`): allows using characters from the Unicode
     surrogate blocks.
   * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>` instead of
     escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
     Added in 0.4.5.
 
-`renderOpts`, `xmldec`,`doctype` and `headless` pass through to
+`renderOpts`, `xmldec`,`doctype`, `stringify`, and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
 
 Updating to new version
