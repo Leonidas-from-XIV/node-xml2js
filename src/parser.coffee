@@ -53,7 +53,7 @@ class exports.Parser extends events.EventEmitter
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
-      if not @options.explicitArray
+      if not @options.explicitArray || (@options.explicitArray instanceof Array && key not in @options.explicitArray)
         obj[key] = newValue
       else
         obj[key] = [newValue]

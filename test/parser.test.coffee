@@ -125,6 +125,24 @@ module.exports =
     equ r.sample.listtest.single, 'Single'
     equ r.sample.listtest.attr, 'Attribute')
 
+  'test parse with mergeAttrs and array explicitArray': skeleton(mergeAttrs: true, explicitArray: ['single'], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.chartest.desc, 'Test for CHARs'
+    equ r.sample.chartest._, 'Character data here!'
+    equ r.sample.cdatatest.desc, 'Test for CDATA'
+    equ r.sample.cdatatest.misc, 'true'
+    equ r.sample.cdatatest._, 'CDATA here!'
+    equ r.sample.nochartest.desc, 'No data'
+    equ r.sample.nochartest.misc, 'false'
+    equ r.sample.listtest.item[0].subitem[0], 'Foo(1)'
+    equ r.sample.listtest.item[0].subitem[1], 'Foo(2)'
+    equ r.sample.listtest.item[0].subitem[2], 'Foo(3)'
+    equ r.sample.listtest.item[0].subitem[3], 'Foo(4)'
+    equ r.sample.listtest.item[1], 'Qux.'
+    equ r.sample.listtest.item[2], 'Quux.'
+    equ r.sample.listtest.single[0], 'Single'
+    equ r.sample.listtest.attr, 'Attribute')
+
   'test parse with explicitChildren': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$.chartest[0].$.desc, 'Test for CHARs'
@@ -283,6 +301,12 @@ module.exports =
     equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
     equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
+
+  'test child node with array explicitArray': skeleton(explicitArray: ['subitem'], (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.arraytest.item[0].subitem[0], 'Baz.'
+    equ r.sample.arraytest.item[1].subitem[0], 'Foo.'
+    equ r.sample.arraytest.item[1].subitem[1], 'Bar.')
 
   'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
