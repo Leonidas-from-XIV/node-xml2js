@@ -12,6 +12,8 @@ Simple XML to JavaScript object converter. It supports bi-directional conversion
 Uses [sax-js](https://github.com/isaacs/sax-js/) and
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js/).
 
+If you are targeting the browser, consider using [isomorphic-xml2js](https://github.com/rikkigibson/isomorphic-xml2js), which implements most of the features of xml2js but at a much smaller bundle size.
+
 Note: If you're looking for a full DOM parser, you probably want
 [JSDom](https://github.com/tmpvar/jsdom).
 
