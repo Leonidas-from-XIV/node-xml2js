@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "sax": ">=0.6.0",
-    "xmlbuilder": "~9.0.1"
+    "xmlbuilder": "~10.0.0"
   },
   "devDependencies": {
     "coffee-script": ">=1.10.0",
@@ -83,8 +83,8 @@
     "nyc": ">=2.2.1",
     "zap": ">=0.2.9"
   },
-  "engines" : {
-    "node" : ">=4.0.0"
+  "engines": {
+    "node": ">=4.0.0"
   },
   "license": "MIT"
 }
