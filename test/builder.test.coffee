@@ -16,6 +16,12 @@ diffeq = (expected, actual) ->
   patch = diff.createPatch('test', expected.trim(), actual.trim(), 'expected', 'actual')
   throw patch unless patch is diffless
 
+# nameToUpperCase = (name) ->
+#  return name.toUpperCase()
+
+# nameCutoff = (name) ->
+#  return name.substr(0, 4)
+
 module.exports =
   'test building basic XML structure': (test) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label/><MsgId>5850440872586764820</MsgId></xml>'
@@ -281,3 +287,13 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+#  'test propNameProcessors': (test) ->
+#    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO>bar</FOO>'
+#    opts = propNameProcessors: [nameToUpperCase]
+#    builder = new xml2js.Builder opts
+#    obj = {"foo":["bar"]}
+#    actual = builder.buildObject obj
+#    diffeq expected, actual
+#    test.finish()
+
