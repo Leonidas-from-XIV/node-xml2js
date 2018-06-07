@@ -79,8 +79,11 @@ class exports.Builder
           if Array.isArray child
             children_as_array = true
             for own index, entry of child
-              if typeof child is "object"
-                if '#name' of entry
+              if typeof entry is "object"
+                if ( Object.keys(entry).length is 1 )
+                  name = Object.keys(entry)[0]
+                  element = render(element.ele(name),entry[name]).up()
+                else if '#name' of entry
                   element = render(element.ele(entry['#name']), entry).up()
                 else
                   throw new Error('Missing #name attribute when children')
