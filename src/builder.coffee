@@ -20,7 +20,8 @@ escapeCDATA = (entry) ->
   return entry.replace ']]>', ']]]]><![CDATA[>'
 
 processItem = (processors, item, key) ->
-  item = process(item, key) for process in processors
+  if processors
+    item = process(item, key) for process in processors
   return item
   
 class exports.Builder
@@ -41,8 +42,7 @@ class exports.Builder
       # we'll take the first element as the root element
       rootName = Object.keys(rootObj)[0]
       rootObj = rootObj[rootName]
-      rootName = if @options.propNameProcessors then processItem(@options.propNameProcessors, rootName) else rootName
-
+      rootName = processItem(@options.tagNameProcessors, rootName)
     else
       # otherwise we'll use whatever they've set, or the default
       rootName = @options.rootName
@@ -58,16 +58,17 @@ class exports.Builder
         # fix issue #119
         for own index, child of obj
           for key, entry of child # TODO: should this be 'for own key...'?
-            tag = if @options.propNameProcessors then processItem(@options.propNameProcessors, key) else key
+            tag = processItem(@options.tagNameProcessors, key)
             element = render(element.ele(tag), entry).up()
       else
         for own key, child of obj
-          tag = if @options.propNameProcessors then processItem(@options.propNameProcessors, key) else key
+          tag = processItem(@options.tagNameProcessors, key)
           # Case #1 Attribute
           if key is attrkey
             if typeof child is "object"
               # Inserts tag attributes
               for attr, value of child
+                attr = processItem(@options.attrNameProcessors, attr)
                 element = element.att(attr, value)
 
           # Case #2 Char data (CDATA, etc.)
