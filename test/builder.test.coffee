@@ -421,5 +421,5 @@ module.exports =
     assert.throws(
       () =>
         actual = builder.buildObject obj
-      { name: 'Error', message: 'Missing #name attribute when children'})
+      /Missing #name attribute when children/)
     test.finish()
