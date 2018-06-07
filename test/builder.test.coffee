@@ -281,3 +281,45 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test round-trip explicitChildren': (test) ->
+    xml = '<a id="0"><b id="1">Text B1</b><c id="2">Text C2</c><b id="3">Text B3</b></a>'
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <b id="3">Text B3</b>
+      <c id="2">Text C2</c>
+    </a>
+
+    """
+    opts = cdata: true, explicitChildren: true
+    parser_opts = explicitChildren: true
+    parser = new xml2js.Parser parser_opts
+    builder = new xml2js.Builder opts
+    parser.parseString xml, (err, data) ->
+      equ err, null
+      actual = builder.buildObject data
+      diffeq expected, actual
+      test.finish()
+
+  'test round-trip explicitChildren & preserveChildrenOrder': (test) ->
+    xml = '<a id="0"><b id="1">Text B1</b><c id="2">Text C2</c><b id="3">Text B3</b></a>'
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <c id="2">Text C2</c>
+      <b id="3">Text B3</b>
+    </a>
+
+    """
+    opts = cdata: true, explicitChildren: true, preserveChildrenOrder: true
+    parser_opts = explicitChildren: true, preserveChildrenOrder: true
+    parser = new xml2js.Parser parser_opts
+    builder = new xml2js.Builder opts
+    parser.parseString xml, (err, data) ->
+      equ err, null
+      actual = builder.buildObject data
+      diffeq expected, actual
+      test.finish()
