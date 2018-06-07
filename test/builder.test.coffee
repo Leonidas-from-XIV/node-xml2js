@@ -16,11 +16,11 @@ diffeq = (expected, actual) ->
   patch = diff.createPatch('test', expected.trim(), actual.trim(), 'expected', 'actual')
   throw patch unless patch is diffless
 
-# nameToUpperCase = (name) ->
-#  return name.toUpperCase()
+nameToUpperCase = (name) ->
+  return name.toUpperCase()
 
-# nameCutoff = (name) ->
-#  return name.substr(0, 4)
+nameCutoff = (name) ->
+  return name.substr(0, 4)
 
 module.exports =
   'test building basic XML structure': (test) ->
@@ -288,12 +288,61 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
-#  'test propNameProcessors': (test) ->
-#    expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO>bar</FOO>'
-#    opts = propNameProcessors: [nameToUpperCase]
-#    builder = new xml2js.Builder opts
-#    obj = {"foo":["bar"]}
-#    actual = builder.buildObject obj
-#    diffeq expected, actual
-#    test.finish()
+  'test single tagNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <FOO>
+        <BAR>1</BAR>
+        <BAR>2</BAR>
+      </FOO>
+
+    """
+    opts = tagNameProcessors: [nameToUpperCase]
+    builder = new xml2js.Builder opts
+    obj = {"foo":{"bar":[1,2]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test multiple tagNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <FOOB>
+        <BARB>1</BARB>
+        <BARB>2</BARB>
+      </FOOB>
+
+    """
+    opts = tagNameProcessors: [nameToUpperCase, nameCutoff]
+    builder = new xml2js.Builder opts
+    obj = {"foobar":{"barbaz":[1,2]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test single attrNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <foo BAR="1" BAZ="2">text</foo>
+
+    """
+    opts = attrNameProcessors: [nameToUpperCase]
+    builder = new xml2js.Builder opts
+    obj = {"foo":{"$": {"bar":1, "baz":2}, _: "text"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test multiple attrNameProcessors': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <foo BARR="1" BAZZ="2">text</foo>
+
+    """
+    opts = attrNameProcessors: [nameToUpperCase, nameCutoff]
+    builder = new xml2js.Builder opts
+    obj = {"foo":{"$": {"barrab":1, "bazzab":2}, _: "text"}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
 
