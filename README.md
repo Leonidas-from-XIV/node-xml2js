@@ -196,7 +196,7 @@ const builder = new Builder({
   valueProcessors: [nameToUpperCase],
   attrValueProcessors: [nameToUpperCase]
 });
-builder.buildObject(js);
+xml = builder.buildObject(js);
 ```
 
 Note that in most cases, you probably don't want to use the same
