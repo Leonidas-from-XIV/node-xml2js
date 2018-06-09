@@ -192,9 +192,7 @@ parseString(xml, {
 
 const builder = new Builder({
   tagNameProcessors: [nameToUpperCase],
-  attrNameProcessors: [nameToUpperCase],
-  valueProcessors: [nameToUpperCase],
-  attrValueProcessors: [nameToUpperCase]
+  attrNameProcessors: [nameToUpperCase]
 });
 xml = builder.buildObject(js);
 ```
