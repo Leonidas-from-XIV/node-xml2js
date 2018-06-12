@@ -169,6 +169,48 @@ var builder = new xml2js.Builder();
 var xml = builder.buildObject(obj);
 ```
 
+### Adding xmlns attributes
+
+You can generate XML that declares XML namespace prefix / URI pairs with xmlns attributes.
+
+Example declaring a default namespace on the root element:
+
+```javascript
+let obj = { 
+  Foo: {
+    $: {
+      "xmlns": "http://foo.com"
+    }   
+  }
+};  
+```
+Result of `buildObject(obj)`:
+```xml
+<Foo xmlns="http://foo.com"/>
+```
+Example declaring non-default namespaces on non-root elements:
+```javascript
+let obj = {
+  'foo:Foo': {
+    $: {
+      'xmlns:foo': 'http://foo.com'
+    },
+    'bar:Bar': {
+      $: {
+        'xmlns:bar': 'http://bar.com'
+      }
+    }
+  }
+}
+```
+Result of `buildObject(obj)`:
+```xml
+<foo:Foo xmlns:foo="http://foo.com">
+  <bar:Bar xmlns:bar="http://bar.com"/>
+</foo:Foo>
+```
+
+
 Processing attribute, tag names and values
 ------------------------------------------
 
