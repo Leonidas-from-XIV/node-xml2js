@@ -552,11 +552,11 @@ module.exports =
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAME'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWE')
 
-  'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
+  'test single valueProcessors': skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME VALUE')
 
-  'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
+  'test multiple valueProcessors': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME')
 
@@ -583,7 +583,7 @@ module.exports =
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'camelCaseAttr'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'lowerCaseAttr')
 
-  'test valueProcessor key param': skeleton(valueProcessors: [replaceValueByName], (r)->
+  'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'valueProcessTest')
   
