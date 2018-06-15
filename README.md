@@ -373,6 +373,10 @@ Options for the `Builder` class
 These options are specified by ``new Builder({optionName: value})``.
 Possible options are:
 
+  * `attrkey` (default: `$`): Prefix that is used to access the attributes.
+    Version 0.1 default was `@`.
+  * `charkey` (default: `_`): Prefix that is used to access the character
+    content. Version 0.1 default was `#`.
   * `rootName` (default `root` or the root key name): root element name to be used in case
      `explicitRoot` is `false` or to override the root element name.
   * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
