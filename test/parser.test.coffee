@@ -29,6 +29,9 @@ nameToUpperCase = (name) ->
 nameCutoff = (name) ->
   return name.substr(0, 4)
 
+replaceValueByName = (value, name) ->
+  return name
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -574,3 +577,13 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test attrValueProcessors key param': skeleton(attrValueProcessors: [replaceValueByName], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'camelCaseAttr'
+    equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'lowerCaseAttr')
+
+  'test valueProcessor key param': skeleton(valueProcessors: [replaceValueByName], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.valueProcessTest[0], 'valueProcessTest')
+  
