@@ -574,3 +574,48 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test sync parsing': (test) ->
+    x2js = new xml2js.Parser()
+    data = fs.readFileSync fileName, 'utf8'
+    r = x2js.parseStringSync data
+    assert.notEqual r, null
+    equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+    test.finish()
+    
+  'test sync with bad input': (test) ->
+    x2js = new xml2js.Parser()
+    data = fs.readFileSync fileName, 'utf8'
+    err = null
+    try
+      r = x2js.parseStringSync "< a moose bit my sister>";
+    catch _err
+      err = _err
+    assert.notEqual err, null
+    test.finish()
+
+  'test global sync parsing': (test) ->
+    data = fs.readFileSync fileName, 'utf8'
+    r = xml2js.parseStringSync data
+    assert.notEqual r, null
+    equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+    test.finish()
+
+  'test global sync parsing with options': (test) ->
+    data = fs.readFileSync fileName, 'utf8'
+    r = xml2js.parseStringSync data,
+      trim: true
+      normalize: true
+    console.log r
+    equ r.sample.whitespacetest[0]._, 'Line One Line Two'
+    test.finish()
+    
+  'test global sync with bad input': (test) ->
+    data = fs.readFileSync fileName, 'utf8'
+    err = null
+    try
+      r = xml2js.parseStringSync "< a moose bit my sister>";
+    catch _err
+      err = _err
+    assert.notEqual err, null
+    test.finish()

@@ -253,6 +253,20 @@ class exports.Parser extends events.EventEmitter
       else if @saxParser.ended
         throw err
 
+  parseStringSync: (str) =>
+    # SAX events block when given a string instead of a stream
+    result = undefined
+    err = undefined
+    cb = (_err, _result) ->
+      result = _result
+      err = _err
+
+    # parseString will implicitly call cb (thus setting closure result) before returning
+    @parseString str, cb
+    if err
+      throw err
+    result
+
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
   if b?
@@ -267,6 +281,12 @@ exports.parseString = (str, a, b) ->
     # and options should be empty - default
     options = {}
 
-  # the rest is super-easy
   parser = new exports.Parser options
   parser.parseString str, cb
+
+exports.parseStringSync = (str, a) ->
+  if typeof a == 'object'
+    options = a
+
+  parser = new exports.Parser options
+  parser.parseStringSync str
