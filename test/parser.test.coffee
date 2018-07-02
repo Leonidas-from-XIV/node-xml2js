@@ -574,3 +574,32 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test source map with defaults': (test) ->
+    xml = "<a>\n  <b>hello</b>\n  <c><d/></c>\n</a>"
+    xml2js.parseString xml, {sourcemap: true}, (err, parsed) ->
+      # sourcemap doesn't appear, but can be accessed anyway
+      equ JSON.stringify(parsed).indexOf("$source") < 0, true
+      equ parsed.a.$source.start.line, 0
+      equ parsed.a.$source.end.line, 3
+      equ parsed.a.b[0].$source.start.line, 1
+      equ parsed.a.b[0].$source.end.line, 1
+      equ parsed.a.c[0].$source.start.line, 2
+      equ parsed.a.c[0].$source.end.line, 2
+      equ parsed.a.c[0].d[0].$source.start.line, 2
+      test.finish()
+
+  'test source map with sourcemapEnumerable': (test) ->
+    xml = "<a>\n  <b>hello</b>\n  <c><d/></c>\n</a>"
+    xml2js.parseString xml, {sourcemap: true, sourcemapEnumerable: true}, (err, parsed) ->
+      # sourcemap is public
+      equ JSON.stringify(parsed).indexOf("$source") > 0, true
+      equ parsed.a.$source.start.line, 0
+      equ parsed.a.$source.end.line, 3
+      equ parsed.a.b[0].$source.start.line, 1
+      equ parsed.a.b[0].$source.end.line, 1
+      equ parsed.a.c[0].$source.start.line, 2
+      equ parsed.a.c[0].$source.end.line, 2
+      equ parsed.a.c[0].d[0].$source.start.line, 2
+      test.finish()
+

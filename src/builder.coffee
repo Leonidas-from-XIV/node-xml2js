@@ -3,6 +3,8 @@
 builder = require 'xmlbuilder'
 defaults = require('./defaults').defaults
 
+CHILDREN_KEY = '$$children_da914993d9904559be754444a4685d08$$'
+
 requiresCDATA = (entry) ->
   return typeof entry is "string" && (entry.indexOf('&') >= 0 || entry.indexOf('>') >= 0 || entry.indexOf('<') >= 0)
 
@@ -48,11 +50,6 @@ class exports.Builder
           element.raw wrapCDATA obj
         else
           element.txt obj
-      else if Array.isArray obj
-        # fix issue #119
-        for own index, child of obj
-          for key, entry of child
-            element = render(element.ele(key), entry).up()
       else
         for own key, child of obj
           # Case #1 Attribute
@@ -61,37 +58,18 @@ class exports.Builder
               # Inserts tag attributes
               for attr, value of child
                 element = element.att(attr, value)
-
           # Case #2 Char data (CDATA, etc.)
           else if key is charkey
             if @options.cdata && requiresCDATA child
               element = element.raw wrapCDATA child
             else
               element = element.txt child
-
-          # Case #3 Array data
-          else if Array.isArray child
-            for own index, entry of child
-              if typeof entry is 'string'
-                if @options.cdata && requiresCDATA entry
-                  element = element.ele(key).raw(wrapCDATA entry).up()
-                else
-                  element = element.ele(key, entry).up()
-              else
-                element = render(element.ele(key), entry).up()
-
-          # Case #4 Objects
-          else if typeof child is "object"
-            element = render(element.ele(key), child).up()
-
-          # Case #5 String and remaining types
+          # Case #3 Preprocessed node
+          else if key is CHILDREN_KEY
+            for childObj in child
+              element = render(element.ele(childObj.name), childObj.node).up()
           else
-            if typeof child is 'string' && @options.cdata && requiresCDATA child
-              element = element.ele(key).raw(wrapCDATA child).up()
-            else
-              if not child?
-                child = ''
-              element = element.ele(key, child.toString()).up()
+            throw new Error 'Invalid object given to xml2js builder'
 
       element
 
@@ -99,4 +77,55 @@ class exports.Builder
       headless: @options.headless
       allowSurrogateChars: @options.allowSurrogateChars)
 
+    # fix issue #119
+    if Array.isArray rootObj
+      rootArray = rootObj
+      rootObj = {}
+      for obj in rootArray
+        for key, entry of obj
+          if rootObj[key]
+            rootObj[key].push entry
+          else
+            rootObj[key] = [entry]
+
+    rootObj = @preprocess rootObj
     render(rootElement, rootObj).end(@options.renderOpts)
+
+  preprocess: (obj) =>
+    if typeof obj != 'object'
+      return obj || ''
+    if Array.isArray obj
+      return obj.map @preprocess
+    ret = {}
+    children = []
+    sourcePosition = 0
+    for own key, value of obj
+      if key is @options.attrkey or key is @options.charkey
+        ret[key] = value
+      else if key is @options.sourcemapkey
+        continue # do not export metadata to the final XML
+      else
+        if Array.isArray value
+          for child in value
+            sourcePosition = (child?.$source?.start?.position) || (sourcePosition + 1)
+            children.push
+              name: key
+              sourcePosition: sourcePosition
+              node: @preprocess child
+        else if typeof value == 'object'
+          sourcePosition = (value?.$source?.start?.position) || (sourcePosition + 1)
+          children.push
+            name: key
+            sourcePosition: sourcePosition
+            node: @preprocess value
+        else
+          sourcePosition = sourcePosition + 1
+          children.push
+            name: key
+            sourcePosition: sourcePosition
+            node: value || ''
+
+    if children.length > 0
+      children.sort (a, b) -> a.sourcePosition - b.sourcePosition
+      ret[CHILDREN_KEY] = children
+    ret

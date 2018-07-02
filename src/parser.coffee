@@ -61,6 +61,35 @@ class exports.Parser extends events.EventEmitter
       obj[key] = [obj[key]] if not (obj[key] instanceof Array)
       obj[key].push newValue
 
+  storeSourcemapStart: (obj, value) =>
+    if @options.sourcemap
+      Object.defineProperty obj, @options.sourcemapkey,
+        value:
+          start:
+            line: value.line
+            column: value.column
+            position: value.position
+        enumerable: true
+        configurable: true
+
+  storeSourcemapEnd: (obj, value) =>
+    if @options.sourcemap
+      currentValue = obj[@options.sourcemapkey]
+      Object.defineProperty obj, @options.sourcemapkey,
+        value:
+          start: currentValue.start
+          end:
+            line: value.line
+            column: value.column
+            position: value.position
+
+  setNonEnumerableSourcemap: (obj) =>
+    if obj instanceof Object
+      if @options.sourcemapkey of obj
+        Object.defineProperty obj, @options.sourcemapkey, enumerable: false
+      for own key of obj
+        @setNonEnumerableSourcemap obj[key]
+
   reset: =>
     # remove all previous listeners for events, to prevent event listener
     # accumulation
@@ -104,6 +133,8 @@ class exports.Parser extends events.EventEmitter
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
+      @storeSourcemapStart obj, @saxParser
+
       unless @options.ignoreAttrs
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
@@ -125,6 +156,7 @@ class exports.Parser extends events.EventEmitter
       obj = stack.pop()
       nodeName = obj["#name"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
+      @storeSourcemapEnd obj, @saxParser
 
       if obj.cdata == true
         cdata = obj.cdata
@@ -199,6 +231,8 @@ class exports.Parser extends events.EventEmitter
           obj[nodeName] = old
 
         @resultObject = obj
+        if @options.sourcemap and not @options.sourcemapEnumerable
+          @setNonEnumerableSourcemap @resultObject
         # parsing has ended, mark that so we won't throw exceptions from
         # here anymore
         @saxParser.ended = true
