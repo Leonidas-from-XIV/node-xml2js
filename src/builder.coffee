@@ -27,9 +27,57 @@ class exports.Builder
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
 
+  buildObjectExplicit: (rootObj) ->
+    attrkey = @options.attrkey
+    charkey = @options.charkey
+    childkey = @options.childkey
+    commentkey = @options.commentkey
+
+    # If there is a sane-looking first element to use as the root,
+    # and the user hasn't specified a non-default rootName,
+    if ( Object.keys(rootObj).length is 1 ) and ( @options.rootName == defaults['0.2'].rootName )
+      # we'll take the first element as the root element
+      rootName = Object.keys(rootObj)[0]
+      rootObj = rootObj[rootName]
+    else
+      # otherwise we'll use whatever they've set, or the default
+      rootName = @options.rootName
+      if Object.keys(rootObj).length
+        alternateRootObj = {
+          "#name": rootName,
+          "#{childkey}": if Array.isArray(rootObj) then rootObj else [rootObj]
+        }
+
+    render = (element, obj) =>
+      element.att(attr, value) for attr, value of obj[attrkey] if obj[attrkey]
+
+      return unless obj[childkey]
+
+      for child in obj[childkey]
+        if child['#name'] == '__text__'
+          if @options.cdata and typeof child[charkey] is 'string' and requiresCDATA child[charkey]
+            element.raw wrapCDATA child[charkey]
+          else
+            element.txt child[charkey] if child[charkey]?
+          continue
+        else if child['#name'] == '__comment__'
+          element.com child[commentkey] if child[commentkey]?
+          continue
+
+        render(element.ele(child['#name']), child)
+      return
+
+    rootElement = builder.create(rootName, @options.xmldec, @options.doctype,
+      headless: @options.headless
+      allowSurrogateChars: @options.allowSurrogateChars)
+
+    render(rootElement, alternateRootObj or rootObj)
+    rootElement.end(@options.renderOpts)
+
   buildObject: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentkey = @options.commentkey
 
     # If there is a sane-looking first element to use as the root,
     # and the user hasn't specified a non-default rootName,

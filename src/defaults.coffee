@@ -42,12 +42,14 @@ exports.defaults = {
     normalizeTags: false
     attrkey: "$"
     charkey: "_"
+    commentkey: "#"
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
     explicitRoot: true
     validator: null
     xmlns : false
+    parseComments: false
     explicitChildren: false
     preserveChildrenOrder: false
     childkey: '$$'

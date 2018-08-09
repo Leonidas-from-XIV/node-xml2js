@@ -137,7 +137,7 @@ module.exports =
     fileName = path.join __dirname, '/fixtures/build_sample.xml'
     fs.readFile fileName, (err, xmlData) ->
       xmlExpected = xmlData.toString()
-      xml2js.parseString xmlData, {'trim': true}, (err, obj) ->
+      xml2js.parseString xmlData, {'trim': true, 'parseComments': true}, (err, obj) ->
         equ err, null
         builder = new xml2js.Builder({})
         xmlActual = builder.buildObject obj

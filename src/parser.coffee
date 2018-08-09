@@ -100,6 +100,8 @@ class exports.Parser extends events.EventEmitter
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentkey = @options.commentkey
+    parseComments = @options.parseComments
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -203,6 +205,18 @@ class exports.Parser extends events.EventEmitter
         # here anymore
         @saxParser.ended = true
         @emit "end", @resultObject
+
+    if parseComments
+      @saxParser.oncomment = (text) =>
+        s = stack[stack.length - 1]
+        if s
+          s[@options.childkey] = s[@options.childkey] or []
+          commentChild = 
+            '#name': '__comment__'
+          commentChild[commentkey] = text
+          s[@options.childkey].push commentChild
+          
+          s
 
     ontext = (text) =>
       s = stack[stack.length - 1]

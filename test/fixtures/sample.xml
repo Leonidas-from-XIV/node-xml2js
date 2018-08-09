@@ -4,11 +4,14 @@
     <cdatawhitespacetest desc="Test for CDATA with whitespace" misc="true"><![CDATA[   ]]></cdatawhitespacetest>
     <nochartest desc="No data" misc="false" />
     <nochildrentest desc="No data" misc="false" />
+    <!-- This is a sample Comment! -->
     <whitespacetest desc="Test for normalizing and trimming">
         Line One
         Line Two
     </whitespacetest>
+    <!-- This is a sample Comment Two! -->
     <listtest attr="Attribute">
+        <!-- listtest comment text right before "item" -->
         <item>
             This <subitem>Foo(1)</subitem> is
             <subitem>Foo(2)</subitem>

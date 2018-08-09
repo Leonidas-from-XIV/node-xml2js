@@ -3,7 +3,9 @@
   <chartest desc="Test for CHARs">Character data here!</chartest>
   <nochartest desc="No data" misc="false"/>
   <nochildrentest desc="No data" misc="false"/>
+  <!-- This is a sample Comment! -->
   <listtest>
+    <!-- listtest comment text right before "item" -->
     <item>
       This is
       character
@@ -16,6 +18,7 @@
     <item>Qux.</item>
     <item>Quux.</item>
   </listtest>
+  <!-- This is a sample Comment Two! -->
   <arraytest>
     <item>
       <subitem>Baz.</subitem>
