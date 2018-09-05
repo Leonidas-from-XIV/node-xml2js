@@ -5,6 +5,28 @@ Ever had the urge to parse XML? And wanted to access the data in some sane,
 easy way? Don't want to compile a C parser, for whatever reason? Then xml2js is
 what you're looking for!
 
+Table of Contents
+=================
+
+- [node-xml2js](#node-xml2js)
+- [Table of Contents](#table-of-contents)
+- [Description](#description)
+- [Installation](#installation)
+- [Usage](#usage)
+  * [Shoot-and-forget usage](#shoot-and-forget-usage)
+  * [Simple as pie usage](#simple-as-pie-usage)
+  * [Parsing multiple files](#parsing-multiple-files)
+  * [So you wanna some JSON?](#so-you-wanna-some-json)
+  * [Displaying results](#displaying-results)
+  * [XML builder usage](#xml-builder-usage)
+    * [Adding xmlns attributes](#adding-xmlns-attributes)
+  * [Processing attribute, tag names and values](#processing-attribute-tag-names-and-values)
+- [Options](#options)
+  * [Options for the `Builder` class](#options-for-the-builder-class)
+- [Updating to new version](#updating-to-new-version)
+- [Running tests, development](#running-tests-development)
+- [Getting support](#getting-support)
+
 Description
 ===========
 
@@ -44,6 +66,10 @@ parseString(xml, function (err, result) {
 });
 ```
 
+```js
+{ root: 'Hello xml2js!' }
+```
+
 Can't get easier than this, right? This works starting with `xml2js` 0.2.3.
 With CoffeeScript it looks like this:
 
@@ -79,6 +105,11 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
         console.log('Done');
     });
 });
+```
+
+```js
+{ root: 'Hello xml2js!' }
+Done
 ```
 
 Look ma, no event listeners!
@@ -176,16 +207,17 @@ You can generate XML that declares XML namespace prefix / URI pairs with xmlns a
 Example declaring a default namespace on the root element:
 
 ```javascript
-let obj = { 
+let obj = {
   Foo: {
     $: {
       "xmlns": "http://foo.com"
-    }   
+    }
   }
-};  
+};
 ```
 Result of `buildObject(obj)`:
 ```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Foo xmlns="http://foo.com"/>
 ```
 Example declaring non-default namespaces on non-root elements:
@@ -205,11 +237,11 @@ let obj = {
 ```
 Result of `buildObject(obj)`:
 ```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <foo:Foo xmlns:foo="http://foo.com">
   <bar:Bar xmlns:bar="http://bar.com"/>
 </foo:Foo>
 ```
-
 
 Processing attribute, tag names and values
 ------------------------------------------
