@@ -65,7 +65,8 @@
   "scripts": {
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "doc": "NODE_DEBUG=doc doc documentary -o README.md"
   },
   "repository": {
     "type": "git",
@@ -80,6 +81,7 @@
     "coveralls": "^3.0.1",
     "diff": ">=1.0.8",
     "docco": ">=0.6.2",
+    "documentary": ">=1.14.0",
     "nyc": ">=2.2.1",
     "zap": ">=0.2.9"
   },
