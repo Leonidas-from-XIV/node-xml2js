@@ -83,6 +83,8 @@ fs.readFile(__dirname + '/foo.xml', function(err, data) {
 
 Look ma, no event listeners!
 
+Tip: add options to constructor `var parser = new xml2js.Parser({ trim: true });`
+
 You can also use `xml2js` from
 [CoffeeScript](https://github.com/jashkenas/coffeescript), further reducing
 the clutter:
