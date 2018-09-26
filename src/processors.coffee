@@ -14,7 +14,10 @@ exports.stripPrefix = (str) ->
 
 exports.parseNumbers = (str) ->
   if !isNaN str
+    originalStr = str
     str = if str % 1 == 0 then parseInt str, 10 else parseFloat str
+    if str == Infinity
+      return originalStr
   return str
 
 exports.parseBooleans = (str) ->
