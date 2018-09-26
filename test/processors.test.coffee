@@ -38,6 +38,8 @@ module.exports =
     equ processors.parseNumbers('123'), 123
     equ processors.parseNumbers('15.56'), 15.56
     equ processors.parseNumbers('10.00'), 10
+    equ processors.parseNumbers('476677170e9305605797914192894822'), '476677170e9305605797914192894822'
+    assert.notStrictEqual processors.parseNumbers('476677170e9305605797914192894822'), Infinity
     test.done()
 
   'test parseBooleans': (test) ->
@@ -52,7 +54,7 @@ module.exports =
     equ processors.parseBooleans('x'), 'x'
     equ processors.parseBooleans(''), ''
     test.done()
-    
+
   'test a processor that filters by node name': (test) ->
     xml = '<account><accountNumber>0012345</accountNumber><balance>123.45</balance></account>'
     options = { valueProcessors: [parseNumbersExceptAccount] }
@@ -60,7 +62,7 @@ module.exports =
       equ parsed.account.accountNumber, '0012345'
       equ parsed.account.balance, 123.45
       test.finish()
-      
+
   'test a processor that filters by attr name': (test) ->
     xml = '<account accountNumber="0012345" balance="123.45" />'
     options = { attrValueProcessors: [parseNumbersExceptAccount] }
