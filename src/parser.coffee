@@ -16,7 +16,7 @@ processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
   return item
 
-class exports.Parser extends events.EventEmitter
+class exports.Parser extends events
   constructor: (opts) ->
     # if this was called without 'new', create an instance with new and return
     return new exports.Parser opts unless @ instanceof exports.Parser
