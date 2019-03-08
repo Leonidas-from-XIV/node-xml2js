@@ -282,6 +282,8 @@ value})``. Possible options are:
     Version 0.1 default was `@`.
   * `charkey` (default: `_`): Prefix that is used to access the character
     content. Version 0.1 default was `#`.
+  * `commentskey` (default: `$comments`): Prefix that is used to access the comments.
+  * `parseComments` (default: `false`): Determines whether comments should be parsed.
   * `explicitCharkey` (default: `false`)
   * `trim` (default: `false`): Trim the whitespace at the beginning and end of
     text nodes.
@@ -377,6 +379,7 @@ Possible options are:
     Version 0.1 default was `@`.
   * `charkey` (default: `_`): Prefix that is used to access the character
     content. Version 0.1 default was `#`.
+  * `commentskey` (default: `$comments`): Prefix that is used to access the comments.
   * `rootName` (default `root` or the root key name): root element name to be used in case
      `explicitRoot` is `false` or to override the root element name.
   * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):

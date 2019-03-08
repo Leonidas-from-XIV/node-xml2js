@@ -3,7 +3,9 @@
   <chartest desc="Test for CHARs">Character data here!</chartest>
   <nochartest desc="No data" misc="false"/>
   <nochildrentest desc="No data" misc="false"/>
+  <!-- This is the first sample comment! -->
   <listtest>
+    <!-- This is the second sample comment! -->
     <item>
       This is
       character

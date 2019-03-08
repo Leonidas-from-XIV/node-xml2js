@@ -42,6 +42,8 @@ exports.defaults = {
     normalizeTags: false
     attrkey: "$"
     charkey: "_"
+    commentskey: "$comments"
+    parseComments: false
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
