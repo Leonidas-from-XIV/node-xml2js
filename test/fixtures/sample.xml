@@ -55,4 +55,7 @@
     <tagNameProcessTest/>
     <valueProcessTest>some value</valueProcessTest>
     <textordertest>this is text with <b>markup</b>   <em>like this</em> in the middle</textordertest>
+    <emptytestanother>
+
+    </emptytestanother>
 </sample>
