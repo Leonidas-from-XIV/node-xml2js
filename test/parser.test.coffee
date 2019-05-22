@@ -72,7 +72,7 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.tagcasetest[0]).length, 3)
 
-  'test parse with empty objects and functions': skeleton({emptyTag: ()=> new Object()}, (r)->
+  'test parse with empty objects and functions': skeleton({emptyTag: ()=> ({})}, (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     bool = r.sample.emptytestanother[0] is r.sample.emptytest[0]
     equ bool, false)
