@@ -299,7 +299,8 @@ value})``. Possible options are:
     attribute object. This option is ignored if `ignoreAttrs` is `true`.
   * `mergeAttrsArray` (default: `true`): Ignored if `mergeAttrs` is `false`.
     While merging attributes as properties of the parent (`mergeAttrs` is `true`),
-    the value for an attribute is the raw value rather than an array.
+    when `mergeAttrsArray` is `false`, the value for an attribute is the raw value
+    rather than an array.
   * `validator` (default `null`): You can specify a callable that validates
     the resulting structure somehow, however you want. See unit tests
     for an example.
