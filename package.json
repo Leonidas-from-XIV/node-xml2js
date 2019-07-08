@@ -53,7 +53,8 @@
     "David Wood <david.p.wood@gmail.com> (http://codesleuth.co.uk/)",
     "Nicolas Maquet (https://github.com/nmaquet)",
     "Lovell Fuller (http://lovell.info/)",
-    "d3adc0d3 (https://github.com/d3adc0d3)"
+    "d3adc0d3 (https://github.com/d3adc0d3)",
+    "IRCraziestTaxi (https://github.com/IRCraziestTaxi)"
   ],
   "main": "./lib/xml2js",
   "files": [
