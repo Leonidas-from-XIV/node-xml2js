@@ -341,7 +341,7 @@ value})``. Possible options are:
     value processing functions. Accepts an `Array` of functions with following
     signature:
     ```javascript
-    function (name){
+    function (value, name){
       //do something with `name`
       return name
     }
@@ -361,7 +361,7 @@ value})``. Possible options are:
     processing functions. Accepts an `Array` of functions with following
     signature:
     ```javascript
-    function (name){
+    function (value, name){
       //do something with `name`
       return name
     }
