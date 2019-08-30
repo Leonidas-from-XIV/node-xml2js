@@ -104,6 +104,33 @@ not, we got you covered! Starting with 0.2.8 you can also leave it out, in
 which case `xml2js` will helpfully add it for you, no bad surprises and
 inexplicable bugs!
 
+Promise usage
+-------------
+
+```javascript
+var xml2js = require('xml2js');
+var xml = '<foo></foo>';
+
+// With parser
+var parser = new xml2js.Parser(/* options */);
+parser.parseStringPromise(data).then(function (result) {
+  console.dir(result);
+  console.log('Done');
+})
+.catch(function (err) {
+  // Failed
+});
+
+// Without parser
+xml2js.parseStringPromise(data /*, options */).then(function (result) {
+  console.dir(result);
+  console.log('Done');
+})
+.catch(function (err) {
+  // Failed
+});
+```
+
 Parsing multiple files
 ----------------------
 
@@ -341,7 +368,7 @@ value})``. Possible options are:
     value processing functions. Accepts an `Array` of functions with following
     signature:
     ```javascript
-    function (name){
+    function (value, name){
       //do something with `name`
       return name
     }
@@ -361,7 +388,7 @@ value})``. Possible options are:
     processing functions. Accepts an `Array` of functions with following
     signature:
     ```javascript
-    function (name){
+    function (value, name){
       //do something with `name`
       return name
     }

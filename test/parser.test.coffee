@@ -5,8 +5,11 @@ util = require 'util'
 assert = require 'assert'
 path = require 'path'
 os = require 'os'
+util = require 'util'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
+
+readFilePromise = util.promisify fs.readFile
 
 skeleton = (options, checks) ->
   (test) ->
@@ -28,6 +31,9 @@ nameToUpperCase = (name) ->
 
 nameCutoff = (name) ->
   return name.substr(0, 4)
+
+replaceValueByName = (value, name) ->
+  return name
 
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
@@ -549,11 +555,11 @@ module.exports =
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAME'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWE')
 
-  'test single valueProcessor': skeleton(valueProcessors: [nameToUpperCase], (r)->
+  'test single valueProcessors': skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME VALUE')
 
-  'test multiple valueProcessor': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
+  'test multiple valueProcessors': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME')
 
@@ -574,3 +580,60 @@ module.exports =
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
+
+  'test attrValueProcessors key param': skeleton(attrValueProcessors: [replaceValueByName], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'camelCaseAttr'
+    equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'lowerCaseAttr')
+
+  'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.valueProcessTest[0], 'valueProcessTest')
+  
+  'test parseStringPromise parsing': (test) ->
+    x2js = new xml2js.Parser()
+    readFilePromise(fileName).then (data) ->
+      x2js.parseStringPromise data
+    .then (r) ->
+      # just a single test to check whether we parsed anything
+      equ r.sample.chartest[0]._, 'Character data here!'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+    
+  'test parseStringPromise with bad input': (test) ->
+    x2js = new xml2js.Parser()
+    x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
+      test.fail('Should fail')
+    .catch (err) ->
+      assert.notEqual err, null
+      test.finish()
+
+  'test global parseStringPromise parsing': (test) ->
+    readFilePromise(fileName).then (data) ->
+      xml2js.parseStringPromise data
+    .then (r) ->
+      assert.notEqual r, null
+      equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+
+  'test global parseStringPromise with options': (test) ->
+    readFilePromise(fileName).then (data) ->
+      xml2js.parseStringPromise data,
+        trim: true
+        normalize: true
+    .then (r) ->
+      assert.notEqual r, null
+      equ r.sample.whitespacetest[0]._, 'Line One Line Two'
+      test.finish()
+    .catch (err) ->
+      test.fail('Should not error')
+    
+  'test global parseStringPromise with bad input': (test) ->
+    xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
+      test.fail('Should fail')
+    .catch (err) ->
+      assert.notEqual err, null
+      test.finish()

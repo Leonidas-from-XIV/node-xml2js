@@ -2,6 +2,7 @@
 
 sax = require 'sax'
 events = require 'events'
+util = require 'util'
 bom = require './bom'
 processors = require './processors'
 setImmediate = require('timers').setImmediate
@@ -15,7 +16,7 @@ processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
   return item
 
-class exports.Parser extends events.EventEmitter
+class exports.Parser extends events
   constructor: (opts) ->
     # if this was called without 'new', create an instance with new and return
     return new exports.Parser opts unless @ instanceof exports.Parser
@@ -253,6 +254,9 @@ class exports.Parser extends events.EventEmitter
       else if @saxParser.ended
         throw err
 
+  parseStringPromise: (str) =>
+    util.promisify(@parseString) str
+
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
   if b?
@@ -270,3 +274,10 @@ exports.parseString = (str, a, b) ->
   # the rest is super-easy
   parser = new exports.Parser options
   parser.parseString str, cb
+
+exports.parseStringPromise = (str, a) ->
+  if typeof a == 'object'
+    options = a
+
+  parser = new exports.Parser options
+  parser.parseStringPromise str
