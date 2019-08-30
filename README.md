@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/xml2js.svg)](https://npmjs.com/package/xml2js) [![Dependencies](https://img.shields.io/david/tj/xml2js.svg)](https://david-dm.org/tj/xml2js) ![Downloads](https://img.shields.io/npm/dm/xml2js.svg) [![code-style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://gitter.im/jlongster/prettier) [![travis](https://travis-ci.org/tj/xml2js.svg?branch=master)](https://travis-ci.org/tj/xml2js)
+
 node-xml2js
 ===========
 
