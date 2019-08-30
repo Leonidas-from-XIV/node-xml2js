@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/xml2js.svg)](https://npmjs.com/package/xml2js) ![Downloads](https://img.shields.io/npm/dm/xml2js.svg) [![travis](https://travis-ci.org/Leonidas-from-XIV/node-xml2js.svg)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
+[![npm](https://img.shields.io/npm/v/xml2js.svg)](https://npmjs.com/package/xml2js) [![Downloads](https://www.npmjs.com/package/xml2js)(https://img.shields.io/npm/dm/xml2js.svg)] [![travis](https://travis-ci.org/Leonidas-from-XIV/node-xml2js.svg)](https://travis-ci.org/Leonidas-from-XIV/node-xml2js)
 
 node-xml2js
 ===========
