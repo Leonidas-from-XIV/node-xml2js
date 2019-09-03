@@ -5,11 +5,11 @@ util = require 'util'
 assert = require 'assert'
 path = require 'path'
 os = require 'os'
-util = require 'util'
+promisify = require 'util.promisify'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
 
-readFilePromise = util.promisify fs.readFile
+readFilePromise = promisify fs.readFile
 
 skeleton = (options, checks) ->
   (test) ->
