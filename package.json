@@ -6,7 +6,7 @@
     "json"
   ],
   "homepage": "https://github.com/Leonidas-from-XIV/node-xml2js",
-  "version": "0.4.22",
+  "version": "0.4.23",
   "author": "Marek Kubica <marek@xivilization.net> (https://xivilization.net)",
   "contributors": [
     "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
@@ -75,8 +75,7 @@
   },
   "dependencies": {
     "sax": ">=0.6.0",
-    "xmlbuilder": "~11.0.0",
-    "util.promisify": "~1.0.0"
+    "xmlbuilder": "~11.0.0"
   },
   "devDependencies": {
     "coffee-script": ">=1.10.0",

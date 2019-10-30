@@ -6,7 +6,7 @@ bom = require './bom'
 processors = require './processors'
 setImmediate = require('timers').setImmediate
 defaults = require('./defaults').defaults
-promisify = require 'util.promisify'
+promisify = require('util').promisify || require 'util.promisify'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->

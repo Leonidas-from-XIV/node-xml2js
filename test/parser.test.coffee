@@ -5,7 +5,7 @@ util = require 'util'
 assert = require 'assert'
 path = require 'path'
 os = require 'os'
-promisify = require 'util.promisify'
+promisify = require('util').promisify || require 'util.promisify'
 
 fileName = path.join __dirname, '/fixtures/sample.xml'
 
@@ -589,7 +589,7 @@ module.exports =
   'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'valueProcessTest')
-  
+
   'test parseStringPromise parsing': (test) ->
     x2js = new xml2js.Parser()
     readFilePromise(fileName).then (data) ->
@@ -600,7 +600,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test parseStringPromise with bad input': (test) ->
     x2js = new xml2js.Parser()
     x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
@@ -630,7 +630,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test global parseStringPromise with bad input': (test) ->
     xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
       test.fail('Should fail')
