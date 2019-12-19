@@ -6,7 +6,6 @@ bom = require './bom'
 processors = require './processors'
 setImmediate = require('timers').setImmediate
 defaults = require('./defaults').defaults
-promisify = require 'util.promisify'
 
 # Underscore has a nice function for this, but we try to go without dependencies
 isEmpty = (thing) ->
@@ -255,7 +254,12 @@ class exports.Parser extends events
         throw err
 
   parseStringPromise: (str) =>
-    promisify(@parseString) str
+    new Promise (resolve, reject) =>
+      @parseString str, (err, value) =>
+        if err
+          reject err
+        else
+          resolve value
 
 exports.parseString = (str, a, b) ->
   # let's determine what we got as arguments
