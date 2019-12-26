@@ -100,6 +100,7 @@ class exports.Parser extends events
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
+    commentskey = @options.commentskey
 
     @saxParser.onopentag = (node) =>
       obj = {}
@@ -224,6 +225,14 @@ class exports.Parser extends events
       s = ontext text
       if s
         s.cdata = true
+
+    if @options.parseComments
+      @saxParser.oncomment = (text) =>
+        s = stack[stack.length - 1]
+        if s
+          s[commentskey] = s[commentskey] or []
+          s[commentskey].push text.slice(1,-1)
+          s
 
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"

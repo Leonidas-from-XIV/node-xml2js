@@ -83,6 +83,11 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.tagcasetest[0]).length, 3)
 
+  'test parse with parseComments': skeleton(parseComments: true, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.$comments[0], 'This is the first sample comment!'
+    equ r.sample.listtest[0].$comments[0], 'This is the second sample comment!')
+
   'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].$.desc, 'Test for CHARs'
@@ -201,32 +206,32 @@ module.exports =
 
   'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.$$[35]['#name'], 'textordertest'
-    equ r.sample.$$[35].$$[0]['#name'], '__text__'
-    equ r.sample.$$[35].$$[0]._, 'this is text with '
-    equ r.sample.$$[35].$$[1]['#name'], 'b'
-    equ r.sample.$$[35].$$[1]._, 'markup'
-    equ r.sample.$$[35].$$[2]['#name'], '__text__'
-    equ r.sample.$$[35].$$[2]._, '   '
-    equ r.sample.$$[35].$$[3]['#name'], 'em'
-    equ r.sample.$$[35].$$[3]._, 'like this'
-    equ r.sample.$$[35].$$[4]['#name'], '__text__'
-    equ r.sample.$$[35].$$[4]._, ' in the middle')
+    equ r.sample.$$[36]['#name'], 'textordertest'
+    equ r.sample.$$[36].$$[0]['#name'], '__text__'
+    equ r.sample.$$[36].$$[0]._, 'this is text with '
+    equ r.sample.$$[36].$$[1]['#name'], 'b'
+    equ r.sample.$$[36].$$[1]._, 'markup'
+    equ r.sample.$$[36].$$[2]['#name'], '__text__'
+    equ r.sample.$$[36].$$[2]._, '   '
+    equ r.sample.$$[36].$$[3]['#name'], 'em'
+    equ r.sample.$$[36].$$[3]._, 'like this'
+    equ r.sample.$$[36].$$[4]['#name'], '__text__'
+    equ r.sample.$$[36].$$[4]._, ' in the middle')
 
   'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars and normalize': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, normalize: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     # normalized whitespace-only text node becomes empty string
-    equ r.sample.$$[35]['#name'], 'textordertest'
-    equ r.sample.$$[35].$$[0]['#name'], '__text__'
-    equ r.sample.$$[35].$$[0]._, 'this is text with'
-    equ r.sample.$$[35].$$[1]['#name'], 'b'
-    equ r.sample.$$[35].$$[1]._, 'markup'
-    equ r.sample.$$[35].$$[2]['#name'], '__text__'
-    equ r.sample.$$[35].$$[2]._, ''
-    equ r.sample.$$[35].$$[3]['#name'], 'em'
-    equ r.sample.$$[35].$$[3]._, 'like this'
-    equ r.sample.$$[35].$$[4]['#name'], '__text__'
-    equ r.sample.$$[35].$$[4]._, 'in the middle')
+    equ r.sample.$$[36]['#name'], 'textordertest'
+    equ r.sample.$$[36].$$[0]['#name'], '__text__'
+    equ r.sample.$$[36].$$[0]._, 'this is text with'
+    equ r.sample.$$[36].$$[1]['#name'], 'b'
+    equ r.sample.$$[36].$$[1]._, 'markup'
+    equ r.sample.$$[36].$$[2]['#name'], '__text__'
+    equ r.sample.$$[36].$$[2]._, ''
+    equ r.sample.$$[36].$$[3]['#name'], 'em'
+    equ r.sample.$$[36].$$[3]._, 'like this'
+    equ r.sample.$$[36].$$[4]['#name'], '__text__'
+    equ r.sample.$$[36].$$[4]._, 'in the middle')
 
   'test element without children': skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
