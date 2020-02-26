@@ -28,6 +28,9 @@ class exports.Builder
     @options[key] = value for own key, value of opts
 
   buildObject: (rootObj) ->
+    @build(rootObj).end(@options.renderOpts)
+
+  build: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
 
@@ -99,4 +102,4 @@ class exports.Builder
       headless: @options.headless
       allowSurrogateChars: @options.allowSurrogateChars)
 
-    render(rootElement, rootObj).end(@options.renderOpts)
+    render(rootElement, rootObj)
