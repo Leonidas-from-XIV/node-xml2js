@@ -180,6 +180,16 @@ var obj = {name: "Super", Surname: "Man", age: 23};
 var builder = new xml2js.Builder();
 var xml = builder.buildObject(obj);
 ```
+will result in:
+
+```
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+  <name>Super</name>
+  <Surname>Man</Surname>
+  <age>23</age>
+</root>
+```
 
 At the moment, a one to one bi-directional conversion is guaranteed only for
 default configuration, except for `attrkey`, `charkey` and `explicitArray` options
@@ -194,6 +204,11 @@ var obj = {root: {$: {id: "my id"}, _: "my inner text"}};
 
 var builder = new xml2js.Builder();
 var xml = builder.buildObject(obj);
+```
+will result in:
+```
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root id="my id">my inner text</root>
 ```
 
 ### Adding xmlns attributes
