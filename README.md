@@ -182,7 +182,7 @@ var xml = builder.buildObject(obj);
 ```
 will result in:
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root>
   <name>Super</name>
@@ -206,7 +206,7 @@ var builder = new xml2js.Builder();
 var xml = builder.buildObject(obj);
 ```
 will result in:
-```
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root id="my id">my inner text</root>
 ```
