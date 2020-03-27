@@ -145,7 +145,10 @@ class exports.Parser extends events
           obj = obj[charkey]
 
       if (isEmpty obj)
-        obj = if @options.emptyTag != '' then @options.emptyTag else emptyStr
+        if typeof @options.emptyTag == 'function'
+          obj = @options.emptyTag()
+        else
+          obj = if @options.emptyTag != '' then @options.emptyTag else emptyStr
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
