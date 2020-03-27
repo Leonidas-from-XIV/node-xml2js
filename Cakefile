@@ -1,7 +1,8 @@
 {spawn, exec} = require 'child_process'
 
 task 'build', 'continually build the JavaScript code', ->
-  coffee = spawn 'coffee', ['-cw', '-o', 'lib', 'src']
+  coffeeScript = if process.platform == 'win32' then 'coffee.cmd' else 'coffee'
+  coffee = spawn coffeeScript, ['-cw', '-o', 'lib', 'src']
   coffee.stdout.on 'data', (data) -> console.log data.toString().trim()
 
 task 'doc', 'rebuild the Docco documentation', ->
