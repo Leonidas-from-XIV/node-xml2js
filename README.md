@@ -113,7 +113,7 @@ var xml = '<foo></foo>';
 
 // With parser
 var parser = new xml2js.Parser(/* options */);
-parser.parseStringPromise(data).then(function (result) {
+parser.parseStringPromise(xml).then(function (result) {
   console.dir(result);
   console.log('Done');
 })
@@ -122,7 +122,7 @@ parser.parseStringPromise(data).then(function (result) {
 });
 
 // Without parser
-xml2js.parseStringPromise(data /*, options */).then(function (result) {
+xml2js.parseStringPromise(xml /*, options */).then(function (result) {
   console.dir(result);
   console.log('Done');
 })
