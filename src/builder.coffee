@@ -28,6 +28,7 @@ class exports.Builder
     @options[key] = value for own key, value of opts
 
   buildObject: (rootObj) ->
+    attrpattern = @options.attrpattern
     attrkey = @options.attrkey
     charkey = @options.charkey
 
@@ -62,14 +63,22 @@ class exports.Builder
               for attr, value of child
                 element = element.att(attr, value)
 
-          # Case #2 Char data (CDATA, etc.)
+          # Case #2 Attribute pattern
+          # else if typeof attrpattern is "string" && key.match(attrpattern)
+          else if key.match(attrpattern)
+            # if typeof child is "object"
+              # Inserts tag attributes
+              # for attr, value of child
+              element = element.att(key.replace(attrpattern, '$1'), child)
+
+          # Case #3 Char data (CDATA, etc.)
           else if key is charkey
             if @options.cdata && requiresCDATA child
               element = element.raw wrapCDATA child
             else
               element = element.txt child
 
-          # Case #3 Array data
+          # Case #4 Array data
           else if Array.isArray child
             for own index, entry of child
               if typeof entry is 'string'
@@ -80,11 +89,11 @@ class exports.Builder
               else
                 element = render(element.ele(key), entry).up()
 
-          # Case #4 Objects
+          # Case #5 Objects
           else if typeof child is "object"
             element = render(element.ele(key), child).up()
 
-          # Case #5 String and remaining types
+          # Case #6 String and remaining types
           else
             if typeof child is 'string' && @options.cdata && requiresCDATA child
               element = element.ele(key).raw(wrapCDATA child).up()
