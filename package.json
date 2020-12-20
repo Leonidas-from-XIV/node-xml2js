@@ -9,6 +9,7 @@
   "version": "0.4.23",
   "author": "Marek Kubica <marek@xivilization.net> (https://xivilization.net)",
   "contributors": [
+    "brian.runyon <brian.runyon@gmail.com> (https://github.com/bigbri64)",
     "maqr <maqr.lollerskates@gmail.com> (https://github.com/maqr)",
     "Ben Weaver (http://benweaver.com/)",
     "Jae Kwon (https://github.com/jaekwon)",
@@ -64,6 +65,7 @@
   },
   "scripts": {
     "build": "cake build",
+    "build:watch": "cake build:watch",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",

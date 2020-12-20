@@ -7,7 +7,7 @@ exports.defaults = {
     # normalize tag names to lower case
     normalizeTags: false
     # set default attribute property name pattern
-    attrpattern: /^@(.+)$/g
+    attrpattern: /^@(.+)$/
     # set default attribute object key
     attrkey: "@"
     # set default char object key
@@ -42,7 +42,7 @@ exports.defaults = {
     trim: false
     normalize: false
     normalizeTags: false
-    attrpattern: /^\$(.+)$/g
+    attrpattern: /^\$(.+)$/
     attrkey: "$"
     charkey: "_"
     explicitArray: true
