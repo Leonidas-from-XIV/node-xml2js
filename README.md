@@ -142,7 +142,7 @@ If you want to parse multiple files, you have multiple possibilities:
   * You can hope everything goes well anyway. This behaviour is not
     guaranteed work always, if ever. Use option #1 if possible. Thanks!
 
-So you wanna some JSON?
+Wanna get some JSON?
 -----------------------
 
 Just wrap the `result` object in a call to `JSON.stringify` like this
