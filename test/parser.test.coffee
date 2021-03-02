@@ -547,13 +547,13 @@ module.exports =
 
   'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
-    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWERCASEATTR'), true)
+    equ {}.hasOwnProperty.call(r.sample.attrNameProcessTest[0].$, 'CAMELCASEATTR'), true
+    equ {}.hasOwnProperty.call(r.sample.attrNameProcessTest[0].$, 'LOWERCASEATTR'), true)
 
   'test multiple attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
-    equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
+    equ {}.hasOwnProperty.call(r.sample.attrNameProcessTest[0].$, 'CAME'), true
+    equ {}.hasOwnProperty.call(r.sample.attrNameProcessTest[0].$, 'LOWE'), true)
 
   'test single attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
@@ -575,21 +575,21 @@ module.exports =
 
   'test single tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.hasOwnProperty('SAMPLE'), true
-    equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
+    equ {}.hasOwnProperty.call(r, 'SAMPLE'), true
+    equ {}.hasOwnProperty.call(r.SAMPLE, 'TAGNAMEPROCESSTEST'), true)
 
   'test single tagNameProcessors in simple callback': (test) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, tagNameProcessors: [nameToUpperCase], (err, r)->
         console.log 'Result object: ' + util.inspect r, false, 10
-        equ r.hasOwnProperty('SAMPLE'), true
-        equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true
+        equ {}.hasOwnProperty.call(r, 'SAMPLE'), true
+        equ {}.hasOwnProperty.call(r.SAMPLE, 'TAGNAMEPROCESSTEST'), true
         test.finish()
 
   'test multiple tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
-    equ r.hasOwnProperty('SAMP'), true
-    equ r.SAMP.hasOwnProperty('TAGN'), true)
+    equ {}.hasOwnProperty.call(r, 'SAMP'), true
+    equ {}.hasOwnProperty.call(r.SAMP, 'TAGN'), true)
 
   'test attrValueProcessors key param': skeleton(attrValueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
