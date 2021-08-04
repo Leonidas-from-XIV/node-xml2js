@@ -68,6 +68,7 @@
     "diff": "kpdecker/jsdiff",
     "docco": "jashkenas/docco",
     "nyc": "bcoe/nyc",
+    "standardx": "^7.0.0",
     "zap": "nornagon/node-zap"
   },
   "ignore": [
