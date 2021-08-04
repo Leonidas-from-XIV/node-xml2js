@@ -66,6 +66,7 @@
     "build": "babel src --out-dir lib",
     "lint": "standardx",
     "lint:fix": "standardx --fix",
+    "prepare": "npm run build",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
