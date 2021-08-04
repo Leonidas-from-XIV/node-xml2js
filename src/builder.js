@@ -21,9 +21,7 @@ const escapeCDATA = entry => // Split the CDATA section in two;
 // When later parsed, it will be put back together as ']]>'
   entry.replace(']]>', ']]]]><![CDATA[>')
 
-const defaultExport = {}
-
-defaultExport.Builder = class Builder {
+class Builder {
   constructor (opts) {
     // copy this versions default options
     let key, value
@@ -138,4 +136,7 @@ defaultExport.Builder = class Builder {
     return render(rootElement, rootObj).end(this.options.renderOpts)
   }
 }
-export default defaultExport
+
+export {
+  Builder
+}

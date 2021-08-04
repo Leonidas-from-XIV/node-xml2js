@@ -1,5 +1,4 @@
-const defaultExport = {}
-defaultExport.defaults = {
+const defaults = {
   '0.1': {
     explicitCharkey: false,
     trim: true,
@@ -74,4 +73,7 @@ defaultExport.defaults = {
     cdata: false
   }
 }
-export default defaultExport
+
+export {
+  defaults
+}

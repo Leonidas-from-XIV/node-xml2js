@@ -10,8 +10,8 @@
  */
 import sax from 'sax'
 import events from 'events'
-import bom from './bom'
-import processors from './processors'
+import * as bom from './bom'
+import * as processors from './processors'
 import { setImmediate } from 'timers'
 import { defaults } from './defaults'
 
@@ -23,9 +23,7 @@ const processItem = function (processors, item, key) {
   return item
 }
 
-const defaultExport = {}
-
-defaultExport.Parser = class Parser extends events {
+class Parser extends events {
   constructor (opts) {
     super()
     let key, value
@@ -359,7 +357,7 @@ defaultExport.Parser = class Parser extends events {
   }
 }
 
-defaultExport.parseString = function (str, a, b) {
+const parseString = function (str, a, b) {
   // let's determine what we got as arguments
   let cb, options
   if (b != null) {
@@ -379,17 +377,23 @@ defaultExport.parseString = function (str, a, b) {
   }
 
   // the rest is super-easy
-  const parser = new defaultExport.Parser(options)
+  const parser = new Parser(options)
   return parser.parseString(str, cb)
 }
 
-defaultExport.parseStringPromise = function (str, a) {
+const parseStringPromise = function (str, a) {
   let options
   if (typeof a === 'object') {
     options = a
   }
 
-  const parser = new defaultExport.Parser(options)
+  const parser = new Parser(options)
   return parser.parseStringPromise(str)
 }
-export default defaultExport
+
+export {
+  Parser,
+  parseString,
+  parseStringPromise,
+}
+
