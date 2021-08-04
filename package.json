@@ -69,8 +69,7 @@
     "prepare": "npm run build",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "doc": "cake doc"
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -84,10 +83,8 @@
     "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.4.2",
-    "coffee-script": ">=1.10.0",
     "coveralls": "^3.0.1",
     "diff": ">=1.0.8",
-    "docco": ">=0.6.2",
     "nyc": ">=2.2.1",
     "standardx": "^7.0.0",
     "zap": ">=0.2.9"
