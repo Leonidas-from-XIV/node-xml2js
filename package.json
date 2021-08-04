@@ -63,7 +63,7 @@
     "lib": "./lib"
   },
   "scripts": {
-    "build": "cake build",
+    "build": "babel src --out-dir lib",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
@@ -78,6 +78,9 @@
     "xmlbuilder": "~11.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.4.2",
     "coffee-script": ">=1.10.0",
     "coveralls": "^3.0.1",
     "diff": ">=1.0.8",
