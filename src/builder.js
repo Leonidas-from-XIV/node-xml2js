@@ -1,10 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS203: Remove `|| {}` from converted for-own loops
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import builder from 'xmlbuilder'
 import { defaults } from './defaults'
 
@@ -24,19 +17,14 @@ const escapeCDATA = entry => // Split the CDATA section in two;
 class Builder {
   constructor (opts) {
     // copy this versions default options
-    let key, value
-    this.options = {}
-    for (key of Object.keys(defaults['0.2'] || {})) { value = defaults['0.2'][key]; this.options[key] = value }
     // overwrite them with the specified options, if any
-    for (key of Object.keys(opts || {})) { value = opts[key]; this.options[key] = value }
+    this.options = Object.assign({}, defaults['0.2'], opts || {})
   }
 
   buildObject (rootObj) {
     let rootName
     const {
-      attrkey
-    } = this.options
-    const {
+      attrkey,
       charkey
     } = this.options
 
@@ -64,7 +52,7 @@ class Builder {
         }
       } else if (Array.isArray(obj)) {
         // fix issue #119
-        for (index of Object.keys(obj || {})) {
+        for (index of Object.keys(obj)) {
           child = obj[index]
           for (key in child) {
             entry = child[key]
@@ -94,7 +82,7 @@ class Builder {
 
           // Case #3 Array data
           } else if (Array.isArray(child)) {
-            for (index of Object.keys(child || {})) {
+            for (index of Object.keys(child)) {
               entry = child[index]
               if (typeof entry === 'string') {
                 if (this.options.cdata && requiresCDATA(entry)) {

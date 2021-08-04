@@ -1,13 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS203: Remove `|| {}` from converted for-own loops
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import sax from 'sax'
 import events from 'events'
 import * as bom from './bom'
@@ -18,8 +8,8 @@ import { defaults } from './defaults'
 // Underscore has a nice function for this, but we try to go without dependencies
 const isEmpty = thing => (typeof thing === 'object') && (thing != null) && (Object.keys(thing).length === 0)
 
-const processItem = function (processors, item, key) {
-  for (const process of Array.from(processors)) { item = process(item, key) }
+const processItem = (processors, item, key) => {
+  for (const process of processors) { item = process(item, key) }
   return item
 }
 
@@ -33,10 +23,8 @@ class Parser extends events {
     this.parseString = this.parseString.bind(this)
     this.parseStringPromise = this.parseStringPromise.bind(this)
     // copy this versions default options
-    this.options = {}
-    for (key of Object.keys(defaults['0.2'] || {})) { value = defaults['0.2'][key]; this.options[key] = value }
     // overwrite them with the specified options, if any
-    for (key of Object.keys(opts || {})) { value = opts[key]; this.options[key] = value }
+    this.options = Object.assign({}, defaults['0.2'], opts || {})
     // define the key used for namespaces
     if (this.options.xmlns) {
       this.options.xmlnskey = this.options.attrkey + 'ns'
@@ -201,16 +189,10 @@ class Parser extends events {
       }
 
       if (this.options.validator != null) {
-        const xpath = '/' + ((() => {
-          const result = []
-          for (node of Array.from(stack)) {
-            result.push(node['#name'])
-          }
-          return result
-        })()).concat(nodeName).join('/');
+        const xpath = '/' + stack.map(node => node['#name']).concat(nodeName).join('/')
         // Wrap try/catch with an inner function to allow V8 to optimise the containing function
         // See https://github.com/Leonidas-from-XIV/node-xml2js/pull/369
-        (() => {
+        ;(() => {
           try {
             obj = this.options.validator(xpath, s && s[nodeName], obj)
             return obj
@@ -308,11 +290,11 @@ class Parser extends events {
 
   parseString (str, cb) {
     if ((cb != null) && (typeof cb === 'function')) {
-      this.on('end', function (result) {
+      this.on('end', (result) => {
         this.reset()
         return cb(null, result)
       })
-      this.on('error', function (err) {
+      this.on('error', (err) => {
         this.reset()
         return cb(err)
       })
@@ -357,7 +339,7 @@ class Parser extends events {
   }
 }
 
-const parseString = function (str, a, b) {
+const parseString = (str, a, b) => {
   // let's determine what we got as arguments
   let cb, options
   if (b != null) {
@@ -381,7 +363,7 @@ const parseString = function (str, a, b) {
   return parser.parseString(str, cb)
 }
 
-const parseStringPromise = function (str, a) {
+const parseStringPromise = (str, a) => {
   let options
   if (typeof a === 'object') {
     options = a
