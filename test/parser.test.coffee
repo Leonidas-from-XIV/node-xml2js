@@ -497,17 +497,6 @@ module.exports =
       equ err, null
       test.finish()
 
-  'test construction with new and without': (test) ->
-    demo = '<xml><foo>Bar</foo></xml>'
-    withNew = new xml2js.Parser
-    withNew.parseString demo, (err, resWithNew) ->
-      equ err, null
-      withoutNew = xml2js.Parser()
-      withoutNew.parseString demo, (err, resWithoutNew) ->
-        equ err, null
-        assert.deepEqual resWithNew, resWithoutNew
-        test.finish()
-
   'test not closed but well formed xml': (test) ->
     xml = "<test>"
     xml2js.parseString xml, (err, parsed) ->
