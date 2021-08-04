@@ -1,6 +1,6 @@
-const defaultExport = {};
+const defaultExport = {}
 defaultExport.defaults = {
-  "0.1": {
+  '0.1': {
     explicitCharkey: false,
     trim: true,
     // normalize implicates trimming, just so you know
@@ -8,9 +8,9 @@ defaultExport.defaults = {
     // normalize tag names to lower case
     normalizeTags: false,
     // set default attribute object key
-    attrkey: "@",
+    attrkey: '@',
     // set default char object key
-    charkey: "#",
+    charkey: '#',
     // always put child nodes in an array
     explicitArray: false,
     // ignore all attributes regardless
@@ -20,7 +20,7 @@ defaultExport.defaults = {
     mergeAttrs: false,
     explicitRoot: false,
     validator: null,
-    xmlns : false,
+    xmlns: false,
     // fold children elements into dedicated property (works only in 0.2)
     explicitChildren: false,
     childkey: '@@',
@@ -37,19 +37,19 @@ defaultExport.defaults = {
     emptyTag: ''
   },
 
-  "0.2": {
+  '0.2': {
     explicitCharkey: false,
     trim: false,
     normalize: false,
     normalizeTags: false,
-    attrkey: "$",
-    charkey: "_",
+    attrkey: '$',
+    charkey: '_',
     explicitArray: true,
     ignoreAttrs: false,
     mergeAttrs: false,
     explicitRoot: true,
     validator: null,
-    xmlns : false,
+    xmlns: false,
     explicitChildren: false,
     preserveChildrenOrder: false,
     childkey: '$$',
@@ -65,7 +65,7 @@ defaultExport.defaults = {
     valueProcessors: null,
     // xml building options
     rootName: 'root',
-    xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true},
+    xmldec: { 'version': '1.0', 'encoding': 'UTF-8', 'standalone': true },
     doctype: null,
     renderOpts: { 'pretty': true, 'indent': '  ', 'newline': '\n' },
     headless: false,
@@ -73,5 +73,5 @@ defaultExport.defaults = {
     emptyTag: '',
     cdata: false
   }
-};
-export default defaultExport;
+}
+export default defaultExport

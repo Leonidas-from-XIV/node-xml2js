@@ -3,13 +3,13 @@
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const defaultExport = {};
+const defaultExport = {}
 
-defaultExport.stripBOM = function(str) {
+defaultExport.stripBOM = function (str) {
   if (str[0] === '\uFEFF') {
-    return str.substring(1);
+    return str.substring(1)
   } else {
-    return str;
+    return str
   }
-};
-export default defaultExport;
+}
+export default defaultExport

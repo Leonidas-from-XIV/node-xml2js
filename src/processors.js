@@ -1,25 +1,25 @@
 // matches all xml prefixes, except for `xmlns:`
-const prefixMatch = new RegExp(/(?!xmlns)^.*:/);
+const prefixMatch = /(?!xmlns)^.*:/
 
-const defaultExport = {};
+const defaultExport = {}
 
-defaultExport.normalize = str => str.toLowerCase();
+defaultExport.normalize = str => str.toLowerCase()
 
-defaultExport.firstCharLowerCase = str => str.charAt(0).toLowerCase() + str.slice(1);
+defaultExport.firstCharLowerCase = str => str.charAt(0).toLowerCase() + str.slice(1)
 
-defaultExport.stripPrefix = str => str.replace(prefixMatch, '');
+defaultExport.stripPrefix = str => str.replace(prefixMatch, '')
 
-defaultExport.parseNumbers = function(str) {
+defaultExport.parseNumbers = function (str) {
   if (!isNaN(str)) {
-    str = (str % 1) === 0 ? parseInt(str, 10) : parseFloat(str);
+    str = (str % 1) === 0 ? parseInt(str, 10) : parseFloat(str)
   }
-  return str;
-};
+  return str
+}
 
-defaultExport.parseBooleans = function(str) {
+defaultExport.parseBooleans = function (str) {
   if (/^(?:true|false)$/i.test(str)) {
-    str = str.toLowerCase() === 'true';
+    str = str.toLowerCase() === 'true'
   }
-  return str;
-};
-export default defaultExport;
+  return str
+}
+export default defaultExport
