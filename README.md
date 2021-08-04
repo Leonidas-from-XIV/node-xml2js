@@ -487,9 +487,7 @@ We also have a number of unit tests, they can be run using `npm test` directly
 from the project root. This runs zap to discover all the tests and execute
 them.
 
-If you like to contribute, keep in mind that `xml2js` is written in
-CoffeeScript, so don't develop on the JavaScript files that are checked into
-the repository for convenience reasons. Also, please write some unit test to
+If you like to contribute, please write some unit test to
 check your behaviour and if it is some user-facing thing, add some
 documentation to this README, so people will know it exists. Thanks in advance!
 
