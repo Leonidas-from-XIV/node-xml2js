@@ -32,6 +32,11 @@ class exports.Parser extends events
         @options.tagNameProcessors = []
       @options.tagNameProcessors.unshift processors.normalize
 
+    # Added arrayFields to enable array even if there one value.
+    # This is to maintain the consistency of JSON structure
+    if ! @options.arrayFields
+      @options.arrayFields = []
+
     @reset()
 
   processAsync: =>
@@ -53,7 +58,11 @@ class exports.Parser extends events
 
   assignOrPush: (obj, key, newValue) =>
     if key not of obj
-      if not @options.explicitArray
+      # Added arrayFields to enable array even if there one value.
+      # This is to maintain the consistency of JSON structure
+      if key in @options.arrayFields
+        obj[key] = [newValue]
+      else if not @options.explicitArray
         obj[key] = newValue
       else
         obj[key] = [newValue]
