@@ -412,7 +412,9 @@ value})``. Possible options are:
     }
     ```
     Added in 0.4.6
-
+  * `arrayFields` (default: `[]`): to enable array even if there one value.
+    ```
+    Added in 0.4.24
 Options for the `Builder` class
 -------------------------------
 These options are specified by ``new Builder({optionName: value})``.
