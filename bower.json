@@ -1,5 +1,4 @@
-{
-  "name": "xml2js",
+": "xml2js",
   "description": "Simple XML to JavaScript object converter.",
   "keywords": [
     "xml",
@@ -61,11 +60,15 @@
     "xmlbuilder": "oozcitak/xmlbuilder-js"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.4.2",
     "coffee-script": ">=1.10.0",
     "coveralls": "nickmerwin/node-coveralls",
     "diff": "kpdecker/jsdiff",
     "docco": "jashkenas/docco",
     "nyc": "bcoe/nyc",
+    "standardx": "^7.0.0",
     "zap": "nornagon/node-zap"
   },
   "ignore": [

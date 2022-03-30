@@ -63,11 +63,13 @@
     "lib": "./lib"
   },
   "scripts": {
-    "build": "cake build",
+    "build": "babel src --out-dir lib",
+    "lint": "standardx",
+    "lint:fix": "standardx --fix",
+    "prepare": "npm run build",
     "test": "zap",
     "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "doc": "cake doc"
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -78,15 +80,26 @@
     "xmlbuilder": "~11.0.0"
   },
   "devDependencies": {
-    "coffee-script": ">=1.10.0",
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.4.2",
     "coveralls": "^3.0.1",
     "diff": ">=1.0.8",
-    "docco": ">=0.6.2",
     "nyc": ">=2.2.1",
+    "standardx": "^7.0.0",
     "zap": ">=0.2.9"
   },
   "engines": {
     "node": ">=4.0.0"
+  },
+  "eslintConfig": {
+    "ignorePatterns": [
+      "lib/**/*.js"
+    ],
+    "rules": {
+      "quote-props": 0,
+      "dot-notation": 0
+    }
   },
   "license": "MIT"
 }
