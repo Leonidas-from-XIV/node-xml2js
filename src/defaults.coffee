@@ -33,6 +33,7 @@ exports.defaults = {
     attrValueProcessors: null
     tagNameProcessors: null
     valueProcessors: null
+    nodeProcessors: null
     emptyTag: ''
 
   "0.2":
@@ -61,6 +62,7 @@ exports.defaults = {
     attrValueProcessors: null
     tagNameProcessors: null
     valueProcessors: null
+    nodeProcessors: null
     # xml building options
     rootName: 'root'
     xmldec: {'version': '1.0', 'encoding': 'UTF-8', 'standalone': true}

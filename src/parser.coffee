@@ -190,6 +190,11 @@ class exports.Parser extends events
           if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
             obj = obj[charkey]
 
+      if @options.nodeProcessors?
+        for processor in @options.nodeProcessors
+          if processor.canProcess obj
+            obj = processor.process obj
+
       # check whether we closed all the open tags
       if stack.length > 0
         @assignOrPush s, nodeName, obj

@@ -58,4 +58,5 @@
     <emptytestanother>
 
     </emptytestanother>
+    <nodeProcessorTest type="number">1234</nodeProcessorTest>
 </sample>
