@@ -257,6 +257,9 @@ module.exports =
   'test text no trimming, no normalize': skeleton(trim: false, normalize: false, (r) ->
     equ r.sample.whitespacetest[0]._, '\n        Line One\n        Line Two\n    ')
 
+  'test trimming on empty tag with whitespace': skeleton(trim: true, explicitArray: false, (r) ->
+    equ r.sample.emptytestanother, '')
+
   'test enabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     assert.deepEqual r, '')
@@ -599,7 +602,7 @@ module.exports =
   'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'valueProcessTest')
-  
+
   'test parseStringPromise parsing': (test) ->
     x2js = new xml2js.Parser()
     readFilePromise(fileName).then (data) ->
@@ -610,7 +613,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test parseStringPromise with bad input': (test) ->
     x2js = new xml2js.Parser()
     x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
@@ -640,7 +643,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test global parseStringPromise with bad input': (test) ->
     xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
       test.fail('Should fail')
