@@ -17,6 +17,10 @@ exports.defaults = {
     # merge attributes and child elements onto parent object.  this may
     # cause collisions.
     mergeAttrs: false
+    # when mergeAttrs and explicitArray are true
+    # and mergeAttrsArray is false (default true),
+    # do not parse attributes into an array.
+    mergeAttrsArray: true
     explicitRoot: false
     validator: null
     xmlns : false
@@ -45,6 +49,10 @@ exports.defaults = {
     explicitArray: true
     ignoreAttrs: false
     mergeAttrs: false
+    # when mergeAttrs and explicitArray are true
+    # and mergeAttrsArray is false (default true),
+    # do not parse attributes into an array.
+    mergeAttrsArray: true
     explicitRoot: true
     validator: null
     xmlns : false

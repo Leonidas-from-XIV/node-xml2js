@@ -111,7 +111,10 @@ class exports.Parser extends events
           newValue = if @options.attrValueProcessors then processItem(@options.attrValueProcessors, node.attributes[key], key) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processItem(@options.attrNameProcessors, key) else key
           if @options.mergeAttrs
-            @assignOrPush obj, processedKey, newValue
+            if @options.mergeAttrsArray
+              @assignOrPush obj, processedKey, newValue
+            else
+              obj[processedKey] = newValue
           else
             obj[attrkey][processedKey] = newValue
 
