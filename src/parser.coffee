@@ -52,6 +52,8 @@ class exports.Parser extends events
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
+    return if key == '__proto__'
+    return if key == 'constructor'
     if key not of obj
       if not @options.explicitArray
         obj[key] = newValue
@@ -113,7 +115,7 @@ class exports.Parser extends events
           if @options.mergeAttrs
             @assignOrPush obj, processedKey, newValue
           else
-            obj[attrkey][processedKey] = newValue
+            @assignOrPush obj[attrkey], processedKey, newValue
 
       # need a place to store the node name
       obj["#name"] = if @options.tagNameProcessors then processItem(@options.tagNameProcessors, node.name) else node.name
