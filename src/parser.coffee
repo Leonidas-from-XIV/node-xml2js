@@ -11,6 +11,9 @@ defaults = require('./defaults').defaults
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
+isValidKey = (key) ->
+  return key != '__proto__' && key != 'constructor' && key != 'prototype'
+
 processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
   return item
@@ -52,8 +55,7 @@ class exports.Parser extends events
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
-    return if key == '__proto__'
-    return if key == 'constructor'
+    return if not isValidKey(key)
     if key not of obj
       if not @options.explicitArray
         obj[key] = newValue
@@ -112,9 +114,10 @@ class exports.Parser extends events
             obj[attrkey] = {}
           newValue = if @options.attrValueProcessors then processItem(@options.attrValueProcessors, node.attributes[key], key) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processItem(@options.attrNameProcessors, key) else key
-          if @options.mergeAttrs
-            @assignOrPush obj, processedKey, newValue
-          else
+          if isValidKey(processedKey)
+            if @options.mergeAttrs
+              @assignOrPush obj, processedKey, newValue
+            else
             @assignOrPush obj[attrkey], processedKey, newValue
 
       # need a place to store the node name
