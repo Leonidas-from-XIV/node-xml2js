@@ -188,7 +188,7 @@ class exports.Parser extends events
           # push a clone so that the node in the children array can receive the #name property while the original obj can do without it
           objClone = {}
           for own key of obj
-            objClone[key] = obj[key]
+            objClone[key] = obj[key] if isValidKey(key)
           s[@options.childkey].push objClone
           delete obj["#name"]
           # re-check whether we can collapse the node now to just the charkey value
