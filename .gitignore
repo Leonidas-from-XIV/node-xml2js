@@ -1,5 +1,6 @@
-*.swp
 node_modules
 npm-debug.log
 .nyc_output
 coverage
+_opam
+_build
