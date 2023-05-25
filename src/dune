@@ -1,4 +1,8 @@
 (executable
   (name xml2js)
   (modes js)
+  (promote
+    (until-clean)
+    (into ../lib))
+  (libraries xmlm)
   (preprocess (pps js_of_ocaml-ppx)))

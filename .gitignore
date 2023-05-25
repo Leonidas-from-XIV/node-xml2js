@@ -4,3 +4,6 @@ npm-debug.log
 coverage
 _opam
 _build
+lib/xml2js.bc-for-jsoo
+# temporary
+lib/xml2js.bc.js
