@@ -20,6 +20,7 @@ processItem = (processors, item, key) ->
 
 class exports.Parser extends events
   constructor: (opts) ->
+    super()
     # if this was called without 'new', create an instance with new and return
     return new exports.Parser opts unless @ instanceof exports.Parser
     # copy this versions default options

@@ -11,6 +11,7 @@ exports.processors = processors
 
 class exports.ValidationError extends Error
   constructor: (message) ->
+    super()
     @message = message
 
 exports.Builder = builder.Builder
