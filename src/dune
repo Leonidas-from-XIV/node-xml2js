@@ -3,7 +3,8 @@
  (modes js)
  (promote
   (until-clean)
-  (into ../lib))
+  (into ../lib)
+  (only xml2js.bc.js))
  (libraries xmlm)
  (preprocess
   (pps js_of_ocaml-ppx)))
