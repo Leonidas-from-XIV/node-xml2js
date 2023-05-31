@@ -1,6 +1,32 @@
 module Jsoo = Js_of_ocaml
 module Js = Jsoo.Js
 
+type json =
+  | String of string
+  | Integer of int
+  | Float of float
+  | Object of (string * json) list
+  | List of json list
+
+let rec js_of_json = function
+  | String s -> Js.Unsafe.inject @@ Js.string s
+  | Integer i -> Js.Unsafe.inject i
+  | Float f -> Js.Unsafe.inject f
+  | Object content ->
+      let content =
+        content
+        |> List.map (fun (key, v) ->
+               let v = js_of_json v in
+               (key, v))
+        |> Array.of_list
+      in
+      Js.Unsafe.obj content
+  | List content ->
+      let content =
+        content |> List.map js_of_json |> Array.of_list |> Js.array
+      in
+      Js.Unsafe.inject content
+
 let rec tree_to_js tree =
   match tree with
   | Parser.Text s -> Js.Unsafe.inject @@ Js.string s
@@ -42,6 +68,12 @@ let rec tree_to_js tree =
 let () =
   Jsoo.Js.export_all
     (object%js
+       method test1 = js_of_json (String "foo")
+       method test2 = js_of_json (Integer 42)
+       method test3 = js_of_json (Float 23.)
+       method test4 = js_of_json (List [ Integer 42 ])
+       method test5 = js_of_json (Object [ ("foo", String "bar") ])
+
        method parseString str cb =
          match Parser.parse str with
          | tree ->
