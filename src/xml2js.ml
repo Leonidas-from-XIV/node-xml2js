@@ -27,41 +27,38 @@ let rec js_of_json = function
       in
       Js.Unsafe.inject content
 
-let rec tree_to_js tree =
-  match tree with
-  | Parser.Text s -> Js.Unsafe.inject @@ Js.string s
-  | Tag (tag, subtrees) ->
-      let tag_name, attrs = tag in
-      let tag_name_uri, tag_name_local = tag_name in
-      let out_name =
-        match tag_name_uri with
-        | "" -> tag_name_local
-        | tag_name_uri -> tag_name_uri ^ ":" ^ tag_name_local
-      in
-      let attributes =
-        match attrs with
-        | [] -> None
-        | attrs ->
-            let mappings =
-              attrs
-              |> List.map (fun ((_uri, local), value) ->
-                     (local, Js.Unsafe.inject @@ Js.string value))
-              |> Array.of_list
-            in
-            Some mappings
-      in
-      let subtrees = List.map tree_to_js subtrees in
-      let subtrees =
-        match attributes with
-        | Some attributes ->
-            let temp = Js.Unsafe.obj [| ("$", Js.Unsafe.obj attributes) |] in
-            temp :: subtrees
-        | None -> subtrees
-      in
-      let subtrees =
-        subtrees |> Array.of_list |> Js.array |> Js.Unsafe.inject
-      in
-      Js.Unsafe.obj [| (out_name, subtrees) |]
+let tree_to_js tree =
+  let rec convert = 
+    function
+    | Parser.Text s -> String s
+    | Tag (tag, subtrees) ->
+        let tag_name, attrs = tag in
+        let tag_name_uri, tag_name_local = tag_name in
+        let out_name =
+          match tag_name_uri with
+          | "" -> tag_name_local
+          | tag_name_uri -> tag_name_uri ^ ":" ^ tag_name_local
+        in
+        let attributes =
+          match attrs with
+          | [] -> None
+          | attrs ->
+            attrs
+            |> List.map (fun ((_uri, local), value) ->
+                   (local, String value))
+            |> Option.some
+        in
+        let subtrees = List.map convert subtrees in
+        let subtrees =
+          match attributes with
+          | Some attributes ->
+              let temp = Object [("$", Object attributes)] in
+              List (temp :: subtrees)
+          | None -> List subtrees
+        in
+        Object [(out_name, subtrees)]
+    in
+    js_of_json (convert tree)
 
 (* API *)
 
