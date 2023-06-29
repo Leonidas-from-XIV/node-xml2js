@@ -5,4 +5,4 @@ coverage
 _opam
 _build
 # temporary
-lib/xml2js.bc.js
+*.bc.js

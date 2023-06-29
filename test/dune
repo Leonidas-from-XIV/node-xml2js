@@ -1,0 +1,9 @@
+(executable
+ (name test_parser)
+ (modes js)
+ (promote
+  (until-clean)
+  (into ../test)
+  (only test_parser.bc.js))
+ (preprocess
+  (pps js_of_ocaml-ppx)))

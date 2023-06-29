@@ -27,10 +27,27 @@ let rec js_of_json = function
       in
       Js.Unsafe.inject content
 
+let is_blank s = match String.trim s with "" -> true | _ -> false
+
+let all_unique jsons =
+  let names =
+    List.map
+      (function
+        (* if it is an object and it has one key-value pair *)
+        | Object [ (k, v) ] -> Some (k, v)
+        | _ -> None)
+      jsons
+  in
+  match List.for_all Option.is_some names with
+  | true ->
+      let kvs = List.filter_map Fun.id names in
+      Object kvs
+  | false -> List jsons
+
 let tree_to_js tree =
-  let rec convert = 
-    function
-    | Parser.Text s -> String s
+  let rec convert = function
+    | Parser.Text s -> (
+        match is_blank s with false -> Some (String s) | true -> None)
     | Tag (tag, subtrees) ->
         let tag_name, attrs = tag in
         let tag_name_uri, tag_name_local = tag_name in
@@ -43,22 +60,26 @@ let tree_to_js tree =
           match attrs with
           | [] -> None
           | attrs ->
-            attrs
-            |> List.map (fun ((_uri, local), value) ->
-                   (local, String value))
-            |> Option.some
+              attrs
+              |> List.map (fun ((_uri, local), value) -> (local, String value))
+              |> Option.some
         in
-        let subtrees = List.map convert subtrees in
+        let subtrees = List.filter_map convert subtrees in
         let subtrees =
           match attributes with
           | Some attributes ->
-              let temp = Object [("$", Object attributes)] in
-              List (temp :: subtrees)
-          | None -> List subtrees
+              let temp = Object [ ("$", Object attributes) ] in
+              temp :: subtrees
+          | None -> subtrees
         in
-        Object [(out_name, subtrees)]
-    in
-    js_of_json (convert tree)
+        let subtrees = all_unique subtrees in
+        Some (Object [ (out_name, subtrees) ])
+  in
+  js_of_json
+  @@
+  match convert tree with
+  | None -> String "TODO, unclear semantics"
+  | Some json -> json
 
 (* API *)
 
