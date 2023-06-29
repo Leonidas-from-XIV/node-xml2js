@@ -29,20 +29,30 @@ let rec js_of_json = function
 
 let is_blank s = match String.trim s with "" -> true | _ -> false
 
+let rec names_unique ?(acc = []) = function
+  | [] -> true
+  | (k, _) :: xs -> (
+      match List.mem k acc with
+      | true -> false
+      | false -> names_unique ~acc:(k :: acc) xs)
+
 let all_unique jsons =
   let names =
     List.map
       (function
         (* if it is an object and it has one key-value pair *)
         | Object [ (k, v) ] -> Some (k, v)
+        (* atomic values get mapped to _ *)
+        | (Float _ as v) | (Integer _ as v) | (String _ as v) -> Some ("_", v)
+        (* other types of values will get discarded *)
         | _ -> None)
       jsons
   in
   match List.for_all Option.is_some names with
-  | true ->
-      let kvs = List.filter_map Fun.id names in
-      Object kvs
   | false -> List jsons
+  | true -> (
+      let kvs = List.filter_map Fun.id names in
+      match names_unique kvs with true -> Object kvs | false -> List jsons)
 
 let tree_to_js tree =
   let rec convert = function

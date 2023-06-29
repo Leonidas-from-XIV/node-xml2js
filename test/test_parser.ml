@@ -10,6 +10,7 @@ let require s =
 let xml2js = require "../lib/xml2js.bc.js"
 let path = require "path"
 let fs = require "fs"
+let util = require "util"
 let file_name = path##join (Js.Unsafe.js_expr "__dirname") "fixtures/sample.xml"
 
 let equ got expected =
@@ -32,12 +33,14 @@ let _index n arr =
 
 let attr name v = Js.Unsafe.get v (Js.string name)
 let dollar = attr "$"
+let inspect v = util##inspect v false 10
 
 let () =
   skeleton
     ( (),
       fun r ->
         console##log_2 "Sample" r##.sample;
+        console##log_2 "Sample" (inspect r##.sample);
 
         (* actual value *)
         (* equ *)
