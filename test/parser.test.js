@@ -96,6 +96,7 @@
   module.exports = {
     'test parse with defaults': skeleton(void 0, function(r) {
       console.log('Result object: ' + util.inspect(r, false, 10));
+      equ(true, false);
       equ(r.sample.chartest[0].$.desc, 'Test for CHARs');
       equ(r.sample.chartest[0]._, 'Character data here!');
       equ(r.sample.cdatatest[0].$.desc, 'Test for CDATA');

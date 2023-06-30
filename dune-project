@@ -16,6 +16,8 @@
     (js_of_ocaml (>= 5.2))
     (js_of_ocaml-compiler (>= 5.2))
     (js_of_ocaml-ppx (>= 5.2))
-    (xmlm (>= 1.4.0)))
+    (xmlm (>= 1.4.0))
+    (webtest (and (>= 2.0.0) :with-test))
+    (webtest-js (and (>= 2.0.0) :with-test)))
   ;; we only compile to JS
   (allow_empty))
