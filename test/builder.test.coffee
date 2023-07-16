@@ -16,16 +16,16 @@ diffeq = (expected, actual) ->
   patch = diff.createPatch('test', expected.trim(), actual.trim(), 'expected', 'actual')
   throw patch unless patch is diffless
 
-module.exports =
-  'test building basic XML structure': (test) ->
+describe 'builder', ->
+  test 'building basic XML structure', (done) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xml><Label/><MsgId>5850440872586764820</MsgId></xml>'
     obj = {"xml":{"Label":[""],"MsgId":["5850440872586764820"]}}
     builder = new xml2js.Builder renderOpts: pretty: false
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test setting XML declaration': (test) ->
+  test 'setting XML declaration', (done) ->
     expected = '<?xml version="1.2" encoding="WTF-8" standalone="no"?><root/>'
     opts =
       renderOpts: pretty: false
@@ -33,9 +33,9 @@ module.exports =
     builder = new xml2js.Builder opts
     actual = builder.buildObject {}
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test pretty by default': (test) ->
+  test 'pretty by default', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -47,9 +47,9 @@ module.exports =
     obj = {"xml":{"MsgId":["5850440872586764820"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test setting indentation': (test) ->
+  test 'setting indentation', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -62,9 +62,9 @@ module.exports =
     obj = {"xml":{"MsgId":["5850440872586764820"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test headless option': (test) ->
+  test 'headless option', (done) ->
     expected = """
       <xml>
           <MsgId>5850440872586764820</MsgId>
@@ -78,9 +78,9 @@ module.exports =
     obj = {"xml":{"MsgId":["5850440872586764820"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test allowSurrogateChars option': (test) ->
+  test 'allowSurrogateChars option', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -95,45 +95,45 @@ module.exports =
     obj = {"xml":{"MsgId":["\uD83D\uDC33"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test explicit rootName is always used: 1. when there is only one element': (test) ->
+  test 'explicit rootName is always used: 1. when there is only one element', (done) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
     opts = renderOpts: {pretty: false}, rootName: 'FOO'
     builder = new xml2js.Builder opts
     obj = {"MsgId":["5850440872586764820"]}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test explicit rootName is always used: 2. when there are multiple elements': (test) ->
+  test 'explicit rootName is always used: 2. when there are multiple elements', (done) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FOO><MsgId>5850440872586764820</MsgId></FOO>'
     opts = renderOpts: {pretty: false}, rootName: 'FOO'
     builder = new xml2js.Builder opts
     obj = {"MsgId":["5850440872586764820"]}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test default rootName is used when there is more than one element in the hash': (test) ->
+  test 'default rootName is used when there is more than one element in the hash', (done) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><MsgId>5850440872586764820</MsgId><foo>bar</foo></root>'
     opts = renderOpts: pretty: false
     builder = new xml2js.Builder opts
     obj = {"MsgId":["5850440872586764820"],"foo":"bar"}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test when there is only one first-level element in the hash, that is used as root': (test) ->
+  test 'when there is only one first-level element in the hash, that is used as root', (done) ->
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><first><MsgId>5850440872586764820</MsgId><foo>bar</foo></first>'
     opts = renderOpts: pretty: false
     builder = new xml2js.Builder opts
     obj = {"first":{"MsgId":["5850440872586764820"],"foo":"bar"}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test parser -> builder roundtrip': (test) ->
+  test 'parser -> builder roundtrip', (done) ->
     fileName = path.join __dirname, '/fixtures/build_sample.xml'
     fs.readFile fileName, (err, xmlData) ->
       xmlExpected = xmlData.toString()
@@ -142,25 +142,25 @@ module.exports =
         builder = new xml2js.Builder({})
         xmlActual = builder.buildObject obj
         diffeq xmlExpected, xmlActual
-        test.finish()
+        done()
 
-  'test building obj with undefined value' : (test) ->
+  test 'building obj with undefined value', (done) ->
     obj = { node: 'string', anothernode: undefined }
     builder = new xml2js.Builder renderOpts: { pretty: false }
     actual = builder.buildObject(obj);
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><node>string</node><anothernode/></root>'
     equ actual, expected
-    test.finish();
+    done();
 
-  'test building obj with null value' : (test) ->
+  test 'building obj with null value', (done) ->
     obj = { node: 'string', anothernode: null }
     builder = new xml2js.Builder renderOpts: { pretty: false }
     actual = builder.buildObject(obj);
     expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><root><node>string</node><anothernode/></root>'
     equ actual, expected
-    test.finish();
+    done();
 
-  'test escapes escaped characters': (test) ->
+  test 'escapes escaped characters', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -172,9 +172,9 @@ module.exports =
     obj = {"xml":{"MsgId":["&amp;&lt;&gt;"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test cdata text nodes': (test) ->
+  test 'cdata text nodes', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -187,9 +187,9 @@ module.exports =
     obj = {"xml":{"MsgId":["& <<"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test cdata text nodes with escaped end sequence': (test) ->
+  test 'cdata text nodes with escaped end sequence', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -202,9 +202,9 @@ module.exports =
     obj = {"xml":{"MsgId":["& <<]]>"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test uses cdata only for chars &, <, >': (test) ->
+  test 'uses cdata only for chars &, <, >', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -218,9 +218,9 @@ module.exports =
     obj = {"xml":{"MsgId":["& <<"],"Message":["Hello"]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test uses cdata for string values of objects': (test) ->
+  test 'uses cdata for string values of objects', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -233,9 +233,9 @@ module.exports =
     obj = {"xml":{"MsgId":"& <<"}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test does not error on non string values when checking for cdata': (test) ->
+  test 'does not error on non string values when checking for cdata', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -248,9 +248,9 @@ module.exports =
     obj = {"xml":{"MsgId":10}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test does not error on array values when checking for cdata': (test) ->
+  test 'does not error on array values when checking for cdata', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <xml>
@@ -264,9 +264,9 @@ module.exports =
     obj = {"xml":{"MsgId":[10, 12]}}
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()
 
-  'test building obj with array': (test) ->
+  test 'building obj with array', (done) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <root>
@@ -280,4 +280,4 @@ module.exports =
     obj = [{"MsgId": 10}, {"MsgId2": 12}]
     actual = builder.buildObject obj
     diffeq expected, actual
-    test.finish()
+    done()

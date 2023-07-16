@@ -17,13 +17,13 @@ readFilePromise = (fileName) ->
         resolve value
 
 skeleton = (options, checks) ->
-  (test) ->
+  (done) ->
     xmlString = options?.__xmlString
     delete options?.__xmlString
     x2js = new xml2js.Parser options
     x2js.addListener 'end', (r) ->
       checks r
-      test.finish()
+      done()
     if not xmlString
       fs.readFile fileName, 'utf8', (err, data) ->
         data = data.split(os.EOL).join('\n')
@@ -63,8 +63,8 @@ validator = (xpath, currentValue, newValue) ->
 # shortcut, because it is quite verbose
 equ = assert.strictEqual
 
-module.exports =
-  'test parse with defaults': skeleton(undefined, (r) ->
+describe 'parser', ->
+  test 'parse with defaults', skeleton(undefined, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].$.desc, 'Test for CHARs'
     equ r.sample.chartest[0]._, 'Character data here!'
@@ -83,12 +83,12 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.tagcasetest[0]).length, 3)
 
-  'test parse with empty objects and functions': skeleton({emptyTag: ()=> ({})}, (r)->
+  test 'parse with empty objects and functions', skeleton({emptyTag: ()=> ({})}, (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     bool = r.sample.emptytestanother[0] is r.sample.emptytest[0]
     equ bool, false)
 
-  'test parse with explicitCharkey': skeleton(explicitCharkey: true, (r) ->
+  test 'parse with explicitCharkey', skeleton(explicitCharkey: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].$.desc, 'Test for CHARs'
     equ r.sample.chartest[0]._, 'Character data here!'
@@ -105,7 +105,7 @@ module.exports =
     equ r.sample.listtest[0].item[1]._, 'Qux.'
     equ r.sample.listtest[0].item[2]._, 'Quux.')
 
-  'test parse with mergeAttrs': skeleton(mergeAttrs: true, (r) ->
+  test 'parse with mergeAttrs', skeleton(mergeAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].desc[0], 'Test for CHARs'
     equ r.sample.chartest[0]._, 'Character data here!'
@@ -123,7 +123,7 @@ module.exports =
     equ r.sample.listtest[0].single[0], 'Single'
     equ r.sample.listtest[0].attr[0], 'Attribute')
 
-  'test parse with mergeAttrs and not explicitArray': skeleton(mergeAttrs: true, explicitArray: false, (r) ->
+  test 'parse with mergeAttrs and not explicitArray', skeleton(mergeAttrs: true, explicitArray: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest.desc, 'Test for CHARs'
     equ r.sample.chartest._, 'Character data here!'
@@ -141,7 +141,7 @@ module.exports =
     equ r.sample.listtest.single, 'Single'
     equ r.sample.listtest.attr, 'Attribute')
 
-  'test parse with explicitChildren': skeleton(explicitChildren: true, (r) ->
+  test 'parse with explicitChildren', skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$.chartest[0].$.desc, 'Test for CHARs'
     equ r.sample.$$.chartest[0]._, 'Character data here!'
@@ -161,7 +161,7 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
 
-  'test parse with explicitChildren and preserveChildrenOrder': skeleton(explicitChildren: true, preserveChildrenOrder: true, (r) ->
+  test 'parse with explicitChildren and preserveChildrenOrder', skeleton(explicitChildren: true, preserveChildrenOrder: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$[10]['#name'], 'ordertest'
     equ r.sample.$$[10].$$[0]['#name'], 'one'
@@ -177,7 +177,7 @@ module.exports =
     equ r.sample.$$[10].$$[5]['#name'], 'three'
     equ r.sample.$$[10].$$[5]._, '6')
 
-  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
+  test 'parse with explicitChildren and charsAsChildren and preserveChildrenOrder', skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$[10]['#name'], 'ordertest'
     equ r.sample.$$[10].$$[0]['#name'], 'one'
@@ -204,7 +204,7 @@ module.exports =
     equ r.sample.$$[17].$$[3]['#name'], '__text__'
     equ r.sample.$$[17].$$[3]._, ' in the middle')
 
-  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, (r) ->
+  test 'parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars', skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$[35]['#name'], 'textordertest'
     equ r.sample.$$[35].$$[0]['#name'], '__text__'
@@ -218,7 +218,7 @@ module.exports =
     equ r.sample.$$[35].$$[4]['#name'], '__text__'
     equ r.sample.$$[35].$$[4]._, ' in the middle')
 
-  'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars and normalize': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, normalize: true, (r) ->
+  test 'parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars and normalize', skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, normalize: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     # normalized whitespace-only text node becomes empty string
     equ r.sample.$$[35]['#name'], 'textordertest'
@@ -233,11 +233,11 @@ module.exports =
     equ r.sample.$$[35].$$[4]['#name'], '__text__'
     equ r.sample.$$[35].$$[4]._, 'in the middle')
 
-  'test element without children': skeleton(explicitChildren: true, (r) ->
+  test 'element without children', skeleton(explicitChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$.nochildrentest[0].$$, undefined)
 
-  'test parse with explicitChildren and charsAsChildren': skeleton(explicitChildren: true, charsAsChildren: true, (r) ->
+  test 'parse with explicitChildren and charsAsChildren', skeleton(explicitChildren: true, charsAsChildren: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$.chartest[0].$$._, 'Character data here!'
     equ r.sample.$$.cdatatest[0].$$._, 'CDATA here!'
@@ -245,39 +245,39 @@ module.exports =
     # determine number of items in object
     equ Object.keys(r.sample.$$.tagcasetest[0].$$).length, 3)
 
-  'test text trimming, normalize': skeleton(trim: true, normalize: true, (r) ->
+  test 'text trimming, normalize', skeleton(trim: true, normalize: true, (r) ->
     equ r.sample.whitespacetest[0]._, 'Line One Line Two')
 
-  'test text trimming, no normalizing': skeleton(trim: true, normalize: false, (r) ->
+  test 'text trimming, no normalizing', skeleton(trim: true, normalize: false, (r) ->
     equ r.sample.whitespacetest[0]._, 'Line One\n        Line Two')
 
-  'test text no trimming, normalize': skeleton(trim: false, normalize: true, (r) ->
+  test 'text no trimming, normalize', skeleton(trim: false, normalize: true, (r) ->
     equ r.sample.whitespacetest[0]._, 'Line One Line Two')
 
-  'test text no trimming, no normalize': skeleton(trim: false, normalize: false, (r) ->
+  test 'text no trimming, no normalize', skeleton(trim: false, normalize: false, (r) ->
     equ r.sample.whitespacetest[0]._, '\n        Line One\n        Line Two\n    ')
 
-  'test enabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
+  test 'enabled root node elimination', skeleton(__xmlString: '<root></root>', explicitRoot: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     assert.deepEqual r, '')
 
-  'test disabled root node elimination': skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
+  test 'disabled root node elimination', skeleton(__xmlString: '<root></root>', explicitRoot: true, (r) ->
     assert.deepEqual r, {root: ''})
 
-  'test default empty tag result': skeleton(undefined, (r) ->
+  test 'default empty tag result', skeleton(undefined, (r) ->
     assert.deepEqual r.sample.emptytest, [''])
 
-  'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
+  test 'empty tag result specified null', skeleton(emptyTag: null, (r) ->
     equ r.sample.emptytest[0], null)
 
-  'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
+  test 'invalid empty XML file', skeleton(__xmlString: ' ', (r) ->
     equ r, null)
 
-  'test enabled normalizeTags': skeleton(normalizeTags: true, (r) ->
+  test 'enabled normalizeTags', skeleton(normalizeTags: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ Object.keys(r.sample.tagcasetest).length, 1)
 
-  'test parse with custom char and attribute object keys': skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
+  test 'parse with custom char and attribute object keys', skeleton(attrkey: 'attrobj', charkey: 'charobj', (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0].attrobj.desc, 'Test for CHARs'
     equ r.sample.chartest[0].charobj, 'Character data here!'
@@ -288,19 +288,19 @@ module.exports =
     equ r.sample.nochartest[0].attrobj.desc, 'No data'
     equ r.sample.nochartest[0].attrobj.misc, 'false')
 
-  'test child node without explicitArray': skeleton(explicitArray: false, (r) ->
+  test 'child node without explicitArray', skeleton(explicitArray: false, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.arraytest.item[0].subitem, 'Baz.'
     equ r.sample.arraytest.item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest.item[1].subitem[1], 'Bar.')
 
-  'test child node with explicitArray': skeleton(explicitArray: true, (r) ->
+  test 'child node with explicitArray', skeleton(explicitArray: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.arraytest[0].item[0].subitem[0], 'Baz.'
     equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
-  'test ignore attributes': skeleton(ignoreAttrs: true, (r) ->
+  test 'ignore attributes', skeleton(ignoreAttrs: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.chartest[0], 'Character data here!'
     equ r.sample.cdatatest[0], 'CDATA here!'
@@ -313,7 +313,7 @@ module.exports =
     equ r.sample.listtest[0].item[1], 'Qux.'
     equ r.sample.listtest[0].item[2], 'Quux.')
 
-  'test simple callback mode': (test) ->
+  test 'simple callback mode', (done) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
       equ err, null
@@ -321,9 +321,9 @@ module.exports =
         equ err, null
         # just a single test to check whether we parsed anything
         equ r.sample.chartest[0]._, 'Character data here!'
-        test.finish()
+        done()
 
-  'test simple callback with options': (test) ->
+  test 'simple callback with options', (done) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data,
         trim: true
@@ -331,9 +331,9 @@ module.exports =
         (err, r) ->
           console.log r
           equ r.sample.whitespacetest[0]._, 'Line One Line Two'
-          test.finish()
+          done()
 
-  'test double parse': (test) ->
+  test 'double parse', (done) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->
       equ err, null
@@ -344,38 +344,38 @@ module.exports =
         x2js.parseString data, (err, r) ->
           equ err, null
           equ r.sample.chartest[0]._, 'Character data here!'
-          test.finish()
+          done()
 
-  'test element with garbage XML': (test) ->
+  test 'element with garbage XML', (done) ->
     x2js = new xml2js.Parser()
     xmlString = "<<>fdfsdfsdf<><<><??><<><>!<>!<!<>!."
     x2js.parseString xmlString, (err, result) ->
       assert.notEqual err, null
-      test.finish()
+      done()
 
-  'test simple function without options': (test) ->
+  test 'simple function without options', (done) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, (err, r) ->
         equ err, null
         equ r.sample.chartest[0]._, 'Character data here!'
-        test.finish()
+        done()
 
-  'test simple function with options': (test) ->
+  test 'simple function with options', (done) ->
     fs.readFile fileName, (err, data) ->
       # well, {} still counts as option, right?
       xml2js.parseString data, {}, (err, r) ->
         equ err, null
         equ r.sample.chartest[0]._, 'Character data here!'
-        test.finish()
+        done()
 
-  'test async execution': (test) ->
+  test 'async execution', (done) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, async: true, (err, r) ->
         equ err, null
         equ r.sample.chartest[0]._, 'Character data here!'
-        test.finish()
+        done()
 
-  'test validator': skeleton(validator: validator, (r) ->
+  test 'validator', skeleton(validator: validator, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ typeof r.sample.validatortest[0].stringtest[0], 'string'
     equ typeof r.sample.validatortest[0].numbertest[0], 'number'
@@ -390,13 +390,13 @@ module.exports =
     equ r.sample.arraytest[0].item[1].subitem[0], 'Foo.'
     equ r.sample.arraytest[0].item[1].subitem[1], 'Bar.')
 
-  'test validation error': (test) ->
+  test 'validation error', (done) ->
     x2js = new xml2js.Parser({validator: validator})
     x2js.parseString '<validationerror/>', (err, r) ->
       equ err.message, 'Validation error!'
-      test.finish()
+      done()
 
-  'test error throwing': (test) ->
+  test 'error throwing', (done) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>content is ok<test>'
     try
       xml2js.parseString xml, (err, parsed) ->
@@ -406,10 +406,10 @@ module.exports =
       # the stream is finished by the time the parseString method is called
       # so the callback, which is synchronous, will bubble the inner error
       # out to here, make sure that happens
-      equ e.message, 'error throwing in callback'
-      test.finish()
+      expect(e.message).toContain 'error throwing in callback'
+      done()
 
-  'test error throwing after an error (async)': (test) ->
+  test 'error throwing after an error (async)', (done) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test node is not okay>content is ok</test node is not okay>'
     nCalled = 0
     xml2js.parseString xml, async: true, (err, parsed) ->
@@ -420,9 +420,9 @@ module.exports =
       # SAX Parser throws multiple errors when processing async. We need to catch and return the first error
       # and then squelch the rest. The only way to test this is to defer the test finish call until after the
       # current stack processes, which, if the test would fail, would contain and throw the additional errors
-      setTimeout test.finish.bind test
+      setTimeout done
 
-  'test xmlns': skeleton(xmlns: true, (r) ->
+  test 'xmlns', skeleton(xmlns: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample["pfx:top"][0].$ns.local, 'top'
     equ r.sample["pfx:top"][0].$ns.uri, 'http://foo.com'
@@ -432,7 +432,7 @@ module.exports =
     equ r.sample["pfx:top"][0].middle[0].$ns.local, 'middle'
     equ r.sample["pfx:top"][0].middle[0].$ns.uri, 'http://bar.com')
 
-  'test callback should be called once': (test) ->
+  test 'callback should be called once', (done) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
     i = 0
     try
@@ -442,10 +442,10 @@ module.exports =
         throw new Error 'Custom error message'
     catch e
       equ i, 1
-      equ e.message, 'Custom error message'
-      test.finish()
+      expect(e.message).toContain 'Custom error message'
+      done()
 
-  'test no error event after end': (test) ->
+  test 'no error event after end', (done) ->
     xml = '<?xml version="1.0" encoding="utf-8"?><test>test</test>'
     i = 0
     x2js = new xml2js.Parser()
@@ -465,160 +465,160 @@ module.exports =
       equ e.message, 'some error in user-land'
 
     equ i, 0
-    test.finish()
+    done()
 
-  'test empty CDATA': (test) ->
+  test 'empty CDATA', (done) ->
     xml = '<xml><Label><![CDATA[]]></Label><MsgId>5850440872586764820</MsgId></xml>'
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.xml.Label[0], ''
-      test.finish()
+      done()
 
-  'test CDATA whitespaces result': (test) ->
+  test 'CDATA whitespaces result', (done) ->
     xml = '<spacecdatatest><![CDATA[ ]]></spacecdatatest>'
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.spacecdatatest, ' '
-      test.finish()
+      done()
 
-  'test escaped CDATA result': (test) ->
+  test 'escaped CDATA result', (done) ->
     xml = '<spacecdatatest><![CDATA[]]]]><![CDATA[>]]></spacecdatatest>'
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.spacecdatatest, ']]>'
-      test.finish()
+      done()
 
-  'test escaped CDATA result': (test) ->
+  test 'escaped CDATA result', (done) ->
     xml = '<spacecdatatest><![CDATA[]]]]><![CDATA[>]]></spacecdatatest>'
     xml2js.parseString xml, (err, parsed) ->
       equ parsed.spacecdatatest, ']]>'
-      test.finish()
+      done()
 
-  'test non-strict parsing': (test) ->
+  test 'non-strict parsing', (done) ->
     html = '<html><head></head><body><br></body></html>'
     xml2js.parseString html, strict: false, (err, parsed) ->
       equ err, null
-      test.finish()
+      done()
 
-  'test not closed but well formed xml': (test) ->
+  test 'not closed but well formed xml', (done) ->
     xml = "<test>"
     xml2js.parseString xml, (err, parsed) ->
       assert.equal err.message, 'Unclosed root tag\nLine: 0\nColumn: 6\nChar: '
-      test.finish()
+      done()
 
-  'test cdata-named node': (test) ->
+  test 'cdata-named node', (done) ->
     xml = "<test><cdata>hello</cdata></test>"
     xml2js.parseString xml, (err, parsed) ->
       assert.equal parsed.test.cdata[0], 'hello'
-      test.finish()
+      done()
 
-  'test onend with empty xml': (test) ->
+  test 'onend with empty xml', (done) ->
     xml = "<?xml version=\"1.0\"?>"
     xml2js.parseString xml, (err, parsed) ->
       assert.equal parsed, null
-      test.finish()
+      done()
 
-  'test parsing null': (test) ->
+  test 'parsing null', (done) ->
     xml = null
     xml2js.parseString xml, (err, parsed) ->
       assert.notEqual err, null
-      test.finish()
+      done()
 
-  'test parsing undefined': (test) ->
+  test 'parsing undefined', (done) ->
     xml = undefined
     xml2js.parseString xml, (err, parsed) ->
       assert.notEqual err, null
-      test.finish()
+      done()
 
-  'test chunked processing': (test) ->
+  test 'chunked processing', (done) ->
     xml = "<longstuff>abcdefghijklmnopqrstuvwxyz</longstuff>"
     xml2js.parseString xml, chunkSize: 10, (err, parsed) ->
       equ err, null
       equ parsed.longstuff, 'abcdefghijklmnopqrstuvwxyz'
-      test.finish()
+      done()
 
-  'test single attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase], (r)->
+  test 'single attrNameProcessors', skeleton(attrNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAMELCASEATTR'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWERCASEATTR'), true)
 
-  'test multiple attrNameProcessors': skeleton(attrNameProcessors: [nameToUpperCase, nameCutoff], (r)->
+  test 'multiple attrNameProcessors', skeleton(attrNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('CAME'), true
     equ r.sample.attrNameProcessTest[0].$.hasOwnProperty('LOWE'), true)
 
-  'test single attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase], (r)->
+  test 'single attrValueProcessors', skeleton(attrValueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAMELCASEATTRVALUE'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWERCASEATTRVALUE')
 
-  'test multiple attrValueProcessors': skeleton(attrValueProcessors: [nameToUpperCase, nameCutoff], (r)->
+  test 'multiple attrValueProcessors', skeleton(attrValueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'CAME'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'LOWE')
 
-  'test single valueProcessors': skeleton(valueProcessors: [nameToUpperCase], (r)->
+  test 'single valueProcessors', skeleton(valueProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME VALUE')
 
-  'test multiple valueProcessors': skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
+  test 'multiple valueProcessors', skeleton(valueProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'SOME')
 
-  'test single tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase], (r)->
+  test 'single tagNameProcessors', skeleton(tagNameProcessors: [nameToUpperCase], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMPLE'), true
     equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true)
 
-  'test single tagNameProcessors in simple callback': (test) ->
+  test 'single tagNameProcessors in simple callback', (done) ->
     fs.readFile fileName, (err, data) ->
       xml2js.parseString data, tagNameProcessors: [nameToUpperCase], (err, r)->
         console.log 'Result object: ' + util.inspect r, false, 10
         equ r.hasOwnProperty('SAMPLE'), true
         equ r.SAMPLE.hasOwnProperty('TAGNAMEPROCESSTEST'), true
-        test.finish()
+        done()
 
-  'test multiple tagNameProcessors': skeleton(tagNameProcessors: [nameToUpperCase, nameCutoff], (r)->
+  test 'multiple tagNameProcessors', skeleton(tagNameProcessors: [nameToUpperCase, nameCutoff], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.hasOwnProperty('SAMP'), true
     equ r.SAMP.hasOwnProperty('TAGN'), true)
 
-  'test attrValueProcessors key param': skeleton(attrValueProcessors: [replaceValueByName], (r)->
+  test 'attrValueProcessors key param', skeleton(attrValueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.attrValueProcessTest[0].$.camelCaseAttr, 'camelCaseAttr'
     equ r.sample.attrValueProcessTest[0].$.lowerCaseAttr, 'lowerCaseAttr')
 
-  'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
+  test 'valueProcessors key param', skeleton(valueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'valueProcessTest')
   
-  'test parseStringPromise parsing': (test) ->
+  test 'parseStringPromise parsing', (done) ->
     x2js = new xml2js.Parser()
     readFilePromise(fileName).then (data) ->
       x2js.parseStringPromise data
     .then (r) ->
       # just a single test to check whether we parsed anything
       equ r.sample.chartest[0]._, 'Character data here!'
-      test.finish()
+      done()
     .catch (err) ->
       test.fail('Should not error')
     
-  'test parseStringPromise with bad input': (test) ->
+  test 'parseStringPromise with bad input', (done) ->
     x2js = new xml2js.Parser()
     x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
       test.fail('Should fail')
     .catch (err) ->
       assert.notEqual err, null
-      test.finish()
+      done()
 
-  'test global parseStringPromise parsing': (test) ->
+  test 'global parseStringPromise parsing', (done) ->
     readFilePromise(fileName).then (data) ->
       xml2js.parseStringPromise data
     .then (r) ->
       assert.notEqual r, null
       equ r.sample.listtest[0].item[0].subitem[0], 'Foo(1)'
-      test.finish()
+      done()
     .catch (err) ->
       test.fail('Should not error')
 
-  'test global parseStringPromise with options': (test) ->
+  test 'global parseStringPromise with options', (done) ->
     readFilePromise(fileName).then (data) ->
       xml2js.parseStringPromise data,
         trim: true
@@ -626,13 +626,13 @@ module.exports =
     .then (r) ->
       assert.notEqual r, null
       equ r.sample.whitespacetest[0]._, 'Line One Line Two'
-      test.finish()
+      done()
     .catch (err) ->
       test.fail('Should not error')
     
-  'test global parseStringPromise with bad input': (test) ->
+  test 'global parseStringPromise with bad input', (done) ->
     xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
       test.fail('Should fail')
     .catch (err) ->
       assert.notEqual err, null
-      test.finish()
+      done()
