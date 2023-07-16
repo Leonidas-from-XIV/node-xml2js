@@ -8,39 +8,39 @@ parseNumbersExceptAccount = (value, key) ->
     return value;
   return processors.parseNumbers(value);
 
-module.exports =
-  'test normalize': (test) ->
+describe 'processors', ->
+  test 'normalize', (done) ->
     demo = 'This shOUld BE loWErcase'
     result = processors.normalize demo
     equ result, 'this should be lowercase'
-    test.done()
+    done()
 
-  'test firstCharLowerCase': (test) ->
+  test 'firstCharLowerCase', (done) ->
     demo = 'ThiS SHould OnlY LOwercase the fIRST cHar'
     result = processors.firstCharLowerCase demo
     equ result, 'thiS SHould OnlY LOwercase the fIRST cHar'
-    test.done()
+    done()
 
-  'test stripPrefix': (test) ->
+  test 'stripPrefix', (done) ->
     demo = 'stripMe:DoNotTouch'
     result = processors.stripPrefix demo
     equ result, 'DoNotTouch'
-    test.done()
+    done()
 
-  'test stripPrefix, ignore xmlns': (test) ->
+  test 'stripPrefix, ignore xmlns', (done) ->
     demo = 'xmlns:shouldHavePrefix'
     result = processors.stripPrefix demo
     equ result, 'xmlns:shouldHavePrefix'
-    test.done()
+    done()
 
-  'test parseNumbers': (test) ->
+  test 'parseNumbers', (done) ->
     equ processors.parseNumbers('0'), 0
     equ processors.parseNumbers('123'), 123
     equ processors.parseNumbers('15.56'), 15.56
     equ processors.parseNumbers('10.00'), 10
-    test.done()
+    done()
 
-  'test parseBooleans': (test) ->
+  test 'parseBooleans', (done) ->
     equ processors.parseBooleans('true'), true
     equ processors.parseBooleans('True'), true
     equ processors.parseBooleans('TRUE'), true
@@ -51,20 +51,20 @@ module.exports =
     equ processors.parseBooleans('xtrue'), 'xtrue'
     equ processors.parseBooleans('x'), 'x'
     equ processors.parseBooleans(''), ''
-    test.done()
+    done()
     
-  'test a processor that filters by node name': (test) ->
+  test 'a processor that filters by node name', (done) ->
     xml = '<account><accountNumber>0012345</accountNumber><balance>123.45</balance></account>'
     options = { valueProcessors: [parseNumbersExceptAccount] }
     xml2js.parseString xml, options, (err, parsed) ->
       equ parsed.account.accountNumber, '0012345'
       equ parsed.account.balance, 123.45
-      test.finish()
+      done()
       
-  'test a processor that filters by attr name': (test) ->
+  test 'a processor that filters by attr name', (done) ->
     xml = '<account accountNumber="0012345" balance="123.45" />'
     options = { attrValueProcessors: [parseNumbersExceptAccount] }
     xml2js.parseString xml, options, (err, parsed) ->
       equ parsed.account.$.accountNumber, '0012345'
       equ parsed.account.$.balance, 123.45
-      test.finish()
+      done()
