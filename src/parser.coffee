@@ -11,12 +11,18 @@ defaults = require('./defaults').defaults
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
-isValidKey = (key) ->
-  return key != '__proto__' && key != 'constructor' && key != 'prototype'
-
 processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
   return item
+
+defineProperty = (obj, key, value) ->
+  # make sure the descriptor hasn't been prototype polluted
+  descriptor = Object.create null
+  descriptor.value = value
+  descriptor.writeable = true
+  descriptor.enumerable = true
+  descriptor.configurable = true
+  Object.defineProperty obj, key, descriptor
 
 class exports.Parser extends events
   constructor: (opts) ->
@@ -55,14 +61,14 @@ class exports.Parser extends events
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
-    return if not isValidKey(key)
     if key not of obj
       if not @options.explicitArray
-        obj[key] = newValue
+        defineProperty obj, key, newValue
       else
-        obj[key] = [newValue]
+        defineProperty obj, key, [newValue]
     else
-      obj[key] = [obj[key]] if not (obj[key] instanceof Array)
+      unless obj[key] instanceof Array
+        defineProperty obj, key, [obj[key]]
       obj[key].push newValue
 
   reset: =>
@@ -114,11 +120,10 @@ class exports.Parser extends events
             obj[attrkey] = {}
           newValue = if @options.attrValueProcessors then processItem(@options.attrValueProcessors, node.attributes[key], key) else node.attributes[key]
           processedKey = if @options.attrNameProcessors then processItem(@options.attrNameProcessors, key) else key
-          if isValidKey(processedKey)
-            if @options.mergeAttrs
-              @assignOrPush obj, processedKey, newValue
-            else
-              obj[attrkey][processedKey] = newValue
+          if @options.mergeAttrs
+            @assignOrPush obj, processedKey, newValue
+          else
+            defineProperty obj[attrkey], processedKey, newValue
 
       # need a place to store the node name
       obj["#name"] = if @options.tagNameProcessors then processItem(@options.tagNameProcessors, node.name) else node.name
@@ -188,7 +193,7 @@ class exports.Parser extends events
           # push a clone so that the node in the children array can receive the #name property while the original obj can do without it
           objClone = {}
           for own key of obj
-            objClone[key] = obj[key] if isValidKey(key)
+            defineProperty objClone, key, obj[key]
           s[@options.childkey].push objClone
           delete obj["#name"]
           # re-check whether we can collapse the node now to just the charkey value
@@ -204,7 +209,7 @@ class exports.Parser extends events
           # avoid circular references
           old = obj
           obj = {}
-          obj[nodeName] = old
+          defineProperty obj, nodeName, old
 
         @resultObject = obj
         # parsing has ended, mark that so we won't throw exceptions from
