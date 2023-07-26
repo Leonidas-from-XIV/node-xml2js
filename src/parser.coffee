@@ -19,7 +19,7 @@ defineProperty = (obj, key, value) ->
   # make sure the descriptor hasn't been prototype polluted
   descriptor = Object.create null
   descriptor.value = value
-  descriptor.writeable = true
+  descriptor.writable = true
   descriptor.enumerable = true
   descriptor.configurable = true
   Object.defineProperty obj, key, descriptor
