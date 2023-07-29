@@ -4,7 +4,7 @@ sax = require 'sax'
 events = require 'events'
 bom = require './bom'
 processors = require './processors'
-setImmediate = require('timers').setImmediate
+global.setImmediate = require('timers').setImmediate
 defaults = require('./defaults').defaults
 
 # Underscore has a nice function for this, but we try to go without dependencies
