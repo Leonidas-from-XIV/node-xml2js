@@ -30,6 +30,7 @@ class exports.Builder
   buildObject: (rootObj) ->
     attrkey = @options.attrkey
     charkey = @options.charkey
+    childkey = @options.childkey
 
     # If there is a sane-looking first element to use as the root,
     # and the user hasn't specified a non-default rootName,
@@ -54,44 +55,73 @@ class exports.Builder
           for key, entry of child
             element = render(element.ele(key), entry).up()
       else
-        for own key, child of obj
-          # Case #1 Attribute
-          if key is attrkey
-            if typeof child is "object"
-              # Inserts tag attributes
-              for attr, value of child
-                element = element.att(attr, value)
+        children_as_array = false
+        # First analyze some metadata keys
 
-          # Case #2 Char data (CDATA, etc.)
-          else if key is charkey
-            if @options.cdata && requiresCDATA child
-              element = element.raw wrapCDATA child
-            else
-              element = element.txt child
+        # Attributes
+        if obj? and attrkey of obj and typeof obj[attrkey] is "object"
+          child = obj[attrkey]
+          # Inserts tag attributes
+          for attr, value of child
+            element = element.att(attr, value)
 
-          # Case #3 Array data
-          else if Array.isArray child
-            for own index, entry of child
-              if typeof entry is 'string'
-                if @options.cdata && requiresCDATA entry
-                  element = element.ele(key).raw(wrapCDATA entry).up()
-                else
-                  element = element.ele(key, entry).up()
-              else
-                element = render(element.ele(key), entry).up()
-
-          # Case #4 Objects
-          else if typeof child is "object"
-            element = render(element.ele(key), child).up()
-
-          # Case #5 String and remaining types
+        # Char data (CDATA, etc.)
+        if obj? and charkey of obj
+          child = obj[charkey]
+          if @options.cdata && requiresCDATA child
+            element = element.raw wrapCDATA child
           else
-            if typeof child is 'string' && @options.cdata && requiresCDATA child
-              element = element.ele(key).raw(wrapCDATA child).up()
+            element = element.txt child
+
+        # Objects with explicitChildren
+        if obj? and childkey of obj
+          child = obj[childkey]
+          if Array.isArray child
+            children_as_array = true
+            for own index, entry of child
+              if typeof entry is "object"
+                if ( Object.keys(entry).length is 1 )
+                  name = Object.keys(entry)[0]
+                  element = render(element.ele(name),entry[name]).up()
+                else if '#name' of entry
+                  element = render(element.ele(entry['#name']), entry).up()
+                else
+                  throw new Error('Missing #name attribute when children')
+          else if typeof child is "object"
+            element = render(element, child)
+
+        if not children_as_array
+          # With the preserverChildrenOrder option, the parser will include
+          # the children element both as an array under 'childkey'
+          # and as individual keys.
+          for own key, child of obj
+            # Skip metadata keys that we have already covered
+            if key is '#name' or key is attrkey or key is charkey or key is childkey
+              continue
+
+            # Case #3 Array data
+            else if Array.isArray child
+              for own index, entry of child
+                if typeof entry is 'string'
+                  if @options.cdata && requiresCDATA entry
+                    element = element.ele(key).raw(wrapCDATA entry).up()
+                  else
+                    element = element.ele(key, entry).up()
+                else
+                  element = render(element.ele(key), entry).up()
+
+            # Case #4 Objects
+            else if typeof child is "object"
+              element = render(element.ele(key), child).up()
+
+            # Case #5 String and remaining types
             else
-              if not child?
-                child = ''
-              element = element.ele(key, child.toString()).up()
+              if typeof child is 'string' && @options.cdata && requiresCDATA child
+                element = element.ele(key).raw(wrapCDATA child).up()
+              else
+                if not child?
+                  child = ''
+                element = element.ele(key, child.toString()).up()
 
       element
 

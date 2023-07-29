@@ -266,6 +266,30 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test obj is a string with cdata': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <root><![CDATA[& <<]]></root>
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = "& <<"
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test obj content with cdata': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <root><![CDATA[& <<]]></root>
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = { root: { '_': "& <<" } }
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test building obj with array': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -280,4 +304,122 @@ module.exports =
     obj = [{"MsgId": 10}, {"MsgId2": 12}]
     actual = builder.buildObject obj
     diffeq expected, actual
+    test.finish()
+
+  'test round-trip explicitChildren': (test) ->
+    xml = '<a id="0"><b id="1">Text B1</b><c id="2">Text C2</c><b id="3">Text B3</b></a>'
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <b id="3">Text B3</b>
+      <c id="2">Text C2</c>
+    </a>
+
+    """
+    opts = cdata: true, explicitChildren: true
+    parser_opts = explicitChildren: true
+    parser = new xml2js.Parser parser_opts
+    builder = new xml2js.Builder opts
+    parser.parseString xml, (err, data) ->
+      equ err, null
+      actual = builder.buildObject data
+      diffeq expected, actual
+      test.finish()
+
+  'test round-trip explicitChildren & preserveChildrenOrder': (test) ->
+    xml = '<a id="0"><b id="1">Text B1</b><c id="2">Text C2</c><b id="3">Text B3</b></a>'
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <c id="2">Text C2</c>
+      <b id="3">Text B3</b>
+    </a>
+
+    """
+    opts = cdata: true, explicitChildren: true, preserveChildrenOrder: true
+    parser_opts = explicitChildren: true, preserveChildrenOrder: true
+    parser = new xml2js.Parser parser_opts
+    builder = new xml2js.Builder opts
+    parser.parseString xml, (err, data) ->
+      equ err, null
+      actual = builder.buildObject data
+      diffeq expected, actual
+      test.finish()
+  'test children as single key objects': (test) ->
+    obj = {
+      a: {
+        '$': { id: 0 },
+        '$$': [
+          {
+            b: {
+              '$': { id: 1},
+              '_': 'Text B1'
+            }
+          },
+          {
+            c: {
+              '$': { id: 2},
+              '_': 'Text C2'
+            }
+          },
+          {
+            b: {
+              '$': { id: 3},
+              '_': 'Text B3'
+            }
+          }
+        ]
+      }
+    }
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <c id="2">Text C2</c>
+      <b id="3">Text B3</b>
+    </a>
+
+    """
+    opts = {}
+    builder = new xml2js.Builder opts
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+  'test children without any name': (test) ->
+    obj = {
+      a: {
+        '$': { id: 0 },
+        '$$': [
+          {
+            '$': { id: 1},
+            '_': 'Text B1'
+          },
+          {
+            '$': { id: 2},
+            '_': 'Text C2'
+          },
+          {
+            '$': { id: 3},
+            '_': 'Text B3'
+          }
+        ]
+      }
+    }
+    expected = """
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <a id="0">
+      <b id="1">Text B1</b>
+      <c id="2">Text C2</c>
+      <b id="3">Text B3</b>
+    </a>
+
+    """
+    opts = {}
+    builder = new xml2js.Builder opts
+    assert.throws(
+      () =>
+        actual = builder.buildObject obj
+      /Missing #name attribute when children/)
     test.finish()
