@@ -136,7 +136,7 @@ class exports.Parser extends events
       nodeName = obj["#name"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
 
-      if obj.cdata == true
+      if obj.cdata is 'always' or obj.cdata == true
         cdata = obj.cdata
         delete obj.cdata
 
