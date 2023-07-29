@@ -114,6 +114,11 @@ class exports.Parser extends events
     @saxParser.onopentag = (node) =>
       obj = {}
       obj[charkey] = ""
+      # generate path based on stacked objs
+      path = stack.reduce((pathArray, item) =>
+        pathArray.push(item['#originalName'])
+        return pathArray;
+      , []);
       unless @options.ignoreAttrs
         for own key of node.attributes
           if attrkey not of obj and not @options.mergeAttrs
@@ -125,8 +130,9 @@ class exports.Parser extends events
           else
             defineProperty obj[attrkey], processedKey, newValue
 
-      # need a place to store the node name
-      obj["#name"] = if @options.tagNameProcessors then processItem(@options.tagNameProcessors, node.name) else node.name
+      # need a place to store the node name and original node name (unprocessed)
+      obj["#name"] = if @options.tagNameProcessors then processItem(@options.tagNameProcessors, node.name, path) else node.name
+      obj["#originalName"] = node.name
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
@@ -134,6 +140,7 @@ class exports.Parser extends events
     @saxParser.onclosetag = =>
       obj = stack.pop()
       nodeName = obj["#name"]
+      delete obj["#originalName"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
 
       if obj.cdata == true
