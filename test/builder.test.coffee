@@ -250,6 +250,38 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test attribute rendering': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml foo="bar">
+        <MsgId>10</MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{
+      "$": {"foo": "bar"}
+      "MsgId":10}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test nested attribute rendering': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId foo="bar">10</MsgId>
+      </xml>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":{"$": {"foo": "bar"}, "_": 10}}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test does not error on array values when checking for cdata': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -278,6 +310,27 @@ module.exports =
     opts = cdata: true
     builder = new xml2js.Builder opts
     obj = [{"MsgId": 10}, {"MsgId2": 12}]
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
+  'test building obj with nested array': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <request>
+        <headers>
+          <header method="INVITE" name="X-Mode" value="standard"/>
+          <header method="INVITE" name="X-Prop" value="default"/>
+        </headers>
+      </request>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = {request: { headers: [
+      { header: { '$': { 'method': 'INVITE', name: 'X-Mode', value: 'standard' } } },
+      { header: { '$': { 'method': 'INVITE', name: 'X-Prop', value: 'default' } } }
+    ]}}
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()

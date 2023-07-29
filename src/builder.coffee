@@ -71,14 +71,24 @@ class exports.Builder
 
           # Case #3 Array data
           else if Array.isArray child
+            # Simple-type children (numbers and strings) and complex children (objects and arrays) are converted
+            # differently. Arrays of simple children will repeat the parent element, e.g. `<foo>1</foo><foo>2</foo>`,
+            # while complex child arrays will be wrapped in their parent, e.g.
+            # `<messages><message type="foo"/message>fuz<message type="bar"/>baz</messages>`
             for own index, entry of child
-              if typeof entry is 'string'
+              if typeof entry isnt 'object'
+                # single element, just append it as text
                 if @options.cdata && requiresCDATA entry
                   element = element.ele(key).raw(wrapCDATA entry).up()
                 else
                   element = element.ele(key, entry).up()
               else
-                element = render(element.ele(key), entry).up()
+                if (!arrayElement)
+                  arrayElement = element.ele(key)
+                render(arrayElement, entry)
+            if (arrayElement)
+              element = arrayElement.up()
+              arrayElement = null
 
           # Case #4 Objects
           else if typeof child is "object"
