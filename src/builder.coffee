@@ -19,6 +19,11 @@ escapeCDATA = (entry) ->
   # When later parsed, it will be put back together as ']]>'
   return entry.replace ']]>', ']]]]><![CDATA[>'
 
+processItem = (processors, item, key) ->
+  if processors
+    item = process(item, key) for process in processors
+  return item
+  
 class exports.Builder
   constructor: (opts) ->
     # copy this versions default options
@@ -37,6 +42,7 @@ class exports.Builder
       # we'll take the first element as the root element
       rootName = Object.keys(rootObj)[0]
       rootObj = rootObj[rootName]
+      rootName = processItem(@options.tagNameProcessors, rootName)
     else
       # otherwise we'll use whatever they've set, or the default
       rootName = @options.rootName
@@ -51,15 +57,18 @@ class exports.Builder
       else if Array.isArray obj
         # fix issue #119
         for own index, child of obj
-          for key, entry of child
-            element = render(element.ele(key), entry).up()
+          for key, entry of child # TODO: should this be 'for own key...'?
+            tag = processItem(@options.tagNameProcessors, key)
+            element = render(element.ele(tag), entry).up()
       else
         for own key, child of obj
+          tag = processItem(@options.tagNameProcessors, key)
           # Case #1 Attribute
           if key is attrkey
             if typeof child is "object"
               # Inserts tag attributes
               for attr, value of child
+                attr = processItem(@options.attrNameProcessors, attr)
                 element = element.att(attr, value)
 
           # Case #2 Char data (CDATA, etc.)
@@ -74,24 +83,24 @@ class exports.Builder
             for own index, entry of child
               if typeof entry is 'string'
                 if @options.cdata && requiresCDATA entry
-                  element = element.ele(key).raw(wrapCDATA entry).up()
+                  element = element.ele(tag).raw(wrapCDATA entry).up()
                 else
-                  element = element.ele(key, entry).up()
+                  element = element.ele(tag, entry).up()
               else
-                element = render(element.ele(key), entry).up()
+                element = render(element.ele(tag), entry).up()
 
           # Case #4 Objects
           else if typeof child is "object"
-            element = render(element.ele(key), child).up()
+            element = render(element.ele(tag), child).up()
 
           # Case #5 String and remaining types
           else
             if typeof child is 'string' && @options.cdata && requiresCDATA child
-              element = element.ele(key).raw(wrapCDATA child).up()
+              element = element.ele(tag).raw(wrapCDATA child).up()
             else
               if not child?
                 child = ''
-              element = element.ele(key, child.toString()).up()
+              element = element.ele(tag, child.toString()).up()
 
       element
 

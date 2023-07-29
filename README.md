@@ -256,7 +256,7 @@ Result of `buildObject(obj)`:
 Processing attribute, tag names and values
 ------------------------------------------
 
-Since 0.4.1 you can optionally provide the parser with attribute name and tag name processors as well as element value processors (Since 0.4.14, you can also optionally provide the parser with attribute value processors):
+Since 0.4.1 you can optionally provide the parser with attribute name and tag name processors as well as element value processors. Since 0.4.14, you can also optionally provide the parser with attribute value processors. Since 0.4.20 you can optionally provide the builder with attribute name and tag name processors:
 
 ```javascript
 
@@ -273,7 +273,19 @@ parseString(xml, {
   function (err, result) {
     // processed data
 });
+
+const builder = new Builder({
+  tagNameProcessors: [nameToUpperCase],
+  attrNameProcessors: [nameToUpperCase]
+});
+xml = builder.buildObject(js);
 ```
+
+Note that in most cases, you probably don't want to use the same
+name and/or value processors for parser and builder
+(e.g., the parser should strip namespace prefixes from tag names,
+but the builder should add prefixes), so you **shouldn't**
+use the same `options` object for parser and builder.
 
 The `tagNameProcessors` and `attrNameProcessors` options
 accept an `Array` of functions with the following signature:
@@ -299,7 +311,7 @@ function (value, name) {
 Some processors are provided out-of-the-box and can be found in `lib/processors.js`:
 
 - `normalize`: transforms the name to lowercase.
-(Automatically used when `options.normalize` is set to `true`)
+(Automatically used when `options.normalizeTags` is set to `true`)
 
 - `firstCharLowerCase`: transforms the first character to lower case.
 E.g. 'MyTagName' becomes 'myTagName'
@@ -382,7 +394,7 @@ value})``. Possible options are:
         return name
     }
     ```
-    Added in 0.4.14
+    Added in 0.4.1. Note: In most cases, you probably **don't** want to use the same `attrNameProcessors` for parser and builder, so you shouldn't use the same `options` object for parser and builder.
   * `attrValueProcessors` (default: `null`): Allows the addition of attribute
     value processing functions. Accepts an `Array` of functions with following
     signature:
@@ -392,7 +404,7 @@ value})``. Possible options are:
       return name
     }
     ```
-    Added in 0.4.1
+    Added in 0.4.14
   * `tagNameProcessors` (default: `null`): Allows the addition of tag name
     processing functions. Accepts an `Array` of functions with following
     signature:
@@ -402,7 +414,7 @@ value})``. Possible options are:
       return name
     }
     ```
-    Added in 0.4.1
+    Added in 0.4.1. Note: In most cases, you probably **don't** want to use the same `tagNameProcessors` for parser and builder, so you shouldn't use the same `options` object for parser and builder.
   * `valueProcessors` (default: `null`): Allows the addition of element value
     processing functions. Accepts an `Array` of functions with following
     signature:
@@ -442,6 +454,26 @@ Possible options are:
   * `cdata` (default: `false`): wrap text nodes in `<![CDATA[ ... ]]>` instead of
     escaping when necessary. Does not add `<![CDATA[ ... ]]>` if it is not required.
     Added in 0.4.5.
+  * `attrNameProcessors` (default: `null`): Allows the addition of attribute
+    name processing functions. Accepts an `Array` of functions with following
+    signature:
+    ```javascript
+    function (name){
+        //do something with `name`
+        return name
+    }
+    ```
+    Added in 0.4.20. Note: In most cases, you probably **don't** want to use the same `attrNameProcessors` for parser and builder, so you shouldn't use the same `options` object for parser and builder.
+  * `tagNameProcessors` (default: `null`): Allows the addition of tag name
+    processing functions. Accepts an `Array` of functions with following
+    signature:
+    ```javascript
+    function (name){
+      //do something with `name`
+      return name
+    }
+    ```
+    Added in 0.4.20. Note: In most cases, you probably **don't** want to use the same `tagNameProcessors` for parser and builder, so you shouldn't use the same `options` object for parser and builder.
 
 `renderOpts`, `xmldec`,`doctype` and `headless` pass through to
 [xmlbuilder-js](https://github.com/oozcitak/xmlbuilder-js).
