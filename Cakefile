@@ -1,15 +1,15 @@
 {spawn, exec} = require 'child_process'
 
-task 'build-watch', 'continually build the JavaScript code', ->
+task 'build', 'continually build the JavaScript code', ->
   coffeeScript = if process.platform == 'win32' then 'coffee.cmd' else 'coffee'
   coffee = spawn coffeeScript, ['-cw', '-o', 'lib', 'src']
   coffee.stdout.on 'data', (data) -> console.log data.toString().trim()
 
-task 'build', 'build the JavaScript code', ->
+task 'build-ci', 'build the JavaScript code', ->
   coffeeScript = if process.platform == 'win32' then 'coffee.cmd' else 'coffee'
   coffee = spawn coffeeScript, ['-c', '-o', 'lib', 'src']
 
-task 'build-tests', 'build the tests', ->
+task 'build-ci-tests', 'build the tests', ->
   coffeeScript = if process.platform == 'win32' then 'coffee.cmd' else 'coffee'
   coffee = spawn coffeeScript, ['-c', '-o', 'test', 'test']
 
