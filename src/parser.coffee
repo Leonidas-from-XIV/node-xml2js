@@ -61,7 +61,7 @@ class exports.Parser extends events
         @emit err
 
   assignOrPush: (obj, key, newValue) =>
-    if key not of obj
+    if not Object::hasOwnProperty.call obj, key
       if not @options.explicitArray
         defineProperty obj, key, newValue
       else

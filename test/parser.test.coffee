@@ -647,3 +647,23 @@ module.exports =
     .catch (err) ->
       assert.notEqual err, null
       test.finish()
+
+  # Regression test for issue #719: prototype chain property confusion
+  # Tags named after Object.prototype methods should parse correctly
+  'test prototype property names do not cause errors': skeleton({__xmlString: '<root><toString>value1</toString><valueOf>value2</valueOf><constructor>value3</constructor><hasOwnProperty>value4</hasOwnProperty></root>'}, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    # Verify all prototype-named tags parsed as strings, not functions
+    equ r.root.toString[0], 'value1'
+    equ r.root.valueOf[0], 'value2'
+    equ r.root.constructor[0], 'value3'
+    equ r.root.hasOwnProperty[0], 'value4'
+    # Verify no inherited functions leaked into the result
+    equ typeof r.root.toString[0], 'string'
+    equ typeof r.root.valueOf[0], 'string')
+
+  'test multiple prototype property tags parse correctly': skeleton({__xmlString: '<root><toString>a</toString><toString>b</toString></root>'}, (r) ->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    # Multiple tags with prototype names should be collected into arrays
+    equ r.root.toString.length, 2
+    equ r.root.toString[0], 'a'
+    equ r.root.toString[1], 'b')
