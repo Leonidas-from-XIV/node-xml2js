@@ -313,6 +313,32 @@ module.exports =
     equ r.sample.listtest[0].item[1], 'Qux.'
     equ r.sample.listtest[0].item[2], 'Quux.')
 
+  'test parseStringPromise with emptyTag and explicitArray': (test) ->
+    xml = """
+      <test xmlns="http://example.com/namespace">
+        <value1>value1</value1>
+        <value2></value2>
+        <value3 xmlns="http://example.com/namespace">value3</value3>
+        <value4 xmlns="http://example.com/namespace"></value4>
+      </test>
+    """
+    parser = new xml2js.Parser
+      emptyTag: '--EMPTY--'
+      explicitArray: false
+
+    parser.parseStringPromise(xml)
+      .then (result) ->
+        equ result.test.$?.xmlns, 'http://example.com/namespace'
+        equ result.test.value1, 'value1'
+        equ result.test.value2, '--EMPTY--'
+        equ result.test.value3._, 'value3'
+        equ result.test.value3.$?.xmlns, 'http://example.com/namespace'
+        equ result.test.value4._, '--EMPTY--'
+        equ result.test.value4.$?.xmlns, 'http://example.com/namespace'
+        test.finish()
+      .catch (err) ->
+        test.fail('Should not error: ' + err)
+
   'test simple callback mode': (test) ->
     x2js = new xml2js.Parser()
     fs.readFile fileName, (err, data) ->

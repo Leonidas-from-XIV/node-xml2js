@@ -11,6 +11,9 @@ defaults = require('./defaults').defaults
 isEmpty = (thing) ->
   return typeof thing is "object" && thing? && Object.keys(thing).length is 0
 
+hasNoContent = (thing) ->
+  return typeof thing is "object" && thing? && (Object.keys(thing).length is 0 || (Object.keys(thing).length is 1 && '$' of thing))
+
 processItem = (processors, item, key) ->
   item = process(item, key) for process in processors
   return item
@@ -154,11 +157,15 @@ class exports.Parser extends events
         if Object.keys(obj).length == 1 and charkey of obj and not @EXPLICIT_CHARKEY
           obj = obj[charkey]
 
+      if typeof @options.emptyTag == 'function'
+        emptyTag = @options.emptyTag()
+      else
+        emptyTag = if @options.emptyTag != '' then @options.emptyTag else emptyStr
+
       if (isEmpty obj)
-        if typeof @options.emptyTag == 'function'
-          obj = @options.emptyTag()
-        else
-          obj = if @options.emptyTag != '' then @options.emptyTag else emptyStr
+        obj = emptyTag
+      else if (hasNoContent obj)
+        obj['_'] = emptyTag
 
       if @options.validator?
         xpath = "/" + (node["#name"] for node in stack).concat(nodeName).join("/")
