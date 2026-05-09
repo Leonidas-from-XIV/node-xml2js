@@ -220,6 +220,22 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  "test uses cdata for all chars when cdata is 'always'": (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <MsgId><![CDATA[& <<]]></MsgId>
+        <Message><![CDATA[Hello]]></Message>
+      </xml>
+
+    """
+    opts = cdata: 'always'
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["& <<"],"Message":["Hello"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test uses cdata for string values of objects': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
