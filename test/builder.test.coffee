@@ -281,3 +281,20 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test building obj with array and attributes': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <root name="myName">
+        <MsgId>10</MsgId>
+        <MsgId2>12</MsgId2>
+      </root>
+
+    """
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    obj = [{"MsgId": 10}, {"MsgId2": 12}]
+    obj.$ = {"name": "myName"}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()

@@ -51,8 +51,14 @@ class exports.Builder
       else if Array.isArray obj
         # fix issue #119
         for own index, child of obj
-          for key, entry of child
-            element = render(element.ele(key), entry).up()
+          # allow setting attributes for parents with multiple childrens
+          if index is attrkey
+            if typeof child is "object"
+              for attr, value of child
+                element = element.att(attr, value)
+          else
+            for key, entry of child
+              element = render(element.ele(key), entry).up()
       else
         for own key, child of obj
           # Case #1 Attribute
