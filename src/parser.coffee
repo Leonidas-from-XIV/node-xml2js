@@ -142,7 +142,7 @@ class exports.Parser extends events
 
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
-      if obj[charkey].match(/^\s*$/) and not cdata
+      if obj[charkey].match(/^\s*$/) and not cdata and not @options.includeWhiteChars
         emptyStr = obj[charkey]
         delete obj[charkey]
       else
