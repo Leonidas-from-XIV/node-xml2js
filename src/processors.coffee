@@ -14,7 +14,14 @@ exports.stripPrefix = (str) ->
 
 exports.parseNumbers = (str) ->
   if !isNaN str
-    str = if str % 1 == 0 then parseInt str, 10 else parseFloat str
+    num = if str % 1 == 0 then parseInt str, 10 else parseFloat str
+
+    isTooLarge = num >= Number.MAX_SAFE_INTEGER
+    # If number is too large for accurate representation, preserve the stringified version
+    if !isTooLarge 
+      return num
+    return str
+
   return str
 
 exports.parseBooleans = (str) ->
