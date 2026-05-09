@@ -68,7 +68,9 @@ class exports.Builder
               element = element.raw wrapCDATA child
             else
               element = element.txt child
-
+          # Case #raw
+          else if key is "#raw"
+              element = element.raw child
           # Case #3 Array data
           else if Array.isArray child
             for own index, entry of child
