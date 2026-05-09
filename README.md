@@ -425,11 +425,13 @@ Possible options are:
     content. Version 0.1 default was `#`.
   * `rootName` (default `root` or the root key name): root element name to be used in case
      `explicitRoot` is `false` or to override the root element name.
-  * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n' }`):
+  * `renderOpts` (default `{ 'pretty': true, 'indent': '  ', 'newline': '\n', 'allowEmpty': false, 'spacebeforeslash': '' }`):
     Rendering options for xmlbuilder-js.
     * pretty: prettify generated XML
     * indent: whitespace for indentation (only when pretty)
     * newline: newline char (only when pretty)
+    * allowEmpty: allow empty tags like <root></root> instead of self-closing them like <root/> (only when pretty)
+    * spacebeforeslash: add the given space character(s) into self-closed tags like <root /> (only when pretty)
   * `xmldec` (default `{ 'version': '1.0', 'encoding': 'UTF-8', 'standalone': true }`:
     XML declaration attributes.
     * `xmldec.version` A version number string, e.g. 1.0
