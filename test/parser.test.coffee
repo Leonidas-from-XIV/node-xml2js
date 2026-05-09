@@ -40,6 +40,11 @@ nameCutoff = (name) ->
 replaceValueByName = (value, name) ->
   return name
 
+sampleNodeProcessor =
+  canProcess: (node) -> node?.$?.type == "number"
+  process: (node) -> Number.parseInt(node._)
+
+
 ###
 The `validator` function validates the value at the XPath. It also transforms the value
 if necessary to conform to the schema or other validation information being used. If there
@@ -599,7 +604,11 @@ module.exports =
   'test valueProcessors key param': skeleton(valueProcessors: [replaceValueByName], (r)->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.valueProcessTest[0], 'valueProcessTest')
-  
+
+  'test nodeProcessors': skeleton(nodeProcessors: [sampleNodeProcessor], (r)->
+    console.log 'Result object: ' + util.inspect r, false, 10
+    equ r.sample.nodeProcessorTest[0], 1234)
+
   'test parseStringPromise parsing': (test) ->
     x2js = new xml2js.Parser()
     readFilePromise(fileName).then (data) ->
@@ -610,7 +619,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test parseStringPromise with bad input': (test) ->
     x2js = new xml2js.Parser()
     x2js.parseStringPromise("< a moose bit my sister>").then (r) ->
@@ -640,7 +649,7 @@ module.exports =
       test.finish()
     .catch (err) ->
       test.fail('Should not error')
-    
+
   'test global parseStringPromise with bad input': (test) ->
     xml2js.parseStringPromise("< a moose bit my sister>").then (r) ->
       test.fail('Should fail')

@@ -412,7 +412,23 @@ value})``. Possible options are:
       return name
     }
     ```
-    Added in 0.4.6
+
+    Added in 0.x.y
+  * `nodeProcessors` (default: `null`): Allows custom processing to be run on a node after xml2js has converted it. Accepts an `Array` of objects with two functions:
+    ```javascript
+    // Processor to convert the XML node "<Foo type="integer">1234</Foo>" to the number "1234"
+    {
+      canProcess: function(node) {
+        // If node has "integer" attribute, this processor will handle it
+        return node?.$?.type === "integer";
+      },
+      process: function(node) {
+        // Replace this node with the parsed text contents
+        return Number.parseInt(node._);
+      }
+    }
+    ```
+    `nodeProcessors` are applied in the order they appear in.
 
 Options for the `Builder` class
 -------------------------------
