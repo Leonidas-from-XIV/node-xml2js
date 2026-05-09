@@ -80,11 +80,15 @@ class exports.Builder
               else
                 element = render(element.ele(key), entry).up()
 
-          # Case #4 Objects
+          # Case #4 Date objects
+          else if child instanceof Date
+            element = element.ele(key, child.toISOString()).up()
+
+          # Case #5 Objects
           else if typeof child is "object"
             element = render(element.ele(key), child).up()
 
-          # Case #5 String and remaining types
+          # Case #6 String and remaining types
           else
             if typeof child is 'string' && @options.cdata && requiresCDATA child
               element = element.ele(key).raw(wrapCDATA child).up()

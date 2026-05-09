@@ -281,3 +281,17 @@ module.exports =
     actual = builder.buildObject obj
     diffeq expected, actual
     test.finish()
+
+  'test building Date object': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+        <DateTime>2001-10-26T21:32:52.126Z</DateTime>
+      </xml>
+
+    """
+    builder = new xml2js.Builder()
+    obj = { "xml": { "DateTime": new Date("2001-10-26T21:32:52.126Z") } }
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
