@@ -17,7 +17,7 @@ escapeCDATA = (entry) ->
   # The first contains the ']]'
   # The second contains the '>'
   # When later parsed, it will be put back together as ']]>'
-  return entry.replace ']]>', ']]]]><![CDATA[>'
+  return entry.replace /]]>/g, ']]]]><![CDATA[>'
 
 class exports.Builder
   constructor: (opts) ->
