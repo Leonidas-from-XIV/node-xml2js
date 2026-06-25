@@ -204,6 +204,19 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test cdata text nodes with multiple escaped end sequences round-trip': (test) ->
+    # A value with two `]]>` sequences must round-trip exactly; every
+    # occurrence has to be split or the second one prematurely closes the
+    # CDATA section (XML 1.0 section 2.7) and corrupts the data.
+    value = "a ]]> b ]]> c"
+    opts = cdata: true
+    builder = new xml2js.Builder opts
+    xml = builder.buildObject {"xml":{"MsgId":[value]}}
+    xml2js.parseString xml, (err, parsed) ->
+      throw err if err
+      equ parsed.xml.MsgId[0], value
+      test.finish()
+
   'test uses cdata only for chars &, <, >': (test) ->
     expected = """
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
