@@ -26,6 +26,14 @@ class exports.Builder
     @options[key] = value for own key, value of defaults["0.2"]
     # overwrite them with the specified options, if any
     @options[key] = value for own key, value of opts
+    # `renderOpts` is merged with its defaults rather than replaced outright,
+    # so passing a partial override (e.g. just `indent`) doesn't silently
+    # drop the other `renderOpts` defaults such as `pretty` or `newline`
+    if opts?.renderOpts?
+      renderOpts = {}
+      renderOpts[key] = value for own key, value of defaults["0.2"].renderOpts
+      renderOpts[key] = value for own key, value of opts.renderOpts
+      @options.renderOpts = renderOpts
 
   buildObject: (rootObj) ->
     attrkey = @options.attrkey

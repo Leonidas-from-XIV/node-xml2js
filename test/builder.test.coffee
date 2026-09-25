@@ -64,6 +64,23 @@ module.exports =
     diffeq expected, actual
     test.finish()
 
+  'test setting indentation without repeating the other renderOpts defaults': (test) ->
+    expected = """
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <xml>
+          <MsgId>5850440872586764820</MsgId>
+      </xml>
+
+    """
+    # only `indent` is set here; `pretty` and `newline` should still come
+    # from the defaults instead of being dropped
+    opts = renderOpts: indent: '    '
+    builder = new xml2js.Builder opts
+    obj = {"xml":{"MsgId":["5850440872586764820"]}}
+    actual = builder.buildObject obj
+    diffeq expected, actual
+    test.finish()
+
   'test headless option': (test) ->
     expected = """
       <xml>
