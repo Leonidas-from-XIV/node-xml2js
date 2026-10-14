@@ -422,6 +422,12 @@ module.exports =
       # current stack processes, which, if the test would fail, would contain and throw the additional errors
       setTimeout test.finish.bind test
 
+  'test error in element handler (async)': (test) ->
+    # an element named like the charkey makes the closing tag handler throw
+    xml2js.parseString '<a><_>x</_></a>', async: true, (err, parsed) ->
+      assert.ok err instanceof Error
+      test.finish()
+
   'test xmlns': skeleton(xmlns: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample["pfx:top"][0].$ns.local, 'top'

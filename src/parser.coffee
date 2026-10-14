@@ -58,7 +58,7 @@ class exports.Parser extends events
     catch err
       if ! @saxParser.errThrown
         @saxParser.errThrown = true
-        @emit err
+        @emit 'error', err
 
   assignOrPush: (obj, key, newValue) =>
     if not Object::hasOwnProperty.call obj, key
