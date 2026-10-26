@@ -40,6 +40,29 @@ module.exports =
     equ processors.parseNumbers('10.00'), 10
     test.done()
 
+  'test parseNumbers preserves empty and whitespace values': (test) ->
+    for value in ['', ' ', '\t\r\n', '\u00a0']
+      assert.strictEqual processors.parseNumbers(value), value
+    assert.strictEqual processors.parseNumbers(' 0 '), 0
+    assert.strictEqual processors.parseNumbers(' -12.5 '), -12.5
+    assert.strictEqual processors.parseNumbers('text'), 'text'
+    test.done()
+
+  'test number processors preserve empty XML values': (test) ->
+    xml = '<root empty="" blank=" " count="0"><empty/><blank> </blank><count>0</count></root>'
+    options =
+      valueProcessors: [processors.parseNumbers]
+      attrValueProcessors: [processors.parseNumbers]
+    xml2js.parseString xml, options, (err, parsed) ->
+      assert.ifError err
+      assert.strictEqual parsed.root.$.empty, ''
+      assert.strictEqual parsed.root.$.blank, ' '
+      assert.strictEqual parsed.root.$.count, 0
+      assert.strictEqual parsed.root.empty[0], ''
+      assert.strictEqual parsed.root.blank[0], ' '
+      assert.strictEqual parsed.root.count[0], 0
+      test.done()
+
   'test parseBooleans': (test) ->
     equ processors.parseBooleans('true'), true
     equ processors.parseBooleans('True'), true
