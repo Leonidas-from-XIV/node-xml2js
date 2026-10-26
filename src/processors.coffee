@@ -13,7 +13,7 @@ exports.stripPrefix = (str) ->
   return str.replace prefixMatch, ''
 
 exports.parseNumbers = (str) ->
-  if !isNaN str
+  if /\S/.test(str) and !isNaN str
     str = if str % 1 == 0 then parseInt str, 10 else parseFloat str
   return str
 
