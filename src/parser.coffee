@@ -107,6 +107,8 @@ class exports.Parser extends events
     @EXPLICIT_CHARKEY = @options.explicitCharkey
     @resultObject = null
     stack = []
+    # Keep CDATA bookkeeping separate from parsed XML properties.
+    cdataStack = []
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
     charkey = @options.charkey
@@ -130,15 +132,13 @@ class exports.Parser extends events
       if (@options.xmlns)
         obj[@options.xmlnskey] = {uri: node.uri, local: node.local}
       stack.push obj
+      cdataStack.push false
 
     @saxParser.onclosetag = =>
       obj = stack.pop()
+      cdata = cdataStack.pop()
       nodeName = obj["#name"]
       delete obj["#name"] if not @options.explicitChildren or not @options.preserveChildrenOrder
-
-      if obj.cdata == true
-        cdata = obj.cdata
-        delete obj.cdata
 
       s = stack[stack.length - 1]
       # remove the '#' key altogether if it's blank
@@ -236,7 +236,7 @@ class exports.Parser extends events
     @saxParser.oncdata = (text) =>
       s = ontext text
       if s
-        s.cdata = true
+        cdataStack[cdataStack.length - 1] = true
 
   parseString: (str, cb) =>
     if cb? and typeof cb is "function"
