@@ -37,9 +37,7 @@ class exports.Parser extends events
     if @options.xmlns
       @options.xmlnskey = @options.attrkey + "ns"
     if @options.normalizeTags
-      if ! @options.tagNameProcessors
-        @options.tagNameProcessors = []
-      @options.tagNameProcessors.unshift processors.normalize
+      @options.tagNameProcessors = [processors.normalize].concat(@options.tagNameProcessors or [])
 
     @reset()
 
