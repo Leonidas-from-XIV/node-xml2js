@@ -166,7 +166,8 @@ class exports.Parser extends events
         # See https://github.com/Leonidas-from-XIV/node-xml2js/pull/369
         do =>
           try
-            obj = @options.validator(xpath, s and s[nodeName], obj)
+            currentValue = if s and Object::hasOwnProperty.call(s, nodeName) then s[nodeName] else undefined
+            obj = @options.validator(xpath, currentValue, obj)
           catch err
             @emit "error", err
 
