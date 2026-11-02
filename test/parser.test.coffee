@@ -273,6 +273,36 @@ module.exports =
   'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
     equ r, null)
 
+  'test normalizeTags preserves supplied processors and processing order': (test) ->
+    addPrefix = (name) -> "Prefix#{name}"
+    processors = [addPrefix]
+    parser = new xml2js.Parser normalizeTags: true, tagNameProcessors: processors
+    assert.deepEqual processors, [addPrefix]
+    parser.parseString '<MixedCase/>', (err, result) ->
+      assert.ifError err
+      assert.deepEqual result, {Prefixmixedcase: ''}
+      test.finish()
+
+  'test normalizeTags does not change another parser sharing processors': (test) ->
+    processors = [nameCutoff]
+    original = new xml2js.Parser tagNameProcessors: processors
+    normalized = new xml2js.Parser normalizeTags: true, tagNameProcessors: processors
+    original.parseString '<MixedCase/>', (err, result) ->
+      assert.ifError err
+      assert.deepEqual result, {Mixe: ''}
+      normalized.parseString '<MixedCase/>', (err, result) ->
+        assert.ifError err
+        assert.deepEqual result, {mixe: ''}
+        test.finish()
+
+  'test normalizeTags accepts frozen processor arrays': (test) ->
+    processors = Object.freeze [nameCutoff]
+    parser = new xml2js.Parser normalizeTags: true, tagNameProcessors: processors
+    parser.parseString '<MixedCase/>', (err, result) ->
+      assert.ifError err
+      assert.deepEqual result, {mixe: ''}
+      test.finish()
+
   'test enabled normalizeTags': skeleton(normalizeTags: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ Object.keys(r.sample.tagcasetest).length, 1)
