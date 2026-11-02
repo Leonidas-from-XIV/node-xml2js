@@ -40,6 +40,20 @@ module.exports =
     equ processors.parseNumbers('10.00'), 10
     test.done()
 
+  'test parseNumbers with scientific notation': (test) ->
+    for [input, expected] in [['1e3', 1000], ['1.2e3', 1200], ['-2.5E+2', -250], ['1e-3', 0.001], ['1e-324', 0]]
+      equ processors.parseNumbers(input), expected
+    assert.ok Object.is(processors.parseNumbers('-1e-324'), -0)
+    test.done()
+
+  'test scientific notation in element and attribute values': (test) ->
+    xml = '<root amount="1.2e3">-2.5e2</root>'
+    options = {valueProcessors: [processors.parseNumbers], attrValueProcessors: [processors.parseNumbers]}
+    xml2js.parseString xml, options, (err, parsed) ->
+      assert.ifError err
+      assert.deepEqual parsed, {root: {$: {amount: 1200}, _: -250}}
+      test.finish()
+
   'test parseBooleans': (test) ->
     equ processors.parseBooleans('true'), true
     equ processors.parseBooleans('True'), true

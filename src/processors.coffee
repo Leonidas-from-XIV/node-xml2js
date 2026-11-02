@@ -14,7 +14,7 @@ exports.stripPrefix = (str) ->
 
 exports.parseNumbers = (str) ->
   if !isNaN str
-    str = if str % 1 == 0 then parseInt str, 10 else parseFloat str
+    str = parseFloat str
   return str
 
 exports.parseBooleans = (str) ->
