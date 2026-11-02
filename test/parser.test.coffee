@@ -535,7 +535,7 @@ module.exports =
   'test non-strict multiple roots retain the first result': skeleton(__xmlString: '<first>keep</first><second>ignore</second>', strict: false, (r) ->
     assert.deepEqual r, {FIRST: 'keep'})
 
-  'test multiple roots retain a null first result': skeleton(__xmlString: '<first/><second>ignore</second>', explicitRoot: false, emptyTag: null, (r) ->
+  'test multiple roots retain a null first result': skeleton(__xmlString: '<first/><second value="ignore"/>', explicitRoot: false, emptyTag: null, (r) ->
     equ r, null)
 
   'test not closed but well formed xml': (test) ->
