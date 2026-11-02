@@ -212,10 +212,6 @@ class exports.Parser extends events
           defineProperty obj, nodeName, old
 
         @resultObject = obj
-        # parsing has ended, mark that so we won't throw exceptions from
-        # here anymore
-        @saxParser.ended = true
-        @emit "end", @resultObject
 
     ontext = (text) =>
       s = stack[stack.length - 1]

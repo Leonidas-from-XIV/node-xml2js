@@ -508,6 +508,30 @@ module.exports =
         assert.deepEqual resWithNew, resWithoutNew
         test.finish()
 
+  'test trailing text after the root is rejected': (test) ->
+    xml2js.parseString '<root/>trailing', (err, parsed) ->
+      assert.ok err instanceof Error
+      assert.ok /outside of root node/.test err.message
+      equ parsed, undefined
+      test.finish()
+
+  'test an unfinished trailing comment is rejected': (test) ->
+    xml2js.parseString '<root/><!--unfinished', (err, parsed) ->
+      assert.ok err instanceof Error
+      assert.ok /Unexpected end/.test err.message
+      equ parsed, undefined
+      test.finish()
+
+  'test a promise rejects an unfinished trailing processing instruction': (test) ->
+    xml2js.parseStringPromise('<root/><?unfinished').then (->
+      test.fail 'Invalid XML should reject'
+    ), (err) ->
+      assert.ok /Unexpected end/.test err.message
+      test.finish()
+
+  'test valid trailing markup preserves the root result': skeleton(__xmlString: '<root>text</root><!--comment--><?processing instruction?>', (r) ->
+    assert.deepEqual r, {root: 'text'})
+
   'test not closed but well formed xml': (test) ->
     xml = "<test>"
     xml2js.parseString xml, (err, parsed) ->
