@@ -270,6 +270,18 @@ module.exports =
   'test empty tag result specified null': skeleton(emptyTag: null, (r) ->
     equ r.sample.emptytest[0], null)
 
+  'test explicitChildren with null empty tags': skeleton(__xmlString: '<root><empty/></root>', emptyTag: null, explicitChildren: true, (r) ->
+    assert.deepEqual r, {root: {$$: {empty: [null]}}})
+
+  'test explicitChildren with a null empty tag factory': skeleton(__xmlString: '<root><empty/></root>', emptyTag: (-> null), explicitChildren: true, explicitArray: false, (r) ->
+    assert.deepEqual r, {root: {$$: {empty: null}}})
+
+  'test explicitChildren with null processed values': skeleton(__xmlString: '<root><value>text</value></root>', valueProcessors: [(-> null)], explicitChildren: true, (r) ->
+    assert.deepEqual r, {root: {$$: {value: [null]}}})
+
+  'test explicitChildren with a null root': skeleton(__xmlString: '<root/>', emptyTag: null, explicitChildren: true, (r) ->
+    assert.deepEqual r, {root: null})
+
   'test invalid empty XML file': skeleton(__xmlString: ' ', (r) ->
     equ r, null)
 

@@ -171,7 +171,7 @@ class exports.Parser extends events
             @emit "error", err
 
       # put children into <childkey> property and unfold chars if necessary
-      if @options.explicitChildren and not @options.mergeAttrs and typeof obj is 'object'
+      if @options.explicitChildren and not @options.mergeAttrs and typeof obj is 'object' and obj isnt null
         if not @options.preserveChildrenOrder
           node = {}
           # separate attributes
