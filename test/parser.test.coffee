@@ -204,6 +204,23 @@ module.exports =
     equ r.sample.$$[17].$$[3]['#name'], '__text__'
     equ r.sample.$$[17].$$[3]._, ' in the middle')
 
+  'test ordered text children preserve literal newline escapes': skeleton(__xmlString: '<root>\\n<child/> \\n\\n </root>', explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
+    assert.deepEqual r.root.$$, [
+      {'#name': '__text__', _: '\\n'}
+      {'#name': 'child'}
+      {'#name': '__text__', _: ' \\n\\n '}
+    ])
+
+  'test ordered CDATA children preserve literal newline escapes': skeleton(__xmlString: '<root><![CDATA[\\n]]><child/><![CDATA[\\n\\n]]></root>', explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
+    assert.deepEqual r.root.$$, [
+      {'#name': '__text__', _: '\\n'}
+      {'#name': 'child'}
+      {'#name': '__text__', _: '\\n\\n'}
+    ])
+
+  'test ordered text children still skip actual whitespace': skeleton(__xmlString: '<root>\n\t <child/> \r\n</root>', explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, (r) ->
+    assert.deepEqual r.root.$$, [{'#name': 'child'}])
+
   'test parse with explicitChildren and charsAsChildren and preserveChildrenOrder and includeWhiteChars': skeleton(explicitChildren: true, preserveChildrenOrder: true, charsAsChildren: true, includeWhiteChars: true, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ r.sample.$$[35]['#name'], 'textordertest'
