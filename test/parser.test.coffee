@@ -375,6 +375,36 @@ module.exports =
         equ r.sample.chartest[0]._, 'Character data here!'
         test.finish()
 
+  'test validator ignores inherited values before the first array item': (test) ->
+    for name in ['item', 'constructor', 'toString', '__proto__', 'hasOwnProperty']
+      count = 0
+      validate = (xpath, currentValue, newValue) ->
+        if xpath is "/root/#{name}"
+          expected = if count++ is 0 then undefined else ['first']
+          assert.deepEqual currentValue, expected
+        return newValue
+      xml = "<root><#{name}>first</#{name}><#{name}>second</#{name}></root>"
+      xml2js.parseString xml, {validator: validate}, (err, result) ->
+        assert.ifError err
+        assert.deepEqual result.root[name], ['first', 'second']
+      equ count, 2
+    test.finish()
+
+  'test validator ignores inherited values before the first scalar item': (test) ->
+    for name in ['item', 'constructor', 'toString', '__proto__', 'hasOwnProperty']
+      count = 0
+      validate = (xpath, currentValue, newValue) ->
+        if xpath is "/root/#{name}"
+          expected = if count++ is 0 then undefined else 'first'
+          equ currentValue, expected
+        return newValue
+      xml = "<root><#{name}>first</#{name}><#{name}>second</#{name}></root>"
+      xml2js.parseString xml, {validator: validate, explicitArray: false}, (err, result) ->
+        assert.ifError err
+        assert.deepEqual result.root[name], ['first', 'second']
+      equ count, 2
+    test.finish()
+
   'test validator': skeleton(validator: validator, (r) ->
     console.log 'Result object: ' + util.inspect r, false, 10
     equ typeof r.sample.validatortest[0].stringtest[0], 'string'
