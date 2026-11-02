@@ -473,6 +473,24 @@ module.exports =
       equ parsed.xml.Label[0], ''
       test.finish()
 
+  'test CDATA after a child named cdata': skeleton(__xmlString: '<root><cdata>keep</cdata><![CDATA[text]]></root>', (r) ->
+    assert.deepEqual r, {root: {_: 'text', cdata: ['keep']}})
+
+  'test CDATA before a child named cdata': skeleton(__xmlString: '<root><![CDATA[text]]><cdata>keep</cdata></root>', (r) ->
+    assert.deepEqual r, {root: {_: 'text', cdata: ['keep']}})
+
+  'test CDATA state is local to each nested element': skeleton(__xmlString: '<root><![CDATA[ ]]><cdata><![CDATA[ ]]><cdata>leaf</cdata></cdata><after> </after></root>', (r) ->
+    assert.deepEqual r, {root: {_: ' ', cdata: [{_: ' ', cdata: ['leaf']}], after: [' ']}})
+
+  'test CDATA preserves a merged attribute named cdata': skeleton(__xmlString: '<root cdata="keep"><![CDATA[text]]></root>', mergeAttrs: true, (r) ->
+    assert.deepEqual r, {root: {_: 'text', cdata: ['keep']}})
+
+  'test CDATA with cdata as the character key': skeleton(__xmlString: '<root><![CDATA[text]]></root>', charkey: 'cdata', (r) ->
+    assert.deepEqual r, {root: 'text'})
+
+  'test a boolean child named cdata is preserved': skeleton(__xmlString: '<root><cdata>true</cdata></root>', explicitArray: false, valueProcessors: [xml2js.processors.parseBooleans], (r) ->
+    assert.deepEqual r, {root: {cdata: true}})
+
   'test CDATA whitespaces result': (test) ->
     xml = '<spacecdatatest><![CDATA[ ]]></spacecdatatest>'
     xml2js.parseString xml, (err, parsed) ->
