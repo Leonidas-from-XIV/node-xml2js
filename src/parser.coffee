@@ -106,6 +106,7 @@ class exports.Parser extends events
     # better pass it as explicitCharkey option to the constructor
     @EXPLICIT_CHARKEY = @options.explicitCharkey
     @resultObject = null
+    resultObjectSet = false
     stack = []
     # aliases, so we don't have to type so much
     attrkey = @options.attrkey
@@ -203,7 +204,7 @@ class exports.Parser extends events
       # check whether we closed all the open tags
       if stack.length > 0
         @assignOrPush s, nodeName, obj
-      else
+      else if not resultObjectSet
         # if explicitRoot was specified, wrap stuff in the root tag name
         if @options.explicitRoot
           # avoid circular references
@@ -212,10 +213,7 @@ class exports.Parser extends events
           defineProperty obj, nodeName, old
 
         @resultObject = obj
-        # parsing has ended, mark that so we won't throw exceptions from
-        # here anymore
-        @saxParser.ended = true
-        @emit "end", @resultObject
+        resultObjectSet = true
 
     ontext = (text) =>
       s = stack[stack.length - 1]
