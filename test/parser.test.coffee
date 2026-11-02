@@ -532,6 +532,12 @@ module.exports =
   'test valid trailing markup preserves the root result': skeleton(__xmlString: '<root>text</root><!--comment--><?processing instruction?>', (r) ->
     assert.deepEqual r, {root: 'text'})
 
+  'test non-strict multiple roots retain the first result': skeleton(__xmlString: '<first>keep</first><second>ignore</second>', strict: false, (r) ->
+    assert.deepEqual r, {FIRST: 'keep'})
+
+  'test multiple roots retain a null first result': skeleton(__xmlString: '<first/><second>ignore</second>', explicitRoot: false, emptyTag: null, (r) ->
+    equ r, null)
+
   'test not closed but well formed xml': (test) ->
     xml = "<test>"
     xml2js.parseString xml, (err, parsed) ->
